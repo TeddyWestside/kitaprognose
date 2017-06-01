@@ -1,0 +1,17 @@
+{
+  "Basic":{
+    "language": "Deutsch"
+  },
+  "Header":{
+
+  },
+  "Main":{
+
+  },
+  "Footer":{
+    "description": "Ein Projekt von Studierenden des Fachbereichs Informatik an der Westfälischen Hochschule Gelsenkirchen in Kooperation mit der Stadt Gelsenkirchen. Das Projekt entstand im Rahmen einer Ideenfindung zu OpenData.",
+    "last_dataset": "Letzter Datenbestand:",
+    "imprint": "Impressum",
+    "disclaimer": "Datenschutz"
+  }
+}

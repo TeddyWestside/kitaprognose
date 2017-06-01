@@ -1,4 +1,5 @@
 <html>
+<!--Hier noch keine sprachabhängigkeit sowie korrekter Head, Body, kein header und footer -->
 <h1>Impressum</h1> <h2>Angaben gem&auml;&szlig; &sect; 5 TMG:</h2> <p>Carsten
 Schober<br /> Wodanstra&szlig;e 7b<br /> 45891 Gelsenkirchen </p>
 <h2>Kontakt:</h2> <table><tr><td>E-Mail:</td>
