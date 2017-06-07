@@ -6,7 +6,9 @@
 
   },
   "Main":{
-
+    "title_parameterConfig": "Parameterkonfiguration",
+    "text_parameterConfig": "In diesem Bereich können Sie die Parameter für die Prognose individuell anpassen:",
+    "text_parameterButton": "Prognose erstellen"
   },
   "Footer":{
     "description": "Ein Projekt von Studierenden des Fachbereichs Informatik an der Westfälischen Hochschule Gelsenkirchen in Kooperation mit der Stadt Gelsenkirchen. Das Projekt entstand im Rahmen einer Ideenfindung zu OpenData.",

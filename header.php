@@ -10,8 +10,7 @@
           <li><a href="./?lang=de">Deutsch</a></li>
           <!--Als Sprache 2 ist aktuell "en" festgelegt um die Funktion zu testen. Es
           sind jedoch nich alle IDs codiert wodurch Fehler in der GUI entstehen können. -->
-          <li><a href="./?lang=en">Sprache 2</a></li>
-          <li><a href="#!">Sprache 3</a></li>
+          <li><a href="./?lang=en">Englisch</a></li>
         </ul>
 
       </div>
