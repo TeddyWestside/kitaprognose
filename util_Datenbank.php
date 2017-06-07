@@ -14,8 +14,8 @@ $password = "";
 
 // Datenbank-Queries
 
-$sql_CreateDB = "CREATE DATABASE IF NOT EXISTS CarstenTestDB";
-$sql_CreateTableKita = "CREATE TABLE IF NOT EXISTS CarstenTestDB.Kitas (
+$sql_CreateDB = "CREATE DATABASE IF NOT EXISTS Kitaprognose";
+$sql_CreateTableKita = "CREATE TABLE IF NOT EXISTS Kitaprognose.Kitas (
   Id int,
   Name varchar(100),
   Art varchar(50),
@@ -39,12 +39,34 @@ $sql_CreateTableKita = "CREATE TABLE IF NOT EXISTS CarstenTestDB.Kitas (
   Betriebsnummer varchar(40)
 )";
 
-// $sql_CreateTableKita = "CREATE TABLE IF NOT EXISTS CarstenTestDB.AlterStadtteil (
-//   Stichtag date,
-//   Bezirk_id int,
-//   Art varchar(50),
-//   Betriebsnummer varchar(40)
-// )";
+$sql_CreateTableAlterStadtteil = "CREATE TABLE IF NOT EXISTS Kitaprognose.AlterStadtteil (
+  Stichtag date,
+  Bezirk_id int,
+  Bezirk_Bez varchar(50),
+  Stadtteil_Id int,
+  Stadtteil_Bez varchar(50),
+  0bis1m int,
+  0bis1w int,
+  1bis2m int,
+  1bis2w int,
+  2bis3m int,
+  2bis3w int,
+  3bis4m int,
+  3bis4w int,
+  4bis5m int,
+  4bis5w int,
+  5bis6m int,
+  5bis6w int,
+  6bis7m int,
+  6bis7w int,
+  7bis8m int,
+  7bis8w int,
+  8bis9m int,
+  8bis9w int,
+  9bis10m int,
+  9bis10w int,
+  Gesamtstadt int
+)";
 
 
 // Connection erstellen
@@ -68,7 +90,12 @@ if ($conn->query($sql_CreateTableKita) === TRUE) {
   echo "<br> Error Erstellung Tabelle 'Kitas': " . $conn->error;
 }
 
-
+// Tabelle "AlterStadtteil" erstellen
+if ($conn->query($sql_CreateTableAlterStadtteil) === TRUE) {
+  echo "<br> Tabelle 'AlterStadtteil' erfolgreich erstellt";
+} else {
+  echo "<br> Error Erstellung Tabelle 'AlterStadtteil': " . $conn->error;
+}
 
 
 
