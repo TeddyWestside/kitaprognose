@@ -69,6 +69,7 @@ $sql_CreateTableAlterStadtteil = "CREATE TABLE IF NOT EXISTS Kitaprognose.AlterS
 )";
 
 
+
 // Connection erstellen
 $conn = new mysqli($servername, $username, $password);
 // Connection prüfen
