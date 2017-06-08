@@ -30,6 +30,7 @@ while ($row = $ergebnis->fetch_assoc()) {
     echo $row['Anzahl_der_Plaetze']."<br>";
     echo $row['Anzahl_der_Gruppen']."<br>";
     echo $row['Betriebsnummer']."<br>";
+    break; // Muss gelöscht werden! Für Demonstrationszwecke!
 }
 
 
