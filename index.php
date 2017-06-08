@@ -16,7 +16,7 @@
     /*Instanzierung der language-Klasse und speichern der JSON-Variable in $lang um auf die Strings über
     die IDs zugreifen zu können.
     */
-    $language = new language("de");
+    $language = new language($lang);
     $lang = $language->translate();
   ?>
 
