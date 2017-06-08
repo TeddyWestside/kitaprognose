@@ -1,4 +1,4 @@
-<<?php
+<?php
 
 /*
 Diese Klasse ist für die Berechnung des Algorithmus zuständig.
