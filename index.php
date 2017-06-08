@@ -5,7 +5,17 @@
   <title>Kitaprognose</title>
 
   <?php
+    //Einbindung der language.php Datei um Sprachunabhängigkeit in der GUI zu ermöglichen.
     require ('lang\language.php');
+    //Prüfung ob ein lang-Parameter übergeben wird. Falls nicht wird die Standardsprache Deutsch gesetzt.
+    if (empty($_GET['lang'])) {
+    $lang = 'de';
+    } else {
+    $lang = $_GET['lang'];
+    }
+    /*Instanzierung der language-Klasse und speichern der JSON-Variable in $lang um auf die Strings über
+    die IDs zugreifen zu können.
+    */
     $language = new language("de");
     $lang = $language->translate();
   ?>
@@ -32,9 +42,9 @@
           <div class="collapsible-header"><i class="material-icons">mode_edit</i>Parameterkonfiguration</div>
           <div class="collapsible-body">
             <div class="row">
-              <form class="col l12">
+              <form class="col l12" method="get">
                 <div class="row">
-                  Hier können Sie die Parameter für ihre Prognose individualisieren.
+                  <?php echo $lang->Main->text_parameterConfig?>
                 </div>
                 <div class="row">
                   <div class="input-field col s6">
@@ -47,7 +57,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <a class="waves-effect waves-light btn">Prognose erstellen</a>
+                  <button type="submit" class="waves-effect waves-light btn"><?php echo $lang->Main->text_parameterButton ?></button>
                 </div>
               </form>
             </div>
@@ -60,8 +70,6 @@
           <div class="card-panel">
             <span class="card-title">Filter</span>
             <span>Filter here
-              <?php echo $lang->Footer->description ?>
-
             </span>
           </div>
         </div>
@@ -79,8 +87,7 @@
       </div>
     </div>
   </main>
-
-
+  <!--Einbindung des Footers -->
   <?php include('footer.php'); ?>
 </body>
 </html>
