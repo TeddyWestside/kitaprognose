@@ -1,0 +1,2 @@
+﻿INSERT INTO `kitas`(`Id`, `Name`, `Art`, `Traeger`, `PLZ`, `Ort`, `Strasse`, `Bezirk`, `Stadtteil`, `X`, `Y`, `Telefon`, `Fax`, `EMail`, `Internet`, `Info`, `Internetbeschreibung`, `Barrierefrei_Inklusion`, `Anzahl_der_Plaetze`, `Anzahl_der_Gruppen`, `Betriebsnummer`) VALUES (2008,"Agnesstrasse
+","Tageseinrichtung für Kinder","städt.",45897,"Gelsenkirchen","Agnesstrasse 15","West","Beckhausen",365444,5712301,"49209587994","492000000000","kita-agnesstrasse@gekita.de","http://kita-agnesstrasse.gekita.de","Testinfo","Tolle Beschreibung","ja",40,4,"50 60 020.092/1");

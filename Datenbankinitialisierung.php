@@ -1,4 +1,4 @@
-<<?php
+<?php
 /** Diese Klasse ist für das ziehen der erfolderlichen Daten aus der Datenbank
 *   zuständig.
 */
@@ -14,7 +14,7 @@ $password = "";
 
 // Datenbank-Queries
 
-$sql_CreateDB = "CREATE DATABASE IF NOT EXISTS Kitaprognose";
+$sql_CreateDB = "CREATE DATABASE IF NOT EXISTS Kitaprognose DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 $sql_CreateTableKita = "CREATE TABLE IF NOT EXISTS Kitaprognose.Kitas (
   Id int,
   Name varchar(100),
@@ -72,6 +72,8 @@ $sql_CreateTableAlterStadtteil = "CREATE TABLE IF NOT EXISTS Kitaprognose.AlterS
 
 // Connection erstellen
 $conn = new mysqli($servername, $username, $password);
+mysqli_query($conn, "SET NAMES 'utf8'");
+
 // Connection prüfen
 if ($conn->connect_error) {
   die("<br> Verbindung fehlgeschlagen: " . $conn->connect_error);
@@ -97,11 +99,5 @@ if ($conn->query($sql_CreateTableAlterStadtteil) === TRUE) {
 } else {
   echo "<br> Error Erstellung Tabelle 'AlterStadtteil': " . $conn->error;
 }
-
-
-
-
-$conn->close();
-
 
 ?>
