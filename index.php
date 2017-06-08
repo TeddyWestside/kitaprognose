@@ -5,7 +5,7 @@
   <title>Kitaprognose</title>
 
   <?php
-    require ('language.php');
+    require ('lang\language.php');
     $language = new language("de");
     $lang = $language->translate();
   ?>
