@@ -1,4 +1,5 @@
 <html>
+<!--Hier noch keine sprachabhängigkeit sowie korrekter Head, Body, kein header und footer -->
 <h1>Datenschutzerkl&auml;rung:</h1>
 <h2>Datenschutz</h2>
 <p>Die Betreiber

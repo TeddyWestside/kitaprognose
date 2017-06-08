@@ -1,0 +1,17 @@
+{
+  "Basic":{
+    "language": "Englisch"
+  },
+  "Header":{
+
+  },
+  "Main":{
+
+  },
+  "Footer":{
+    "description": "Lorem Ipsum",
+    "last_dataset": "Last Dataset:",
+    "imprint": "Imprint",
+    "disclaimer": "Disclaimer"
+  }
+}
