@@ -1,16 +1,12 @@
 <?php
-/** Diese Klasse ist für das ziehen der erfolderlichen Daten aus der Datenbank
-*   zuständig.
+/*  Diese Klasse ist für das Einrichten der Datenbank und
+*   für die Erstellung der erforderlichen Tabellen zuständig.
 */
 
 
 // Datenbank Zugangsdaten
 
-echo "<p>util_Datenbank ist eingebungen<p>";
-
-$servername = "localhost";
-$username = "root";
-$password = "";
+echo "<p>Datenbankinitialisierung begonnen<p>";
 
 // Datenbank-Queries
 
@@ -68,17 +64,6 @@ $sql_CreateTableAlterStadtteil = "CREATE TABLE IF NOT EXISTS Kitaprognose.AlterS
   Gesamtstadt int
 )";
 
-
-
-// Connection erstellen
-$conn = new mysqli($servername, $username, $password);
-mysqli_query($conn, "SET NAMES 'utf8'");
-
-// Connection prüfen
-if ($conn->connect_error) {
-  die("<br> Verbindung fehlgeschlagen: " . $conn->connect_error);
-}
-
 // Datenbank erstellen
 if ($conn->query($sql_CreateDB) === TRUE) {
   echo "<br> Datenbank erfolgreich erstellt";
@@ -99,5 +84,7 @@ if ($conn->query($sql_CreateTableAlterStadtteil) === TRUE) {
 } else {
   echo "<br> Error Erstellung Tabelle 'AlterStadtteil': " . $conn->error;
 }
+
+echo "<br> Tabellen erfolgreich erstellt";
 
 ?>
