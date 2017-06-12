@@ -1,36 +1,46 @@
 <?php
-
 /*
-Diese Klasse ist für die Berechnung des Algorithmus zuständig.
-
+    Diese Klasse ist für die Berechnung des Algorithmus zuständig.
 */
 
-echo "<br /><br />" . "Testausabe aus der DB: " . "<br />";
+require 'Datenbankabfrage.php';
 
+$cl_DatenBankabfrage = new Datenbankabfrage;
 
-// Abfrage der Datenbanktabelle "Kitas"
-$ergebnis = $conn->query("SELECT * FROM Kitaprognose.Kitas");
-
-while ($row = $ergebnis->fetch_assoc()) {
+$Kitas = $cl_DatenBankabfrage->getKitasInStadtteil("Beckhausen");
+$KapaKita = $cl_DatenBankabfrage->getKapazitaetProKita("Agnesstraße");
+while ($row = $Kitas->fetch_assoc()) {
+    echo "<br />--------------------<br />";
     echo $row['Id']."<br>";
     echo $row['Name']."<br>";
-    echo $row['Art']."<br>";
-    echo $row['Traeger']."<br>";
-    echo $row['PLZ']."<br>";
-    echo $row['Ort']."<br>";
-    echo $row['Strasse']."<br>";
-    echo $row['X']."<br>";
-    echo $row['Y']."<br>";
-    echo $row['Telefon']."<br>";
-    echo $row['EMail']."<br>";
-    echo $row['Internet']."<br>";
-    echo $row['Info']."<br>";
-    echo $row['Internetbeschreibung']."<br>";
-    echo $row['Barrierefrei_Inklusion']."<br>";
-    echo $row['Anzahl_der_Plaetze']."<br>";
-    echo $row['Anzahl_der_Gruppen']."<br>";
-    echo $row['Betriebsnummer']."<br>";
-    break; // Muss gelöscht werden! Für Demonstrationszwecke!
+    // echo $row['Art']."<br>";
+    // echo $row['Traeger']."<br>";
+    // echo $row['PLZ']."<br>";
+    // echo $row['Ort']."<br>";
+    // echo $row['Strasse']."<br>";
+    // echo $row['Bezirk']."<br>";
+    // echo $row['Stadtteil']."<br>";
+    // echo $row['X']."<br>";
+    // echo $row['Y']."<br>";
+    // echo $row['Telefon']."<br>";
+    // echo $row['EMail']."<br>";
+    // echo $row['Internet']."<br>";
+    // echo $row['Info']."<br>";
+    // echo $row['Internetbeschreibung']."<br>";
+    // echo $row['Barrierefrei_Inklusion']."<br>";
+    // echo $row['Anzahl_der_Plaetze']."<br>";
+    // echo $row['Anzahl_der_Gruppen']."<br>";
+    // echo $row['Betriebsnummer']."<br>";
+  //  break; // Muss gelöscht werden! Für Demonstrationszwecke!
+}
+while ($row = $KapaKita->fetch_assoc()) {
+    echo "<br />--------------------<br />";
+    if ($row['Anzahl_der_Plaetze'] === NULL){
+      echo "KEINE KAPAZITÄT";
+    }
+    else{
+      echo $row['Anzahl_der_Plaetze']."<br>";
+    }
 }
 
 

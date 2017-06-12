@@ -79,8 +79,9 @@
         <div class="col l12">
           <div class="card-panel">
             <span>
-              <?php include("Datenbankinitialisierung.php"); ?>
-              <?php include("Algorithmus.php"); ?>
+              <?php include("connection.php"); ?>
+              <?php include("datenbankinitialisierung.php"); ?>
+              <?php include("algorithmus.php"); ?>
             </span>
           </div>
         </div>
