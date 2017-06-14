@@ -85,10 +85,10 @@
       <div class="row">
         <div class="col l12">
           <div class="card-panel">
-              <?php include("connection.php"); ?>
-              <?php include("datenbankinitialisierung.php"); ?>
-              <?php include("algorithmus.php"); ?>
-
+            <span>
+              <?php include 'connection.php'; ?>
+              <?php include 'initDB.php'; ?>
+            </span>
               <?php
               //Variable für Filterjahr
               $progYear = 0;
