@@ -26,12 +26,17 @@
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Skript zum sotieren der Tabelle -->
+   <script type="text/javascript" src="TableSort.js"></script>
 </head>
 
 <body>
   <!--Import jQuery before materialize.js-->
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/materialize.min.js"></script>
+
+
 
   <?php include('header.php'); ?>
 
@@ -43,7 +48,7 @@
           <div class="collapsible-body">
             <div class="row">
               <form class="col l12" method="get">
-              <!-- Get nicht verkettet -->  
+              <!-- Get nicht verkettet -->
                 <div class="row">
                   <?php echo $lang->Main->text_parameterConfig?>
                 </div>
@@ -80,11 +85,40 @@
       <div class="row">
         <div class="col l12">
           <div class="card-panel">
-            <span>
               <?php include("connection.php"); ?>
               <?php include("datenbankinitialisierung.php"); ?>
               <?php include("algorithmus.php"); ?>
-            </span>
+
+              <?php
+              //Variable für Filterjahr
+              $progYear = 0;
+
+              //zum testen
+              $algoResult = array
+              (
+                "Buer" => array(51, 52, 53),
+                "Schalke" => array(61, 62, 63),
+                "Erle" => array(71, 72, 73),
+              );
+
+
+
+              echo "
+              <table class='striped'>
+                <thead>
+                  <tr>
+                    <th class='sortierbar'>Stadtteil</th>
+                    <th class='sortierbar'>Auslastung</th>
+                  </tr>
+                </thead>
+              <tbody>";
+              foreach($algoResult as $stadtteil => $year){
+                echo"<tr> <td>" . $stadtteil . "</td> <td>" . $year[$progYear] . "</td></tr>";
+              }
+              echo"
+              </tbody>
+              </table>";
+              ?>
           </div>
         </div>
       </div>
