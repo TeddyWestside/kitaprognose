@@ -43,7 +43,7 @@
           <div class="collapsible-body">
             <div class="row">
               <form class="col l12" method="get">
-              <!-- Get nicht verkettet -->  
+              <!-- Get nicht verkettet -->
                 <div class="row">
                   <?php echo $lang->Main->text_parameterConfig?>
                 </div>
@@ -81,9 +81,8 @@
         <div class="col l12">
           <div class="card-panel">
             <span>
-              <?php include("connection.php"); ?>
-              <?php include("datenbankinitialisierung.php"); ?>
-              <?php include("algorithmus.php"); ?>
+              <?php include 'connection.php'; ?>
+              <?php include 'initDB.php'; ?>
             </span>
           </div>
         </div>
