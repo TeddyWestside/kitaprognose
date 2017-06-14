@@ -43,21 +43,23 @@
           <div class="collapsible-body">
             <div class="row">
               <form class="col l12" method="get">
+              <!-- Get nicht verkettet -->  
                 <div class="row">
                   <?php echo $lang->Main->text_parameterConfig?>
                 </div>
                 <div class="row">
-                  <div class="input-field col s6">
-                    <input placeholder="10" id="" type="text" class="validate">
-                    <label for="xyz">XYZ</label>
+                  <div class="input-field col l6">
+                    <input placeholder="10" id="propchildren" name="propchildren" type="number">
+                    <!-- class="validate"? zur validierung?-->
+                    <label for="propchildren"><?php echo $lang->Main->label_propChildren ?></label>
                   </div>
-                  <div class="input-field col s6">
-                    <input placeholder="5" id="" type="text" class="validate">
-                    <label for="zyx">ZYX</label>
+                  <div class="input-field col l6">
+                    <input placeholder="5" id="birthrate" name="birthrate" type="text" >
+                    <label for="birthrate"><?php echo $lang->Main->label_birthrate ?></label>
                   </div>
                 </div>
                 <div class="row">
-                  <button type="submit" class="waves-effect waves-light btn"><?php echo $lang->Main->text_parameterButton ?></button>
+                  <button type="submit" class="waves-effect waves-light btn col l12"><?php echo $lang->Main->text_parameterButton ?></button>
                 </div>
               </form>
             </div>
