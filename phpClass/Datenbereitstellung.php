@@ -23,13 +23,13 @@ class Datenbereitstellung {
   /**
   * Testfunktion
   */
-  public function test() {
-
-    $json = file_get_contents('https://opendata.gelsenkirchen.de/api/action/datastore/search.json?resource_id=81c5bb92-b75f-41bb-b544-e12fe158fcdf&fields=id,name&limit=5');
-    $obj = json_decode($json);
-    echo $obj->result->records[0]->id;
-    //  var_dump($obj);
-  }
+  // public function test() {
+  //
+  //   $json = file_get_contents('https://opendata.gelsenkirchen.de/api/action/datastore/search.json?resource_id=81c5bb92-b75f-41bb-b544-e12fe158fcdf&fields=id,name&limit=5');
+  //   $obj = json_decode($json);
+  //   echo $obj->result->records[0]->id;
+  //   //  var_dump($obj);
+  // }
 
   /**
   * Aktualisiert sämtliche Datenbestände.
@@ -95,6 +95,7 @@ class Datenbereitstellung {
 
     //Daten einfügen
     foreach ($ir_kita_result->records as $record) {
+
       $id = $record->Id;
       $name = $record->Name;
       $art = $record->Art;
@@ -108,7 +109,7 @@ class Datenbereitstellung {
       $y = $record->Y;
       $telefon = $record->Telefon;
       $fax = $record->Fax;
-      // $email = $record->E-Mail;
+      // $email = $record->'E-Mail';
       $internet = $record->Internet;
       // $info = $record->Info;
       // $internetbeschreibung = $record->Internetbeschreibung;
@@ -117,14 +118,11 @@ class Datenbereitstellung {
       // $anzahl_der_gruppen = $record->
       // $betriebsnummer = $record->
 
-
       //Statement ausführen
       if($lr_sql_stmt->execute()) {
         echo 'Datensatz eingefügt! id=' . $record->Id;
       }
     }
-
-
 
     //Datenbankverbindung schließen
     $lr_conn->close();

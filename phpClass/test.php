@@ -3,5 +3,5 @@
 require 'Datenbereitstellung.php';
 
 $cl_datenbereitstellung = new Datenbereitstellung;
-$cl_datenbereitstellung->aktualisiere_daten();
+$cl_datenbereitstellung->aktualisiere_datenbestand();
 ?>
