@@ -39,7 +39,7 @@
     <div class="container">
       <ul class="collapsible" data-collapsible="accordion">
         <li>
-          <div class="collapsible-header"><i class="material-icons">mode_edit</i>Parameterkonfiguration</div>
+          <div class="collapsible-header"><i class="material-icons">mode_edit</i><?php echo $lang->Main->title_parameterConfig ?></div>
           <div class="collapsible-body">
             <div class="row">
               <form class="col l12" method="get">
@@ -79,8 +79,9 @@
         <div class="col l12">
           <div class="card-panel">
             <span>
-              <?php include("Datenbankinitialisierung.php"); ?>
-              <?php include("Algorithmus.php"); ?>
+              <?php include("connection.php"); ?>
+              <?php include("datenbankinitialisierung.php"); ?>
+              <?php include("algorithmus.php"); ?>
             </span>
           </div>
         </div>

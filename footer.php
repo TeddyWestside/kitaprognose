@@ -23,9 +23,9 @@
         <?php echo $lang->Footer->last_dataset ?>
       </div>
       <div class="col l4">
-        <a class="grey-text text-lighten-3" href="./Impressum.php"><?php echo $lang->Footer->imprint ?></a>
+        <a class="grey-text text-lighten-3" href="./impressum.php"><?php echo $lang->Footer->imprint ?></a>
         ||
-        <a class="grey-text text-lighten-3" href="./Datenschutzerklärung.php"><?php echo $lang->Footer->disclaimer ?></a>
+        <a class="grey-text text-lighten-3" href="./datenschutzerklärung.php"><?php echo $lang->Footer->disclaimer ?></a>
       </div>
       <div class="col l4">
         <a class="grey-text text-lighten-4 right" href="">Made with LOVE in Gelsenkirchen</a>
