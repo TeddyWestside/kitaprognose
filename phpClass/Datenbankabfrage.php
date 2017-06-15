@@ -32,6 +32,7 @@ class Datenbankabfrage
       $sql_AnzahlKinder3bis6 = $GLOBALS['conn']->query("SELECT Stadtteil_Bez, Stichtag, Bezirk_Bez, (sum(2bis3m) + sum(2bis3w) + sum(1bis2m) + sum(1bis2w + sum(3bis4m) + sum(3bis4w)) as SummeKinder FROM Kitaprognose.AlterStadtteil WHERE Bezirk_Bez LIKE 'Gelsenkirchen' AND Stichtag LIKE '30.06.16' GROUP BY Stadtteil_Bez");
       return $sql_AnzahlKinder1bis4;
   }
+  public function getAnzahlKinder0bis6($AnzahlKinder0bis3)
   {
       $sql_AnzahlKinder0bis3 = $GLOBALS['conn']->query("SELECT Stadtteil_Bez, Stichtag, Bezirk_Bez, (sum(2bis3m) + sum(2bis3w) + sum(1bis2m) + sum(1bis2w + sum(0bis1m) + sum(0bis1w)) as SummeKinder FROM Kitaprognose.AlterStadtteil WHERE Bezirk_Bez LIKE 'Gelsenkirchen' AND Stichtag LIKE '30.06.16' GROUP BY Stadtteil_Bez");
       return $sql_AnzahlKinder0bis3;
