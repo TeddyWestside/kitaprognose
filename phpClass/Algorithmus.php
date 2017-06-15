@@ -12,6 +12,10 @@ class Algorithmus
   private $cl_DatenBankabfrage;
   private $Kitas;
   private $KapaKita;
+  private $AnzahlKinder3bis6;
+  private $AnzahlKinder2bis5;
+  private $AnzahlKinder1bis4;
+  private $AnzahlKinder0bis3;
 
   public function getPrognose($propChildren,$birthrate){
     // Architektur der Ausgabe
