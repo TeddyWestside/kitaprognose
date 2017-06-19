@@ -12,7 +12,9 @@
     "label_birthrate": "Geburtenrate in Prozent",
     "text_parameterButton": "Prognose erstellen",
 
-    "title_filter": "Filter"
+    "title_filter": "Filter",
+
+    "text_tableCaption": "Die Werte werden entsprechend der Auslastung eingefärbt: Rote Werte = kritisch, Orange Werte = gefährdet, grüne Werte = gut"
   },
   "Footer":{
     "description": "Ein Projekt von Studierenden des Fachbereichs Informatik an der Westfälischen Hochschule Gelsenkirchen in Kooperation mit der Stadt Gelsenkirchen. Das Projekt entstand im Rahmen einer Ideenfindung zu OpenData.",

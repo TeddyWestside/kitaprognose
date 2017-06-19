@@ -1,32 +1,55 @@
+<!--
+  author: Johannes Kusber
+  description: Über diese Datei wird die Prognose parametriesiert, Filter erstellt,
+  der Prognosealgorithmus aufgerufen und das Ergebnis angezeigt. Der Header und der
+  Footer wird jeweils extra eingebunden.
+-->
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kitaprognose</title>
-
-  <?php
-    //Einbindung der language.php Datei um Sprachunabhängigkeit in der GUI zu ermöglichen.
-    require ('lang\language.php');
-    //Prüfung ob ein lang-Parameter übergeben wird. Falls nicht wird die Standardsprache Deutsch gesetzt.
-    if (empty($_GET['lang'])) {
-    $lang = 'de';
-    } else {
-    $lang = $_GET['lang'];
-    }
-    /*Instanzierung der language-Klasse und speichern der JSON-Variable in $lang um auf die Strings über
-    die IDs zugreifen zu können.
-    */
-    $language = new language($lang);
-    $lang = $language->translate();
-  ?>
 
   <!--Import Google Icon Font-->
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import materialize.css-->
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+  <?php
+  //Definierung der Variablen und Vorbelegung mit Standardwerten
+  //Standardsprache
+  $lang = "de";
+  //Standard % Anzahl Kinder im Kindergarten
+  $propChildren = 100;
+  //Standard % Geburtenrate
+  $birthrate = 1.7;
+  //Standard Filterjahr
+  $progYear = 0;
+
+  //Prüfen und ggf. Anpassen der Werte auf Grundlage der GET-Parameter
+  if (isset($_GET["lang"])) {
+    $lang = $_GET["lang"];
+  }
+  if (isset($_GET["propChildren"]) && $_GET["propChildren"] != "") {
+    $propChildren = $_GET["propChildren"];
+  }
+  if (isset($_GET["birthrate"]) && $_GET["birthrate"] != "") {
+    $birthrate = $_GET["birthrate"];
+  }
+  var_dump($lang);
+  var_dump($propChildren);
+  var_dump($birthrate);
+
+  //Einbindung der language.php Datei um Sprachunabhängigkeit in der GUI zu ermöglichen.
+  require ('lang\language.php');
+  /*Instanzierung der language-Klasse und speichern der JSON-Variable in $lang um auf die Strings über
+  die IDs zugreifen zu können.
+  */
+  $language = new language($lang);
+  $lang = $language->translate();
+  ?>
 
 </head>
 
@@ -51,12 +74,12 @@
                 </div>
                 <div class="row">
                   <div class="input-field col l6">
-                    <input placeholder="10" id="propchildren" name="propchildren" type="number">
+                    <input placeholder=<?php echo $propChildren ?> id="propChildren" name="propChildren" type="number">
                     <!-- class="validate"? zur validierung?-->
-                    <label for="propchildren"><?php echo $lang->Main->label_propChildren ?></label>
+                    <label for="propChildren"><?php echo $lang->Main->label_propChildren ?></label>
                   </div>
                   <div class="input-field col l6">
-                    <input placeholder="5" id="birthrate" name="birthrate" type="text" >
+                    <input placeholder=<?php echo $birthrate ?> id="birthrate" name="birthrate" type="text" >
                     <label for="birthrate"><?php echo $lang->Main->label_birthrate ?></label>
                   </div>
                 </div>
@@ -90,9 +113,7 @@
               require "phpClass/Algorithmus.php";
 
               $algo = new Algorithmus;
-              $result = $algo->getPrognose(2.5, 3.5);
-              //Variable für Filterjahr
-              $progYear = 0;
+              $result = $algo->getPrognose($propChildren, $birthrate);
 
               echo "
               <table class='striped sortierbar'>
@@ -105,12 +126,13 @@
               <tbody>";
               foreach($result as $stadtteil => $year){
                 echo"<tr> <td>" . $stadtteil . "</td> <td style='color:" . outputColor($year[$progYear]) . "'>" . $year[$progYear] . "</td></tr>";
+                //echo"<tr style='background-color:" . outputColor($year[$progYear]) ."'> <td>" . $stadtteil . "</td> <td>" . $year[$progYear] . "</td></tr>";
               }
               echo"
               </tbody>
-              </table>
-              Die Werte werden entsprechend der Auslastung eingefärbt: Rote Werte = kritisch, Orange Werte = gefährdet, grüne Werte = gut
-              ";
+              </table>";
+              echo $lang->Main->text_tableCaption;
+
 
               function outputColor ($value){
                 $color;
