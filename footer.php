@@ -11,26 +11,24 @@
       <div class="col l3">
         <a href="https://www.gelsenkirchen.de/"><img class="responsive-img" src="./img/Logo-GE.gif" alt="Logo Stadt Gelsenkirchen"></a>
       </div>
+    </div>
   </div>
-</div>
-</div>
-
-<div class="footer-copyright">
-  <div class="container">
-    <div class="row">
-      <div class="col l4">
-        <!-- Hier muss noch eine Variable für den Datenbestand eingefügt werden -->
-        <?php echo $lang->Footer->last_dataset ?>
-      </div>
-      <div class="col l4">
-        <a class="grey-text text-lighten-3" href="./impressum.php"><?php echo $lang->Footer->imprint ?></a>
-        ||
-        <a class="grey-text text-lighten-3" href="./datenschutzerklaerung.php"><?php echo $lang->Footer->disclaimer ?></a>
-      </div>
-      <div class="col l4">
-        <a class="grey-text text-lighten-4 right" href="">Made with LOVE in Gelsenkirchen</a>
+  <div class="footer-copyright">
+    <div class="container">
+      <div class="row">
+        <div class="col l4">
+          <!-- Hier muss noch eine Variable für den Datenbestand eingefügt werden -->
+          <?php echo $lang->Footer->last_dataset ?>
+        </div>
+        <div class="col l4">
+          <a class="grey-text text-lighten-3" href="./impressum.php"><?php echo $lang->Footer->imprint ?></a>
+          ||
+          <a class="grey-text text-lighten-3" href="./datenschutzerklaerung.php"><?php echo $lang->Footer->disclaimer ?></a>
+        </div>
+        <div class="col l4">
+          <a class="grey-text text-lighten-4 right" href="">Made with LOVE in Gelsenkirchen</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </footer>
