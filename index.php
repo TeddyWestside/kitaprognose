@@ -58,6 +58,7 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/materialize.min.js"></script>
 
+  <!--Einbindung des Headers -->
   <?php include('header.php'); ?>
 
   <main>
@@ -106,7 +107,7 @@
         <div class="col l12">
           <div class="card-panel">
              <!-- Skript zum sotieren der Tabelle -->
-             <script type="text/javascript" src="TableSort.js"></script>
+             <script type="text/javascript" src="js/TableSort.js"></script>
 
               <?php
               include 'connection.php';
