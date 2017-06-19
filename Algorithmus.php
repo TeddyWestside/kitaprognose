@@ -1,8 +1,10 @@
 <<?php
 
-/*
-Diese Klasse ist für die Berechnung des Algorithmus zuständig.
-
+/**
+Was soll diese Datei?
+Der richtige Algorithmus ist in /phpClass
+mfg Carsten
+*
 */
 
 echo "<br /><br />" . "Testausabe aus der DB: " . "<br />";
