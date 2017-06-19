@@ -28,11 +28,11 @@ class Algorithmus
 
     // Architektur der Ausgabe
     $prognoseAusgabe = array(
-      "Stadtteil1" => array(60,70,80),
-      "Stadtteil2" => array(10,12,14),
-      "Stadtteil3" => array(100,120,140),
-      "Stadtteil4" => array(60,70,80),
-      "Stadtteil5" => array(60,70,80),
+      "Stadtteil1" => array(84.99,70,80),
+      "Stadtteil2" => array(85,12,14),
+      "Stadtteil3" => array(105,120,140),
+      "Stadtteil4" => array(115,70,80),
+      "Stadtteil5" => array(115.01,70,80),
     );
 
     return $prognoseAusgabe;

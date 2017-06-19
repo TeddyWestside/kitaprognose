@@ -9,7 +9,7 @@
         <a href="https://www.w-hs.de"><img class="responsive-img" src="./img/Logo-WHS.gif" alt="Logo WHS"></a>
       </div>
       <div class="col l3">
-        <a href="https://www.gelsenkirchen.de/"><img class="responsive-img" src="./img/Logo-GE.jpg" alt="Logo Stadt Gelsenkirchen"></a>
+        <a href="https://www.gelsenkirchen.de/"><img class="responsive-img" src="./img/Logo-GE.gif" alt="Logo Stadt Gelsenkirchen"></a>
       </div>
   </div>
 </div>

@@ -104,11 +104,30 @@
                 </thead>
               <tbody>";
               foreach($result as $stadtteil => $year){
-                echo"<tr> <td>" . $stadtteil . "</td> <td>" . $year[$progYear] . "</td></tr>";
+                echo"<tr> <td>" . $stadtteil . "</td> <td style='color:" . outputColor($year[$progYear]) . "'>" . $year[$progYear] . "</td></tr>";
               }
               echo"
               </tbody>
-              </table>";
+              </table>
+              Die Werte werden entsprechend der Auslastung eingefärbt: Rote Werte = kritisch, Orange Werte = gefährdet, grüne Werte = gut
+              ";
+
+              function outputColor ($value){
+                $color;
+                if ($value < 85){
+                  $color = "red";
+                } else if($value < 95){
+                  $color = "orange";
+                } else if($value <= 105){
+                  $color = "green";
+                } else if($value <= 115){
+                  $color = "orange";
+                } else{
+                  $color = "red";
+                }
+
+                return $color;
+              }
               ?>
           </div>
         </div>
