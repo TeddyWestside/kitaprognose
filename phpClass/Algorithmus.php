@@ -12,6 +12,7 @@ class Algorithmus
   private $cl_DatenBankabfrage;
   private $Kitas;
   private $KapaKita;
+  private $test;
 
   public function getPrognose($propChildren,$birthrate){
 
@@ -25,6 +26,8 @@ class Algorithmus
     //   echo $row['Stadtteil_Bez'];
     //   echo $row['SummeKinder'];
     // }
+
+    var_dump($this->test);
 
     // Architektur der Ausgabe
     $prognoseAusgabe = array(
@@ -45,9 +48,7 @@ class Algorithmus
   public function __construct()
   {
     $cl_DatenBankabfrage = new Datenbankabfrage();
-    $Kitas = $cl_DatenBankabfrage->getKitasInStadtteil("Beckhausen");
-    $KapaKita = $cl_DatenBankabfrage->getKapazitaetProKita("Agnesstraße");
-
+    $test = $cl_DatenBankabfrage->getKapazitaetProStadtteil('Buer');
   }
 
 
