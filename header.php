@@ -1,8 +1,9 @@
 <nav>
   <div class="container">
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Kitaprognose</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <a href="" class="brand-logo">Kitaprognose</a>
+      <ul id="nav-mobile" class="right">
+        <!-- hide-on-med-and-down -->
         <li><a class='dropdown-button' href='#' data-activates='dropdownLanguage'><?php echo $lang->Basic->language ?></a></li>
       </ul>
       <!-- Dropdown Structure -->

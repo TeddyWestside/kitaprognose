@@ -1,14 +1,14 @@
 <footer class="page-footer">
   <div class="container">
-    <div class="row">
+    <div class="row valign-wrapper">
       <div class="col l6">
         <h5 class="white-text">Kitaprognose</h5>
         <p class="grey-text text-lighten-4"><?php echo $lang->Footer->description ?></p>
       </div>
-      <div class="col l3">
+      <div class="col l3 valign-wrapper">
         <a href="https://www.w-hs.de"><img class="responsive-img" src="./img/Logo-WHS.gif" alt="Logo WHS"></a>
       </div>
-      <div class="col l3">
+      <div class="col l3 valign-wrapper">
         <a href="https://www.gelsenkirchen.de/"><img class="responsive-img" src="./img/Logo-GE.gif" alt="Logo Stadt Gelsenkirchen"></a>
       </div>
     </div>
