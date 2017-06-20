@@ -38,9 +38,10 @@
   if (isset($_GET["birthrate"]) && $_GET["birthrate"] != "") {
     $birthrate = $_GET["birthrate"];
   }
-  var_dump($lang);
-  var_dump($propChildren);
-  var_dump($birthrate);
+  //Only fot test
+  //var_dump($lang);
+  //var_dump($propChildren);
+  //var_dump($birthrate);
 
   //Einbindung der language.php Datei um Sprachunabhängigkeit in der GUI zu ermöglichen.
   require ('lang\language.php');
@@ -74,12 +75,16 @@
                 </div>
                 <div class="row">
                   <div class="input-field col l6">
-                    <input placeholder=<?php echo $propChildren ?> id="propChildren" name="propChildren" type="number">
-                    <!-- class="validate"? zur validierung?-->
+                    <input placeholder=<?php echo $propChildren ?> id="propChildren"
+                     name="propChildren" type="text"
+                    pattern="100|100\.00|100\.0|\d{2}|\d{2}\.\d|\d{2}\.\d{2}|\d|\d\.\d|\d\.\d{2}"
+                     class="validate" title="Bitte einen . als Dezimalzeichen nutzten  z.B. 95.99">
                     <label for="propChildren"><?php echo $lang->Main->label_propChildren ?></label>
                   </div>
                   <div class="input-field col l6">
-                    <input placeholder=<?php echo $birthrate ?> id="birthrate" name="birthrate" type="text" >
+                    <input placeholder=<?php echo $birthrate ?> id="birthrate" name="birthrate" type="text"
+                    pattern="\d{3}|\d{3}\.\d|\d{3}\.\d{2}|\d{2}|\d{2}\.\d|\d{2}\.\d{2}|\d|\d\.\d|\d\.\d{2}"
+                     class="validate" title="Bitte einen . als Dezimalzeichen nutzten  z.B. 95.99">
                     <label for="birthrate"><?php echo $lang->Main->label_birthrate ?></label>
                   </div>
                 </div>
@@ -96,7 +101,7 @@
         <div class="col l12">
           <div class="card-panel">
             <span class="card-title">Filter</span>
-            <span>Filter here
+            <span>Radio Buttons?
             </span>
           </div>
         </div>
