@@ -8,7 +8,20 @@
   "Main":{
     "title_parameterConfig": "Parameterkonfiguration",
     "text_parameterConfig": "In diesem Bereich können Sie die Parameter für die Prognose individuell anpassen:",
-    "text_parameterButton": "Prognose erstellen"
+    "label_propChildren": "Prozentualer Anteil der Kinder, die einen Kindergarten besuchen",
+    "label_birthrate": "Geburtenrate in Prozent",
+    "text_parameterButton": "Prognose erstellen",
+
+    "title_filter": "Filter",
+    "text_forecastPeriod": "Prognose für in:",
+    "label_year1": "einem Jahr",
+    "label_year2": "zwei Jahren",
+    "label_year3": "drei Jahren",
+
+
+    "text_filterButton": "Aktualisieren",
+
+    "text_tableCaption": "Die Werte werden entsprechend der Auslastung eingefärbt: Rote Werte = kritisch, Orange Werte = gefährdet, grüne Werte = gut"
   },
   "Footer":{
     "description": "Ein Projekt von Studierenden des Fachbereichs Informatik an der Westfälischen Hochschule Gelsenkirchen in Kooperation mit der Stadt Gelsenkirchen. Das Projekt entstand im Rahmen einer Ideenfindung zu OpenData.",
