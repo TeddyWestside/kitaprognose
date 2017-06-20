@@ -1,8 +1,8 @@
 <!--
-  author: Johannes Kusber
-  description: Über diese Datei wird die Prognose parametriesiert, Filter erstellt,
-  der Prognosealgorithmus aufgerufen und das Ergebnis angezeigt. Der Header und der
-  Footer wird jeweils extra eingebunden.
+author: Johannes Kusber
+description: Über diese Datei wird die Prognose parametriesiert, Filter erstellt,
+der Prognosealgorithmus aufgerufen und das Ergebnis angezeigt. Der Header und der
+Footer wird jeweils extra eingebunden.
 -->
 
 <!DOCTYPE html>
@@ -25,8 +25,8 @@
   $propChildren = 100;
   //Standard % Geburtenrate
   $birthrate = 1.7;
-  //Standard Filterjahr
-  $progYear = 0;
+  //Standard PrognosePeriode
+  $forecastPeriod = 0;
 
   //Prüfen und ggf. Anpassen der Werte auf Grundlage der GET-Parameter
   if (isset($_GET["lang"])) {
@@ -38,10 +38,14 @@
   if (isset($_GET["birthrate"]) && $_GET["birthrate"] != "") {
     $birthrate = $_GET["birthrate"];
   }
+  if (isset($_GET["forecastPeriod"]) && $_GET["forecastPeriod"] != "") {
+    $forecastPeriod = $_GET["forecastPeriod"];
+  }
   //Only fot test
   //var_dump($lang);
   //var_dump($propChildren);
   //var_dump($birthrate);
+  //var_dump($forecastPeriod);
 
   //Einbindung der language.php Datei um Sprachunabhängigkeit in der GUI zu ermöglichen.
   require ('lang\language.php');
@@ -69,22 +73,22 @@
           <div class="collapsible-body">
             <div class="row">
               <form class="col l12" method="get">
-              <!-- Get nicht verkettet -->
+                <!-- Get nicht verkettet -->
                 <div class="row">
                   <?php echo $lang->Main->text_parameterConfig?>
                 </div>
                 <div class="row">
                   <div class="input-field col l6">
                     <input placeholder=<?php echo $propChildren ?> id="propChildren"
-                     name="propChildren" type="text"
+                    name="propChildren" type="text"
                     pattern="100|100\.00|100\.0|\d{2}|\d{2}\.\d|\d{2}\.\d{2}|\d|\d\.\d|\d\.\d{2}"
-                     class="validate" title="Bitte einen . als Dezimalzeichen nutzten  z.B. 95.99">
+                    class="validate" title="Bitte einen . als Dezimalzeichen nutzten  z.B. 95.99">
                     <label for="propChildren"><?php echo $lang->Main->label_propChildren ?></label>
                   </div>
                   <div class="input-field col l6">
                     <input placeholder=<?php echo $birthrate ?> id="birthrate" name="birthrate" type="text"
                     pattern="\d{3}|\d{3}\.\d|\d{3}\.\d{2}|\d{2}|\d{2}\.\d|\d{2}\.\d{2}|\d|\d\.\d|\d\.\d{2}"
-                     class="validate" title="Bitte einen . als Dezimalzeichen nutzten  z.B. 95.99">
+                    class="validate" title="Bitte einen . als Dezimalzeichen nutzten  z.B. 95.99">
                     <label for="birthrate"><?php echo $lang->Main->label_birthrate ?></label>
                   </div>
                 </div>
@@ -100,18 +104,38 @@
       <div class="row">
         <div class="col l12">
           <div class="card-panel">
-            <span class="card-title">Filter</span>
-            <span>Radio Buttons?
-            </span>
+            <form method="get">
+                <?php echo $lang->Main->text_forecastPeriod; ?>
+                <input type="radio" class="with-gap" id="year1" name="forecastPeriod" value=0 <?php if ($forecastPeriod == 0){echo "checked";} ?>/>
+                <label for="year1"><?php echo $lang->Main->label_year1; ?></label>
+                <input type="radio" class="with-gap" id="year2" name="forecastPeriod" value=1 <?php if ($forecastPeriod == 1){echo "checked";} ?>/>
+                <label for="year2"><?php echo $lang->Main->label_year2; ?></label>
+                <input type="radio" class="with-gap" id="year3" name="forecastPeriod" value=2 <?php if ($forecastPeriod == 2){echo "checked";} ?>/>
+                <label for="year3"><?php echo $lang->Main->label_year3; ?></label>
+            <button type="submit" class="waves-effect waves-light btn"><?php echo $lang->Main->text_filterButton; ?></button>
+            </form>
+
+            <!-- <form method="get">
+              <p>Prognose für in X Jahren</p>
+              <fieldset>
+                <input type="radio" id="year1" name="PrognosePeriod" value="0">
+                <label for="year1">1 Jahr</label><br>
+                <input type="radio" id="year2" name="PrognosePeriod" value="1">
+                <label for="year2">2 Jahre</label><br>
+                <input type="radio" id="year3" name="PrognosePeriod" value="2">
+                <label for="year3">3 Jahre</label>
+              </fieldset>
+              <button type="submit">Test</button>
+            </form> -->
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col l12">
-          <div class="card-panel">
-             <!-- Skript zum sotieren der Tabelle -->
-             <script type="text/javascript" src="js/TableSort.js"></script>
+        <div class="row">
+          <div class="col l12">
+            <div class="card-panel">
+              <!-- Skript zum sotieren der Tabelle -->
+              <script type="text/javascript" src="js/TableSort.js"></script>
 
               <?php
               include 'connection.php';
@@ -122,15 +146,15 @@
 
               echo "
               <table class='striped sortierbar'>
-                <thead>
-                  <tr>
-                    <th class='sortierbar'>Stadtteil</th>
-                    <th class='sortierbar'>Auslastung</th>
-                  </tr>
-                </thead>
+              <thead>
+              <tr>
+              <th class='sortierbar'>Stadtteil</th>
+              <th class='sortierbar'>Auslastung</th>
+              </tr>
+              </thead>
               <tbody>";
               foreach($result as $stadtteil => $year){
-                echo"<tr> <td>" . $stadtteil . "</td> <td style='color:" . outputColor($year[$progYear]) . "'>" . $year[$progYear] . "</td></tr>";
+                echo"<tr> <td>" . $stadtteil . "</td> <td style='color:" . outputColor($year[$forecastPeriod]) . "'>" . $year[$forecastPeriod] . "</td></tr>";
                 //echo"<tr style='background-color:" . outputColor($year[$progYear]) ."'> <td>" . $stadtteil . "</td> <td>" . $year[$progYear] . "</td></tr>";
               }
               echo"
@@ -156,12 +180,12 @@
                 return $color;
               }
               ?>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </main>
-  <!--Einbindung des Footers -->
-  <?php include('footer.php'); ?>
-</body>
-</html>
+    </main>
+    <!--Einbindung des Footers -->
+    <?php include('footer.php'); ?>
+  </body>
+  </html>
