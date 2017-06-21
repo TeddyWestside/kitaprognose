@@ -25,8 +25,6 @@ Footer wird jeweils extra eingebunden.
   $propChildren = 100;
   //Standard % Geburtenrate
   $birthrate = 1.7;
-  //Standard PrognosePeriode
-  $forecastPeriod = 0;
 
   //Prüfen und ggf. Anpassen der Werte auf Grundlage der GET-Parameter
   if (isset($_GET["lang"])) {
@@ -37,9 +35,6 @@ Footer wird jeweils extra eingebunden.
   }
   if (isset($_GET["birthrate"]) && $_GET["birthrate"] != "") {
     $birthrate = $_GET["birthrate"];
-  }
-  if (isset($_GET["forecastPeriod"]) && $_GET["forecastPeriod"] != "") {
-    $forecastPeriod = $_GET["forecastPeriod"];
   }
   //Only fot test
   //var_dump($lang);
@@ -104,7 +99,7 @@ Footer wird jeweils extra eingebunden.
       <div class="row">
         <div class="col l12">
           <div class="card-panel">
-            <form method="get">
+            <!-- <form method="get">
                 <?php echo $lang->Main->text_forecastPeriod; ?>
                 <input type="radio" class="with-gap" id="year1" name="forecastPeriod" value=0 <?php if ($forecastPeriod == 0){echo "checked";} ?>/>
                 <label for="year1"><?php echo $lang->Main->label_year1; ?></label>
@@ -113,19 +108,6 @@ Footer wird jeweils extra eingebunden.
                 <input type="radio" class="with-gap" id="year3" name="forecastPeriod" value=2 <?php if ($forecastPeriod == 2){echo "checked";} ?>/>
                 <label for="year3"><?php echo $lang->Main->label_year3; ?></label>
             <button type="submit" class="waves-effect waves-light btn"><?php echo $lang->Main->text_filterButton; ?></button>
-            </form>
-
-            <!-- <form method="get">
-              <p>Prognose für in X Jahren</p>
-              <fieldset>
-                <input type="radio" id="year1" name="PrognosePeriod" value="0">
-                <label for="year1">1 Jahr</label><br>
-                <input type="radio" id="year2" name="PrognosePeriod" value="1">
-                <label for="year2">2 Jahre</label><br>
-                <input type="radio" id="year3" name="PrognosePeriod" value="2">
-                <label for="year3">3 Jahre</label>
-              </fieldset>
-              <button type="submit">Test</button>
             </form> -->
             </div>
           </div>
@@ -136,6 +118,17 @@ Footer wird jeweils extra eingebunden.
             <div class="card-panel">
               <!-- Skript zum sotieren der Tabelle -->
               <script type="text/javascript" src="js/TableSort.js"></script>
+              <table class="striped sortierbar">
+                <thead>
+                  <tr>
+                    <th class="sortierbar">Stadtteil</th>
+                    <th class="sortierbar">Auslastung</th>
+                  </tr>
+                </thead>
+                <tbody id="jsbody">
+                    <!-- Hier wird der Body per JS generiert -->
+                </tbody>
+              </table>
 
               <?php
               include 'connection.php';
@@ -143,43 +136,43 @@ Footer wird jeweils extra eingebunden.
 
               $algo = new Algorithmus;
               $result = $algo->getPrognose($propChildren, $birthrate);
+              ?>
 
-              echo "
-              <table class='striped sortierbar'>
-              <thead>
-              <tr>
-              <th class='sortierbar'>Stadtteil</th>
-              <th class='sortierbar'>Auslastung</th>
-              </tr>
-              </thead>
-              <tbody>";
-              foreach($result as $stadtteil => $year){
-                echo"<tr> <td>" . $stadtteil . "</td> <td style='color:" . outputColor($year[$forecastPeriod]) . "'>" . $year[$forecastPeriod] . "</td></tr>";
-                //echo"<tr style='background-color:" . outputColor($year[$progYear]) ."'> <td>" . $stadtteil . "</td> <td>" . $year[$progYear] . "</td></tr>";
-              }
-              echo"
-              </tbody>
-              </table>";
-              echo $lang->Main->text_tableCaption;
+              <script>
+                <?php
+                $jsArray = json_encode($result);
+                echo ("var jsresult = $jsArray;");
+                ?>
 
+                buildTable(0);
 
-              function outputColor ($value){
-                $color;
-                if ($value < 85){
-                  $color = "red";
-                } else if($value < 95){
-                  $color = "orange";
-                } else if($value <= 105){
-                  $color = "green";
-                } else if($value <= 115){
-                  $color = "orange";
-                } else{
-                  $color = "red";
+                function buildTable(forecastPeriod){
+
+                  var htmlString = "";
+                  var stadtteil;
+                  for (stadtteil in jsresult){
+                    htmlString = htmlString + "<tr><td>" + stadtteil + "</td><td class='" + outputColor(jsresult[stadtteil][forecastPeriod]) + "'>" + jsresult[stadtteil][forecastPeriod] + "</td></tr>"
+                  }
+                  document.getElementById("jsbody").innerHTML = htmlString;
                 }
 
-                return $color;
-              }
-              ?>
+                function outputColor (value){
+                  var color = "";
+                  if (value < 85){
+                    color = "red-text";
+                  } else if(value < 95){
+                    color = "orange-text";
+                  } else if(value <= 105){
+                    color = "green-text";
+                  } else if(value <= 115){
+                    color = "orange-text";
+                  } else{
+                    color = "red-text";
+                  }
+                  return color;
+                }
+              </script>
+
             </div>
           </div>
         </div>
