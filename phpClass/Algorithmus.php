@@ -8,10 +8,13 @@ require 'Datenbankabfrage.php';
 
 class Algorithmus
 {
+<<<<<<< HEAD
 
   private $cl_DatenBankabfrage;
   private $kapa;
 
+=======
+>>>>>>> refs/remotes/origin/master
   public function getPrognose($propChildren,$birthrate){
 
     // $test = $this->cl_DatenBankabfrage->getAnzahlKinder3bis6();
@@ -31,15 +34,32 @@ class Algorithmus
 
     $cl_DatenBankabfrage = new Datenbankabfrage();
     // Kapazität eines STadteils herausfinden
-    $sql_kapa = $cl_DatenBankabfrage->getKapazitaetProStadtteil("Buer");
-    if ($row = $sql_kapa->fetch_assoc() == NULL){
-      $kapa = 0;
-    }
-    else {
-      $kapa = $row['Kapa'];
-    }
-    echo "Kapazität: " . $kapa;
+    $sql_kapa = $cl_DatenBankabfrage->getKapazitaet();
+    $sql_3bis6 = $cl_DatenBankabfrage->getAnzahlKinder3bis6();
+    $sql_2bis5 = $cl_DatenBankabfrage->getAnzahlKinder2bis5();
+    $sql_1bis4 = $cl_DatenBankabfrage->getAnzahlKinder1bis4();
 
+/*
+    while($row = $sql_1bis4->fetch_assoc() ){
+     echo $row["Stadtteil_Bez"];
+     echo $row["SummeKinder"];
+     echo "<br />";
+   }
+
+    if (!$sql_kapa) {
+      echo "Konnte Abfrage nicht erfolgreich ausführen von DB: " . mysql_error();
+      exit;
+    }
+    else{
+      echo "<br />";
+      echo "<br />";
+       while($row = $sql_kapa->fetch_assoc() ){
+        echo $row["Stadtteil"];
+        echo $row["Kapa"];
+        echo "<br />";
+      }
+    }
+*/
 
     // Architektur der Ausgabe
     $prognoseAusgabe = array(

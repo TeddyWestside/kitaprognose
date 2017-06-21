@@ -25,30 +25,54 @@ class Datenbereitstellung {
   //----------------------------------------------------------------------------
   //Datenbankverbindung
   private $gr_conn = null;
+  //Kennzeichen, dass eine lokale Datenbankverbindung erzeugt wurde
+  private $gv_lokale_verbindung = 0;
 
   //FUNKTIONEN
   //----------------------------------------------------------------------------
 
   /**
    * __CONSTRUCT
+   * Liest die global verfügbare Datenbankverbindung aus.
    *
    * @author René Kanzenbach
    */
-  // public function __construct($ir_connection) {
-  //   self::$gr_conn = $GLOBALS['conn'];
-  // }
   public function __construct() {
 
-    /*--DATENBANKVERBINDUNG AUFBAUEN--*/
-    //Baue Datenbankverbindung auf
-    $this->gr_conn = new mysqli(self::CO_SERVERNAME, self::CO_USERNAME, self::CO_PASSWORD);
-    //Connection prüfen
+    //Datenbankverbindung auslesen
+    $this->gr_conn = $GLOBALS["conn"];
+    //Datenbankverbindung prüfen
     if ($this->gr_conn->connect_error) {
-      //->Verbindung konnte nicht aufgebaut werden
-      die("<br> Verbindung fehlgeschlagen: " . $lr_conn->connect_error);
+      //->Verbindung konnte nicht ausgelesen werden
+      die("Die globale Datenbankverbindung konnte nicht geladen werden!");
+
+      //Eigene DB-Verbindung erzeugen
+      $this->gr_conn = new mysqli(self::CO_SERVERNAME, self::CO_USERNAME,
+        self::CO_PASSWORD);
+      if ($this->gr_conn->connect_error) {
+        //->Verbindung konnte nicht aufgebaut werden
+        die("Es konnte keine Datenbankverbindung erzeugt werden!");
+      }
+      $this->gv_lokale_verbindung = 1;
+    }
+  }
+
+  /**
+   * __DESTRUCT
+   * Prüft, ob eine lokale Datenbankverbindung erzeugt wurde. Falls ja wird
+   * diese wieder geschlossen.
+   *
+   * @author René Kanzenbach
+   */
+  public function __destruct() {
+    if ($this->gv_lokale_verbindung == 1) {
+      //->Es wird eine lokale Datenbankverbindung genutzt
+      //Verbindung schließen
+      $this->gr_conn->close();
+      $this->gv_lokale_verbindung = 0;
     }
     //Charset auf UTF-8 setzen
-    $this->gr_conn->set_charset('utf-8');
+    $this->gr_conn->set_charset('utf8');
   }
 
   /**
@@ -87,11 +111,42 @@ class Datenbereitstellung {
     $lv_json; //JSON-String
     $lr_obj;  //Aus dem JSON-String generiertes Result-Objekt
 
-    //JSON Datei anfordern und in Objekt wandeln
+    //Datensatz als JSON-String anfordern
     $lv_json = file_get_contents($iv_link);
+
+    //DEBUG
+    // var_dump($lv_json);
+
+    //Anpassen der Attributnamen innerhalb des JSON-Strings, damit diese im nächsten
+    //Schritt erfolgreich in ein Objekt gewandelt werden können
+    $lv_json = str_replace("0_bis_unter_1_jahr__m", "_0bis1m", $lv_json);
+    $lv_json = str_replace("0_bis_unter_1_jahr__w", "_0bis1w", $lv_json);
+    $lv_json = str_replace("1_bis_unter_2_jahre__m", "_1bis2m", $lv_json);
+    $lv_json = str_replace("1_bis_unter_2_jahre__w", "_1bis2w", $lv_json);
+    $lv_json = str_replace("2_bis_unter_3_jahre__m", "_2bis3m", $lv_json);
+    $lv_json = str_replace("2_bis_unter_3_jahre__w", "_2bis3w", $lv_json);
+    $lv_json = str_replace("3_bis_unter_4_jahre__m", "_3bis4m", $lv_json);
+    $lv_json = str_replace("3_bis_unter_4_jahre__w", "_3bis4w", $lv_json);
+    $lv_json = str_replace("4_bis_unter_5_jahre__m", "_4bis5m", $lv_json);
+    $lv_json = str_replace("4_bis_unter_5_jahre__w", "_4bis5w", $lv_json);
+    $lv_json = str_replace("5_bis_unter_6_jahre__m", "_5bis6m", $lv_json);
+    $lv_json = str_replace("5_bis_unter_6_jahre__w", "_5bis6w", $lv_json);
+    $lv_json = str_replace("6_bis_unter_7_jahre__m", "_6bis7m", $lv_json);
+    $lv_json = str_replace("6_bis_unter_7_jahre__w", "_6bis7w", $lv_json);
+    $lv_json = str_replace("7_bis_unter_8_jahre__m", "_7bis8m", $lv_json);
+    $lv_json = str_replace("7_bis_unter_8_jahre__w", "_7bis8w", $lv_json);
+    $lv_json = str_replace("8_bis_unter_9_jahre__m", "_8bis9m", $lv_json);
+    $lv_json = str_replace("8_bis_unter_9_jahre__w", "_8bis9w", $lv_json);
+    $lv_json = str_replace("9_bis_unter_10_jahre__m", "_9bis10m", $lv_json);
+    $lv_json = str_replace("9_bis_unter_10_jahre__w", "_9bis10w", $lv_json);
+
+    //JSON-String in Objekt wandeln
     $lr_obj = json_decode($lv_json);
 
-    //Rückgabe der Datensätze
+    //DEBUG
+    var_dump($lr_obj);
+
+    //=>Rückgabe der Datensätze
     return $lr_obj->result;
   }
 
@@ -148,14 +203,14 @@ class Datenbereitstellung {
       $y = $record->Y;
       $telefon = $record->Telefon;
       $fax = $record->Fax;
-      // $email = $record->e_mail;
+      $email = $record->E_Mail;
       $internet = $record->Internet;
       // $info = $record->Info;
-      // $internetbeschreibung = $record->Internetbeschreibung;
-      // $barrierefrei_inklusion = $record->Barrierefrei (Inklusion);
-      // $anzahl_der_plaetze = $record->Anzahl_der_Plaetze;
-      // $anzahl_der_gruppen = $record->
-      // $betriebsnummer = $record->
+      $internetbeschreibung = $record->Internet;
+      $barrierefrei_inklusion = $record->Barrierefrei;
+      $anzahl_der_plaetze = $record->Anzahl_der_Plaetze;
+      $anzahl_der_gruppen = $record->Anzahl_der_Gruppen;
+      $betriebsnummer = $record->Betriebsnummer;
 
       //Statement ausführen
       if($lr_sql_stmt->execute()) {
@@ -165,13 +220,13 @@ class Datenbereitstellung {
   }
 
   /**
-   * SPEICHER_STADTTEIL
-   * Leert die DB-Tabelle 'alterstadtteil' und füllt sie erneut mit dem Inhalt
-   * des übergebenen Result-Objektes.
-   *
-   * @param $ir_stadtteil_result: Result-Objekt der JSON-AlterStadtteil Datensätze
-   * @author René Kanzenbach
-   */
+  * SPEICHER_STADTTEIL
+  * Leert die DB-Tabelle 'alterstadtteil' und füllt sie erneut mit dem Inhalt
+  * des übergebenen Result-Objektes.
+  *
+  * @param $ir_stadtteil_result: Result-Objekt der JSON-AlterStadtteil Datensätze
+  * @author René Kanzenbach
+  */
   private function speicher_stadtteil($ir_stadtteil_result) {
 
     /*--DEKLARATION--*/
@@ -191,45 +246,58 @@ class Datenbereitstellung {
     /*--TABELLE BEFÜLLEN--*/
     //Statement vorbereiten
     $lr_sql_stmt = $this->gr_conn->prepare(
-      "INSERT INTO kitaprognose.alterstadtteil (STICHTAG, BEZIRK_ID, BEZIRK_BEZ, STADTTEIL_ID,
-        STADTTEIL_BEZ, 0BIS1M, 0BIS1W, 1BIS2M, 1BIS2W, 2BIS3M, 2BIS3W, 3BIS4M,
-        3BIS4W, 4BIS5M, 4BIS5W, 5BIS6M, 5BIS6W, 6BIS7M, 6BIS7W, 7BIS8M, 7BIS8W,
-        8BIS9M, 8BIS9W, 9BIS10M, 9BIS10W, GESAMTSTADT)
+      "INSERT INTO kitaprognose.alterstadtteil (STICHTAG, BEZIRK_ID, BEZIRK_BEZ,
+        STADTTEIL_ID, STADTTEIL_BEZ, 0BIS1M, 0BIS1W, 1BIS2M, 1BIS2W, 2BIS3M,
+        2BIS3W, 3BIS4M, 3BIS4W, 4BIS5M, 4BIS5W, 5BIS6M, 5BIS6W, 6BIS7M, 6BIS7W,
+        7BIS8M, 7BIS8W, 8BIS9M, 8BIS9W, 9BIS10M, 9BIS10W, GESAMTSTADT)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?)");
+        ?, ?, ?, ?)");
 
     //Statement befüllen
     $lr_sql_stmt->bind_param('sisisiiiiiiiiiiiiiiiiiiiii', $stichtag, $bezirk_id,
-      $bezirk_bez, $stadtteil_id, $stadtteil_bez, $_0bis1m, $_0bis1w, $_1bis2m,
-      $_1bis2w, $_2bis3m, $_2bis3w, $_3bis4m, $_3bis4w, $_4bis5m, $_4bis5w,
-      $_5bis6m, $_5bis6w, $_6bis7m, $_6bis7w, $_7bis8m, $_7bis8w, $_8bis9m,
-      $_8bis9w, $_9bis10m,$_9bis10w, $gesamtstadt);
+    $bezirk_bez, $stadtteil_id, $stadtteil_bez, $_0bis1m, $_0bis1w, $_1bis2m,
+    $_1bis2w, $_2bis3m, $_2bis3w, $_3bis4m, $_3bis4w, $_4bis5m, $_4bis5w,
+    $_5bis6m, $_5bis6w, $_6bis7m, $_6bis7w, $_7bis8m, $_7bis8w, $_8bis9m,
+    $_8bis9w, $_9bis10m,$_9bis10w, $gesamtstadt);
 
+    //Daten einfügen
+    foreach ($ir_stadtteil_result->records as $record) {
 
+      //DEBUG
+      // var_dump($record);
 
-    // $lr_sql_stmt = $this->gr_conn->prepare(
-    //   "INSERT INTO kitaprognose.alterstadtteil(STICHTAG, BEZIRK_ID) VALUES (?, ?)");
-    //
-    // //Statement befüllen
-    // $lr_sql_stmt->bind_param('si', $stichtag, $bezirk_id);
+      $stichtag = $this->formatiere_datum($record->stichtag);
+      $bezirk_id = $record->bezirk_id;
+      $bezirk_bez = $record->bezirk_bez;
+      $stadtteil_id = $record->stadtteil_id;
+      $stadtteil_bez = $record->stadtteil_bez;
+      $_0bis1m = $record->_0bis1m;
+      $_0bis1w = $record->_0bis1w;
+      $_1bis2m = $record->_1bis2m;
+      $_1bis2w = $record->_1bis2w;
+      $_2bis3m = $record->_2bis3m;
+      $_2bis3w = $record->_2bis3w;
+      $_3bis4m = $record->_3bis4m;
+      $_3bis4w = $record->_3bis4w;
+      $_4bis5m = $record->_4bis5m;
+      $_4bis5w = $record->_4bis5w;
+      $_5bis6m = $record->_5bis6m;
+      $_5bis6w = $record->_5bis6w;
+      $_6bis7m = $record->_6bis7m;
+      $_6bis7w = $record->_6bis7w;
+      $_7bis8m = $record->_7bis8m;
+      $_7bis8w = $record->_7bis8w;
+      $_8bis9m = $record->_8bis9m;
+      $_8bis9w = $record->_8bis9w;
+      $_9bis10m = $record->_9bis10m;
+      $_9bis10w = $record->_9bis10w;
+      $gesamtstadt = $record->gesamtstadt;
 
-      //Daten einfügen
-      foreach ($ir_stadtteil_result->records as $record) {
-
-        var_dump($record);
-
-        $stichtag = $this->formatiere_datum($record->stichtag);
-        $bezirk_id = $record->bezirk_id;
-        $bezirk_bez = $record->bezirk_bez;
-        $stadtteil_id = $record->stadtteil_id;
-        $stadtteil_bez = $record->stadtteil_bez;
-        //  $_0bis1m = $record->0_bis_unter_1_jahr_m;
-
-        //Statement ausführen
-        if($lr_sql_stmt->execute()) {
-          // echo "Datensatz eingefügt! Stichtag=" . $record->stichtag;
-        }
+      //Statement ausführen
+      if($lr_sql_stmt->execute()) {
+        // echo "Datensatz eingefügt! Stichtag=" . $record->stichtag;
       }
+    }
   }
 
   /**
@@ -237,7 +305,8 @@ class Datenbereitstellung {
    * Bringt das Datum vom OpenData-Format "TT.MM.JJJJ" in das SQL-Format
    * "JJJJ-MM-TT".
    *
-   * @param $iv_datum
+   * @param $iv_datum: Datum im Format "TT.MM.JJJJ"
+   * @return $rv_datum: Datum im Format "JJJJ-MM-TT"
    * @author René Kanzenbach
    */
   private function formatiere_datum($iv_datum) {
@@ -249,7 +318,6 @@ class Datenbereitstellung {
     $rv_datum = $lv_jahr . '-' . $lv_monat . '-' . $lv_tag;
     return $rv_datum;
   }
-
  }
 
 ?>
