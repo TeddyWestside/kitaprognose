@@ -8,13 +8,7 @@ require 'Datenbankabfrage.php';
 
 class Algorithmus
 {
-<<<<<<< HEAD
 
-  private $cl_DatenBankabfrage;
-  private $kapa;
-
-=======
->>>>>>> refs/remotes/origin/master
   public function getPrognose($propChildren,$birthrate){
 
     // $test = $this->cl_DatenBankabfrage->getAnzahlKinder3bis6();
