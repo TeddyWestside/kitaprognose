@@ -109,6 +109,11 @@ Footer wird jeweils extra eingebunden.
                 <label for="year3"><?php echo $lang->Main->label_year3; ?></label>
             <button type="submit" class="waves-effect waves-light btn"><?php echo $lang->Main->text_filterButton; ?></button>
             </form> -->
+            <div class="col l6">
+            </div>
+            <div class="col l6">
+              <input type="range" id="forecastPeriod" onchange="buildTable(getForecastPeriod())"  value="1" max="3" min="1">
+            </div>
             </div>
           </div>
         </div>
@@ -144,7 +149,11 @@ Footer wird jeweils extra eingebunden.
                 echo ("var jsresult = $jsArray;");
                 ?>
 
-                buildTable(0);
+                buildTable(getForecastPeriod());
+
+                function getForecastPeriod() {
+                  return parseInt(document.getElementById("forecastPeriod").value) - 1;
+                }
 
                 function buildTable(forecastPeriod){
 
