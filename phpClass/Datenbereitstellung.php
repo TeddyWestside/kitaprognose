@@ -25,27 +25,51 @@ class Datenbereitstellung {
   //----------------------------------------------------------------------------
   //Datenbankverbindung
   private $gr_conn = null;
+  //Kennzeichen, dass eine lokale Datenbankverbindung erzeugt wurde
+  private $gv_lokale_verbindung = 0;
 
   //FUNKTIONEN
   //----------------------------------------------------------------------------
 
   /**
    * __CONSTRUCT
+   * Liest die global verfügbare Datenbankverbindung aus.
    *
    * @author René Kanzenbach
    */
-  // public function __construct($ir_connection) {
-  //   self::$gr_conn = $GLOBALS['conn'];
-  // }
   public function __construct() {
 
-    /*--DATENBANKVERBINDUNG AUFBAUEN--*/
-    //Baue Datenbankverbindung auf
-    $this->gr_conn = new mysqli(self::CO_SERVERNAME, self::CO_USERNAME, self::CO_PASSWORD);
-    //Connection prüfen
+    //Datenbankverbindung auslesen
+    $this->gr_conn = $GLOBALS["conn"];
+    //Datenbankverbindung prüfen
     if ($this->gr_conn->connect_error) {
-      //->Verbindung konnte nicht aufgebaut werden
-      die("<br> Verbindung fehlgeschlagen: " . $lr_conn->connect_error);
+      //->Verbindung konnte nicht ausgelesen werden
+      die("Die globale Datenbankverbindung konnte nicht geladen werden!");
+
+      //Eigene DB-Verbindung erzeugen
+      $this->gr_conn = new mysqli(self::CO_SERVERNAME, self::CO_USERNAME,
+        self::CO_PASSWORD);
+      if ($this->gr_conn->connect_error) {
+        //->Verbindung konnte nicht aufgebaut werden
+        die("Es konnte keine Datenbankverbindung erzeugt werden!");
+      }
+      $this->gv_lokale_verbindung = 1;
+    }
+  }
+
+  /**
+   * __DESTRUCT
+   * Prüft, ob eine lokale Datenbankverbindung erzeugt wurde. Falls ja wird
+   * diese wieder geschlossen.
+   *
+   * @author René Kanzenbach
+   */
+  public function __destruct() {
+    if ($this->gv_lokale_verbindung == 1) {
+      //->Es wird eine lokale Datenbankverbindung genutzt
+      //Verbindung schließen
+      $this->gr_conn->close();
+      $this->gv_lokale_verbindung = 0;
     }
     //Charset auf UTF-8 setzen
     $this->gr_conn->set_charset('utf8');
@@ -116,14 +140,11 @@ class Datenbereitstellung {
     $lv_json = str_replace("9_bis_unter_10_jahre__m", "_9bis10m", $lv_json);
     $lv_json = str_replace("9_bis_unter_10_jahre__w", "_9bis10w", $lv_json);
 
-    //DEBUG
-    // var_dump($lv_json);
-
     //JSON-String in Objekt wandeln
     $lr_obj = json_decode($lv_json);
 
     //DEBUG
-    // var_dump($lr_obj);
+    var_dump($lr_obj);
 
     //=>Rückgabe der Datensätze
     return $lr_obj->result;
@@ -229,8 +250,8 @@ class Datenbereitstellung {
         STADTTEIL_ID, STADTTEIL_BEZ, 0BIS1M, 0BIS1W, 1BIS2M, 1BIS2W, 2BIS3M,
         2BIS3W, 3BIS4M, 3BIS4W, 4BIS5M, 4BIS5W, 5BIS6M, 5BIS6W, 6BIS7M, 6BIS7W,
         7BIS8M, 7BIS8W, 8BIS9M, 8BIS9W, 9BIS10M, 9BIS10W, GESAMTSTADT)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-          ?, ?, ?, ?)");
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+        ?, ?, ?, ?)");
 
     //Statement befüllen
     $lr_sql_stmt->bind_param('sisisiiiiiiiiiiiiiiiiiiiii', $stichtag, $bezirk_id,
@@ -258,6 +279,8 @@ class Datenbereitstellung {
       $_2bis3w = $record->_2bis3w;
       $_3bis4m = $record->_3bis4m;
       $_3bis4w = $record->_3bis4w;
+      $_4bis5m = $record->_4bis5m;
+      $_4bis5w = $record->_4bis5w;
       $_5bis6m = $record->_5bis6m;
       $_5bis6w = $record->_5bis6w;
       $_6bis7m = $record->_6bis7m;
@@ -295,7 +318,6 @@ class Datenbereitstellung {
     $rv_datum = $lv_jahr . '-' . $lv_monat . '-' . $lv_tag;
     return $rv_datum;
   }
-
  }
 
 ?>
