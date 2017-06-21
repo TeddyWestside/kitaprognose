@@ -48,7 +48,7 @@ class Datenbereitstellung {
       die("<br> Verbindung fehlgeschlagen: " . $lr_conn->connect_error);
     }
     //Charset auf UTF-8 setzen
-    $this->gr_conn->set_charset('utf-8');
+    $this->gr_conn->set_charset('utf8');
   }
 
   /**
