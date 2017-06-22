@@ -1,6 +1,13 @@
 <?php
 /*
 Diese Klasse ist für die Berechnung des Algorithmus zuständig.
+
+=> (Pro Stadtteil)
+
+kinder3b6 * %die Kita gehen * %Anteil andere Stadtteile
+-----------------------------------------------------s
+                    Kitaplätze
+
 @author Carsten Schober
 */
 
@@ -32,13 +39,31 @@ class Algorithmus
     $sql_3bis6 = $cl_DatenBankabfrage->getAnzahlKinder3bis6();
     $sql_2bis5 = $cl_DatenBankabfrage->getAnzahlKinder2bis5();
     $sql_1bis4 = $cl_DatenBankabfrage->getAnzahlKinder1bis4();
+    $sql_1bis4 = $sql_1bis4->fetch_array();
+    var_dump($sql_1bis4);
 
-/*
-    while($row = $sql_1bis4->fetch_assoc() ){
-     echo $row["Stadtteil_Bez"];
-     echo $row["SummeKinder"];
-     echo "<br />";
-   }
+      while($rowKapa = $sql_kapa->fetch_assoc() ){
+      while($rowKinder = $sql_3bis6->fetch_assoc() ){
+
+        // $Stadtteil = $rowKapa["Stadtteil"];
+        // echo $Stadtteil;
+        $Kinder = $rowKinder["SummeKinder"];
+        echo $Kinder;
+        // if
+        // echo $Stadtteil;
+        // // echo $row["Kapa"];
+        // echo "<br />";
+
+      }
+    }
+
+
+
+    //   while($row = $sql_1bis4->fetch_assoc() ){
+    //    echo $row["Stadtteil_Bez"];
+    //    echo $row["SummeKinder"];
+    //    echo "<br />";
+    //  }
 
     if (!$sql_kapa) {
       echo "Konnte Abfrage nicht erfolgreich ausführen von DB: " . mysql_error();
@@ -53,7 +78,7 @@ class Algorithmus
         echo "<br />";
       }
     }
-*/
+
 
     // Architektur der Ausgabe
     $prognoseAusgabe = array(
