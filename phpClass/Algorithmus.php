@@ -41,21 +41,37 @@ class Algorithmus
     $sql_1bis4 = $cl_DatenBankabfrage->getAnzahlKinder1bis4();
     // var_dump($sql_1bis4);
 
-      while($rowKapa = $sql_kapa->fetch_assoc() ){
-        echo "<br>";
-        $stadtteilKapa = $rowKapa["Stadtteil"];
-        $kapa = $rowKapa["Kapa"];
-        echo $stadtteilKapa . "_Kapazität: " . $kapa;
+    // Kapazitäten-Array mit dem Ergebnis der SQL-Abfrage füllen.
+    for($i = 0; $stadtteilKapa[$i] = ($sql_kapa->fetch_assoc()); $i++);
+    array_pop($stadtteilKapa);
 
-        while($rowKinder = $sql_3bis6->fetch_assoc() ){
+    // AnzahlKinder-Array mit dem Ergebnis der SQL-Abfrage füllen.
+    for($i = 0; $stadtteilKinder[$i] = ($sql_3bis6->fetch_assoc()); $i++);
+    array_pop($stadtteilKinder);
 
-            echo "<br>";
-            $stadtteilKinder = $rowKinder["Stadtteil_Bez"];
-            $kinder = $rowKinder["SummeKinder"];
-            echo $stadtteilKinder . "_Kinder: " . $kinder;
+    // Möglichkeit ein PHP-Array iterativ durchzulaufen.
+    $iterator = new MultipleIterator;
+    $iterator->attachIterator(new ArrayIterator($stadtteilKapa));
+    $iterator->attachIterator(new ArrayIterator($stadtteilKinder));
 
-        }
-      }
+    foreach ($iterator as $values) {
+        var_dump($values[0], $values[1]);
+    }
+      // while($rowKapa = $sql_kapa->fetch_assoc() ){
+      //   echo "<br>";
+      //   $stadtteilKapa = $rowKapa["Stadtteil"];
+      //   $kapa = $rowKapa["Kapa"];
+      //   echo $stadtteilKapa . "_Kapazität: " . $kapa*1000;
+      //
+      //   while($rowKinder = $sql_3bis6->fetch_assoc() ){
+      //
+      //       echo "<br>";
+      //       $stadtteilKinder = $rowKinder["Stadtteil_Bez"];
+      //       $kinder = $rowKinder["SummeKinder"];
+      //       echo $stadtteilKinder . "_Kinder: " . $kinder;
+      //
+      //   }
+      // }
 
 
 
