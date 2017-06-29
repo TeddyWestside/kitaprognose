@@ -46,7 +46,7 @@ class Algorithmus
       foreach($ar_3bis6 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = 0;
           }
           else{
             $auslastung = $propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
@@ -62,7 +62,7 @@ class Algorithmus
       foreach($ar_2bis5 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = 0;
           }
           else{
             $auslastung = $propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
@@ -77,7 +77,7 @@ class Algorithmus
       foreach($ar_1bis4 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = 0;
           }
           else{
             $auslastung = $propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
@@ -92,7 +92,7 @@ class Algorithmus
       foreach($ar_0bis3 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = 0;
           }
           else{
             $auslastung = $propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
@@ -107,7 +107,7 @@ class Algorithmus
       foreach($ar_m0bis2 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = 0;
           }
           else{
             $auslastung = $birthrate*$propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
