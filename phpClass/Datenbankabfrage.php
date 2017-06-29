@@ -49,6 +49,12 @@ class Datenbankabfrage
       return $sql_AnzahlKinder;
   }
     // Funktion, die die Anzahl der Kinder im mitgegebenen Stadtteil zwischen 0 und 3 in Gelsenkirchen zurückliefert.
+  public function getAnzahlKinder0bis3()
+  {
+      $sql_AnzahlKinder = $GLOBALS['conn']->query("SELECT Stadtteil_Bez as Stadtteil, (sum(2bis3m) + sum(2bis3w) + sum(1bis2m) + sum(1bis2w) + sum(0bis1m) + sum(0bis1w)) as SummeKinder FROM Kitaprognose.AlterStadtteil WHERE Bezirk_Bez NOT LIKE 'Gesamtstadt' AND Stichtag LIKE '2015-12-31' GROUP BY Stadtteil_Bez;");
+      return $sql_AnzahlKinder;
+  }
+    // Funktion, die die Anzahl der Kinder im mitgegebenen Stadtteil zwischen 0 und 3 in Gelsenkirchen zurückliefert.
   public function getAnzahlKinder0bis6()
   {
       $sql_AnzahlKinder = $GLOBALS['conn']->query("SELECT Stadtteil_Bez as Stadtteil, (sum(2bis3m) + sum(2bis3w) + sum(1bis2m) + sum(1bis2w) + sum(0bis1m) + sum(0bis1w)) as SummeKinder FROM Kitaprognose.AlterStadtteil WHERE Bezirk_Bez NOT LIKE 'Gesamtstadt' AND Stichtag LIKE '2015-12-31' GROUP BY Stadtteil_Bez;");
