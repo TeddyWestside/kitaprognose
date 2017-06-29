@@ -28,7 +28,8 @@ class Datenbankinitialisierung{
     Barrierefrei_Inklusion varchar(10),
     Anzahl_der_Plaetze int,
     Anzahl_der_Gruppen int,
-    Betriebsnummer varchar(40)
+    Betriebsnummer varchar(40),
+    PRIMARY KEY (Id)
   )";
 
   private $sql_CreateTableAlterStadtteil = "CREATE TABLE IF NOT EXISTS Kitaprognose.AlterStadtteil (
