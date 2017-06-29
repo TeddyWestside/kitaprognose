@@ -60,12 +60,13 @@ class Algorithmus
       foreach($ar_3bis6 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $auslastung = 0;
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
           }
           else{
             $auslastung = $propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
           }
-          $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
+
 
         }
       }
@@ -75,13 +76,12 @@ class Algorithmus
       foreach($ar_2bis5 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $auslastung = 0;
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
           }
           else{
             $auslastung = $propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
           }
-          $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
-
         }
       }
     }
@@ -91,13 +91,12 @@ class Algorithmus
       foreach($ar_1bis4 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $auslastung = 0;
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
           }
           else{
             $auslastung = $propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
           }
-          $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
-
         }
       }
     }
@@ -107,13 +106,12 @@ class Algorithmus
       foreach($ar_0bis3 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $auslastung = 0;
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
           }
           else{
             $auslastung = $propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
           }
-          $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
-
         }
       }
     }
@@ -123,13 +121,12 @@ class Algorithmus
       foreach($ar_m0bis2 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
           if($kapa["Kapa"] == 0){
-            $auslastung = 0;
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = "Fehler";
           }
           else{
             $auslastung = $birthrate*$propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
+            $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
           }
-          $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
-
         }
       }
     }
