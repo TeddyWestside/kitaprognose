@@ -10,24 +10,10 @@ class Algorithmus
 {
   public function getPrognose($propChildren,$birthrate){
 
-    // $test = $this->cl_DatenBankabfrage->getAnzahlKinder3bis6();
-    // $kinder0b3 = $this->cl_DatenBankabfrage->getAnzahlKinder3bis6();
-    // var_dump($kinder0b3);
-
-    // Durchführung des Algorithmus
-
-
-    // $cl_DatenBankabfrage = $this->cl_DatenBankabfrage;
-    // var_dump($cl_DatenBankabfrage->getKapazitaetProStadtteil("Buer"));
-    //
-    // $kapa = $cl_DatenBankabfrage->getKapazitaetProStadtteil("Buer");
-    // while ($row = $kapa->fetch_assoc()) {
-    //   echo $row['Kapa'];
-    // }
-
     $cl_DatenBankabfrage = new Datenbankabfrage();
     // Kapazität eines STadteils herausfinden
     $sql_kapa = $cl_DatenBankabfrage->getKapazitaet();
+
     $sql_3bis6 = $cl_DatenBankabfrage->getAnzahlKinder3bis6();
     $sql_2bis5 = $cl_DatenBankabfrage->getAnzahlKinder2bis5();
     $sql_1bis4 = $cl_DatenBankabfrage->getAnzahlKinder1bis4();
@@ -131,18 +117,6 @@ class Algorithmus
       }
     }
 
-    /**
-    Wichtig!
-    */
-    // foreach($ar_kapa as $kapa){
-    //   foreach($ar_3bis6 as $kinder){
-    //     if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
-    //       echo "Stadtteil: " . $kapa["Stadtteil"];
-    //       echo " => Auslastung: " . $kinder["SummeKinder"] . "/" . $kapa["Kapa"];
-    //       echo "<br>";
-    //     }
-    //   }
-    // }
 
     // Architektur der Ausgabe
     // $prognoseAusgabe = array(
