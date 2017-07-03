@@ -34,7 +34,6 @@ class Datenbankabfrage
   public function getKapazitaet()
   {
     $sql_Kapazitaet = $GLOBALS['conn']->query("SELECT Stadtteil ,sum(Anzahl_der_Plaetze) as Kapa FROM Kitaprognose.Kitas Group by Stadtteil;");
-    // var_dump($sql_KapazitaetInStadtteil->fetch_assoc());
     return $sql_Kapazitaet;
   }
 
