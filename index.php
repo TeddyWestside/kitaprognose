@@ -134,7 +134,9 @@ Footer wird jeweils extra eingebunden.
   </body>
   <?php
   include 'connection.php';
-  require "phpClass/Algorithmus.php";
+  if($GLOBALS['conn'] != null){
+    require "phpClass/Algorithmus.php";  
+  }
 
   $algo = new Algorithmus;
   $result = $algo->getPrognose($propChildren, $birthrate);
