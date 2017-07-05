@@ -101,7 +101,7 @@ Footer wird jeweils extra eingebunden.
         <div class="row">
           <div class="col l12">
             <div class="card-panel">
-              <div class="row">
+              <div class="row" id="filterRow" style="visibility:hidden">
                 <div class="input-field col l6">
 
                   <select id="filter" multiple onchange="buildTable();">
@@ -146,11 +146,16 @@ Footer wird jeweils extra eingebunden.
   <?php
   $jsArray = json_encode($result);
   echo ("var jsresult = $jsArray;");
+  $jsLanguage = json_encode($lang);
+  echo ("var jsLanguage = $jsLanguage;");
   ?>
+
+  console.log(jsLanguage);
 
   buildFilter();
   setMaxForecastPeriod();
   buildTable();
+  document.getElementById("filterRow").style.visibility = "visible";
 
   // Methoden
 
