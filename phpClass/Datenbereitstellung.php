@@ -106,7 +106,7 @@ class Datenbereitstellung {
 
     //=>Fehlende Kapazitätsplätze manuell eintragen
     //--------------------------------------------------------------------------
-    // $this->fuelle_leere_kitaplaetze();
+    $this->fuelle_leere_kitaplaetze();
   }
 
   /**
@@ -248,20 +248,11 @@ class Datenbereitstellung {
       $anzahl_der_gruppen = $record->Anzahl_der_Gruppen;
       $betriebsnummer = $record->Betriebsnummer;
 
-      // //Prüfen, ob für die Kita die Kapazitätsplätze eingefügt sind
-      // if ($record->Anzahl_der_Plaetze == 0) {
-      //   //->Für diese Kita wurden keine Kitaplätze hinterlegt
-      //   //Standardanzahl für Kitaplätze verwenden
-      //   $anzahl_der_plaetze = self::CO_KITAPLAETZE;
-      // }
-
       //Statement ausführen
       if($lr_sql_stmt->execute()) {
-        $lv_i++;
-        // echo "Datensatz eingefügt! id=" . $record->Id;
+        //TODO Fehlerbehandlung
       }
     }
-    echo $lv_i;
   }
 
   /**
@@ -308,8 +299,9 @@ class Datenbereitstellung {
     //Daten einfügen
     foreach ($ia_stadtteil_result as $record) {
 
-      //DEBUG
+      //>>>DEBUG
       // var_dump($record);
+      //<<<DEBUG
 
       $stichtag = $this->formatiere_datum($record->stichtag);
       $bezirk_id = $record->bezirk_id;
@@ -374,14 +366,21 @@ class Datenbereitstellung {
   */
   private function fuelle_leere_kitaplaetze() {
 
-    $lv_sql = "";       //SQL-Statement
-    $lr_kitas_leer  ;   //Kitas, für die keine Kapazitäten gepflegt sind
-    $lr_datei = null;   //Ressource der Kapazitaeten.csv
-    $la_manuell_kap ;   //Array der manuell gepflegten Kapazitäten
+    $lv_sql = "";           //SQL-Statement
+    $lr_sql_prep = null;    //Prepared SQL-Statement
+    $lr_kitas_leer;         //Kitas, für die keine Kapazitäten gepflegt sind
+    $la_kita_leer;          //Array mit Kita ohne Kapazitäten
+    $lr_datei = null;       //Ressource der Kapazitaeten.csv
+    $la_csv_zeile ;         //Array mit dem Inhalt einer CSV-Zeile
+    $lv_kita_id = 0;        //ID einer Kita
+    $lv_kita_kap = 0;       //Kapazität einer Kita
+    $la_man_kap = array();  //Array mit manuell gepflegten Kapazitäten
 
     //=>Auslesen aller Kitas, für die keine Kapazitätsplätze gepflegt wurden
     //--------------------------------------------------------------------------
-    $lv_sql = "SELECT * FROM kitaprognose.kitas";
+    $lv_sql = "SELECT ID, ANZAHL_DER_PLAETZE
+                FROM kitaprognose.kitas
+                WHERE ANZAHL_DER_PLAETZE = 0";
 
     //Verbindung prüfen
     if ($this->gr_conn->connect_error) {
@@ -392,38 +391,69 @@ class Datenbereitstellung {
     //Statement ausführen
     $lr_kitas_leer = $this->gr_conn->query($lv_sql);
 
-    //>>>DEBUG
-    // echo "la_kitas_leer: ";
-    // if ($lr_kitas_leer->num_rows > 0) {
-    //   echo "<table><tr><th>ID</th><th>Name</th></tr>";
-    //   // output data of each row
-    //   while($row = $lr_kitas_leer->fetch_assoc()) {
-    //     echo "<tr><td>".$row["Id"]."</td><td>".$row["Name"]."</td></tr>";
-    //   }
-    //   echo "</table>";
-    // }
-    // echo "<br>";
-    //<<<DEBUG
+    //TODO Prüfen ob leere Kitas gefunden wurden
 
-    //=>Auslesen der manuellen gepflegten Kapazitätsplätze
+    //=>Update-Statement vorbereiten
     //--------------------------------------------------------------------------
+    $lr_sql_prep = $this->gr_conn->prepare(
+      "UPDATE kitaprognose.kitas
+        SET ANZAHL_DER_PLAETZE = ?
+        WHERE ID = ?");
+
+    //=>Auslesen der manuell gepflegten Kapazitätsplätze
+    //--------------------------------------------------------------------------
+    //Datei öffnen
     $lr_datei = fopen(self::CO_PFAD_KITAPLAETZE, "r")
-      or die("Datei mit den manuellen Kapaziätsplätzen konnte nicht geöffnet werden");
+    or die("Datei mit den manuellen Kapaziätsplätzen konnte nicht geöffnet werden");
 
-    //CSV-Datei in Array konvertieren
-    $la_manuell_kap = fgetcsv($lr_datei);
+    //Erste Zeile der CSV-Datei einlesen (Die erste Zeile ist die Headerline
+    //und wird nicht benötigt)
+    $la_csv_zeile = fgetcsv($lr_datei,30,";");
+    //Zweite Zeile der CSV-Datei einlesen
+    $la_csv_zeile = fgetcsv($lr_datei,30,";");
 
-    //>>>DEBUG
-    // echo "la_manuell_kap: ";
-    // var_dump($la_manuell_kap);
-    // echo "<br>";
-    //<<<DEBUG
+    //Übertragen der einzelnen CSV-Zeilen in ein Array
+    while(count($la_csv_zeile) <> 1){
 
-    //=>Prüfen ob für die Kitas manuelle Daten vorliegen
+      //Werte nach int casten
+      $lv_kita_id = intval($la_csv_zeile[0]);
+      $lv_kita_kap = intval($la_csv_zeile[1]);
+
+      //Array-Zeile anfügen
+      $la_man_kap[$lv_kita_id] = $lv_kita_kap;
+
+      //Nächste Zeile der CSV-Datei auslesen
+      $la_csv_zeile = fgetcsv($lr_datei,30,";");
+    }
+
+    //Update durchführen
     //--------------------------------------------------------------------------
+    //Transaktion beginnen
+    $this->gr_conn->begin_transaction();
 
-    //=>Update der Kapazitätsplätze
-    //--------------------------------------------------------------------------
+    while (($la_kita_leer = $lr_kitas_leer->fetch_assoc()) != null) {
+
+      //Kita-ID nach int casten
+      $lv_kita_id = intval($la_kita_leer["ID"]);
+      $lv_kita_kap = intval($la_kita_leer["ANZAHL_DER_PLAETZE"]);
+
+      //Prüfen, ob für diese Kita bereits Kapazitäten vorliegen
+      if (array_key_exists($lv_kita_id, $la_man_kap)
+          & $lv_kita_kap == 0) {
+        //->Für diese Kita existiert eine manuell gepflegte Kapazität
+
+        //SQL-Statement füllen
+        $lr_sql_prep->bind_param("ii", $la_man_kap[$lv_kita_id], $lv_kita_id);
+        //SQL-Statement ausführen
+        $lr_sql_prep->execute();
+      }
+    }
+
+    //Transaktion abschließen
+    if (!$this->gr_conn->commit()) {
+      //->Transaktion fehlgeschlagen
+      $this->gr_conn->rollback();
+    }
   }
 
 }
