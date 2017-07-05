@@ -10,13 +10,24 @@ $username = "root";
 $password = "";
 
 // Connection erstellen
-$GLOBALS['conn'] = new mysqli($servername, $username, $password);
-mysqli_query($GLOBALS['conn'], "SET NAMES 'utf8'");
+// $GLOBALS['conn'] = new mysqli($servername, $username, $password);
+// mysqli_query($GLOBALS['conn'], "SET NAMES 'utf8'");
+//
+// // Connection prüfen
+// if ($GLOBALS['conn']->connect_error) {
+//   die("<br> Verbindung fehlgeschlagen: " . $conn->connect_error);
+// }
 
-// Connection prüfen
-if ($GLOBALS['conn']->connect_error) {
-  die("<br> Verbindung fehlgeschlagen: " . $conn->connect_error);
+
+
+mysqli_report(MYSQLI_REPORT_STRICT);
+try {
+    $GLOBALS['conn'] = new mysqli($servername, $username, $password);
+} catch (Exception $e) {
+    $GLOBALS['conn'] = NULL;
+    echo 'Datenbankerror: ' . $e->getMessage() . "<br />";
 }
+
 
 
 ?>

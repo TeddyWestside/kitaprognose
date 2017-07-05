@@ -4,7 +4,6 @@
     @author Carsten Schober und Ken Diepers
 */
 
-require 'Datenbankinitialisierung.php';
 
 class Datenbankabfrage
 {
@@ -22,18 +21,11 @@ class Datenbankabfrage
   //   return $sql_KapazitaetInKita;
   // }
 
-  function __construct() {
-    $cl_Datenbankinitialisierung = new Datenbankinitialisierung();
-    $cl_Datenbankinitialisierung->erstelleDatenbank();
-    $cl_Datenbankinitialisierung->erstelleTabelleKitas();
-    $cl_Datenbankinitialisierung->erstelleTabelleAlterStadtteil();
-  }
-
-
   // Funktion, die die aufsummierte Kapazität der Kitas für ein Stadtteil zurückliefert.
   public function getKapazitaet()
   {
     $sql_Kapazitaet = $GLOBALS['conn']->query("SELECT Stadtteil ,sum(Anzahl_der_Plaetze) as Kapa FROM Kitaprognose.Kitas Group by Stadtteil;");
+    // var_dump($sql_KapazitaetInStadtteil->fetch_assoc());
     return $sql_Kapazitaet;
   }
 

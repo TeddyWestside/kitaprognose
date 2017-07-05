@@ -10,7 +10,9 @@ class Datenbereitstellung {
   //KONSTANTEN
   //----------------------------------------------------------------------------
   //Link zum Aufruf der OpenData-API
-  const CO_OPENDATA_LINK = 'https://opendata.gelsenkirchen.de/api/action/datastore/search.json?';
+  private const CO_OPENDATA_LINK = 'https://opendata.gelsenkirchen.de/api/action/datastore/search.json?';
+  //Link zum prüfen der Erreichbarkeit der OpenData-API
+  const CO_CONNECTION_LINK = 'https://opendata.gelsenkirchen.de/api/3/action/site_read';
 
   //Resource-ID's
   const CO_RESOURCE_KITA      = '5a27334a-4765-4535-8943-02ef8494f21b';
@@ -20,9 +22,6 @@ class Datenbereitstellung {
   const CO_SERVERNAME = "localhost";
   const CO_USERNAME   = "root";
   const CO_PASSWORD   = "";
-
-  //Durchschnittliche Anzahl an Kitaplätzen
-  const CO_KITAPLAETZE = 30;
 
   //Dateipfad zur CSV-Datei mit den manuell gepflegten Kapazitätsplätzen
   const CO_PFAD_KITAPLAETZE = "../files/Kapazitaeten.csv";
@@ -50,7 +49,6 @@ class Datenbereitstellung {
     //Datenbankverbindung prüfen
     if ($this->gr_conn->connect_error) {
       //->Verbindung konnte nicht ausgelesen werden
-      die("Die globale Datenbankverbindung konnte nicht geladen werden!");
 
       //Eigene DB-Verbindung erzeugen
       $this->gr_conn = new mysqli(self::CO_SERVERNAME, self::CO_USERNAME,
@@ -71,6 +69,7 @@ class Datenbereitstellung {
    * @author René Kanzenbach
    */
   public function __destruct() {
+
     if ($this->gv_lokale_verbindung == 1) {
       //->Es wird eine lokale Datenbankverbindung genutzt
       //Verbindung schließen
@@ -92,21 +91,25 @@ class Datenbereitstellung {
     $la_kita_result;
     $la_stadtteil_result;
 
+    //=>Verbindung zur OpenData-API prüfen
+    //--------------------------------------------------------------------------
+    $this->pruefe_verbindung();
+
     //=>Kita-Datenbestand aktuallisieren
     //--------------------------------------------------------------------------
-    $la_kita_result = $this->lade_datensatz(self::CO_OPENDATA_LINK . 'resource_id='
-      . self::CO_RESOURCE_KITA);
-    $this->speicher_kitas($la_kita_result);
+    // $la_kita_result = $this->lade_datensatz(self::CO_OPENDATA_LINK . 'resource_id='
+    //   . self::CO_RESOURCE_KITA);
+    // $this->speicher_kitas($la_kita_result);
 
     //=>AlterStadtteil-Datenbestand aktualisieren
     //--------------------------------------------------------------------------
-    $la_stadtteil_result = $this->lade_datensatz(self::CO_OPENDATA_LINK
-      . 'resource_id=' . self::CO_RESOURCE_STADTTEIL);
-    $this->speicher_stadtteil($la_stadtteil_result);
+    // $la_stadtteil_result = $this->lade_datensatz(self::CO_OPENDATA_LINK
+    //   . 'resource_id=' . self::CO_RESOURCE_STADTTEIL);
+    // $this->speicher_stadtteil($la_stadtteil_result);
 
     //=>Fehlende Kapazitätsplätze manuell eintragen
     //--------------------------------------------------------------------------
-    $this->fuelle_leere_kitaplaetze();
+    // $this->fuelle_leere_kitaplaetze();
   }
 
   /**
@@ -120,11 +123,11 @@ class Datenbereitstellung {
   */
   private function lade_datensatz($iv_link) {
 
-    $lv_json; //JSON-String
-    $lr_obj;  //Aus dem JSON-String generiertes Result-Objekt
-    $lv_offset = 0; //Offset-Parameter für OpenData-Portal
-    $lv_dyn_link = ""; //Link mit dynamischen Offset
-    $ra_result = array();       //Return Array mit abgefragten Datensätzen
+    $lv_json;             //JSON-String
+    $lr_obj;              //Aus dem JSON-String generiertes Result-Objekt
+    $lv_offset = 0;       //Offset-Parameter für OpenData-Portal
+    $lv_dyn_link = "";    //Link mit dynamischen Offset
+    $ra_result = array(); //Return Array mit abgefragten Datensätzen
 
     $lv_dyn_link = $iv_link."&offset=";
 
@@ -139,7 +142,6 @@ class Datenbereitstellung {
 
       //Offset erhöhen
       $lv_offset = $lv_offset + 100;
-
       //Datensatz als JSON-String anfordern
       $lv_json = file_get_contents($lv_dyn_link);
 
@@ -168,7 +170,6 @@ class Datenbereitstellung {
 
       //JSON-String in Objekt wandeln
       $lr_obj = json_decode($lv_json);
-
       //Neue Datensätze an das Return-Array hängen
       $ra_result = array_merge($ra_result, $lr_obj->result->records);
 
@@ -195,7 +196,6 @@ class Datenbereitstellung {
   */
   private function speicher_kitas($ia_kita_result) {
 
-    /*--DEKLARATION--*/
     $lv_sql_delete;   //SQL-String zum leeren der Kita-Tabelle
     $lr_sql_stmt;     //Prepared SQL Statement
     $lv_i = 0;
@@ -205,11 +205,13 @@ class Datenbereitstellung {
     $y; $telefon; $fax; $email; $internet; $info; $internetbeschreibung;
     $barrierefrei_inklusion; $anzahl_der_plaetze; $anzahl_der_gruppen; $betriebsnummer;
 
-    /*--KITA-TABELLE LEEREN--*/
+    //=>Kita Tabelle leeren
+    //--------------------------------------------------------------------------
     $lv_sql_delete = 'DELETE FROM kitaprognose.kitas';
     $this->gr_conn->query($lv_sql_delete);
 
-    /*--KITA-TABELLE MIT NEUEN DATEN BEFÜLLEN--*/
+    //=>Kita Tabelle mit neuen Daten befüllen
+    //--------------------------------------------------------------------------
     //Statement vorbereiten
     $lr_sql_stmt = $this->gr_conn->prepare(
       "INSERT INTO kitaprognose.kitas (ID, NAME, ART, TRAEGER, PLZ, ORT, STRASSE,
@@ -265,7 +267,6 @@ class Datenbereitstellung {
   */
   private function speicher_stadtteil($ia_stadtteil_result) {
 
-    /*--DEKLARATION--*/
     $lv_sql_delete  = "";       //SQL-String zum leeren der Kita-Tabelle
     $lr_sql_stmt    = null;     //Prepared SQL Statement
 
@@ -275,11 +276,13 @@ class Datenbereitstellung {
     $_5bis6w; $_6bis7m; $_6bis7w; $_7bis8m; $_7bis8w; $_8bis9m; $_8bis9w; $_9bis10m;
     $_9bis10w; $gesamtstadt;
 
-    /*--TABELLE LEEREN--*/
+    //=>Tabelle leeren
+    //--------------------------------------------------------------------------
     $lv_sql_delete = "DELETE FROM kitaprognose.alterstadtteil";
     $this->gr_conn->query($lv_sql_delete);
 
-    /*--TABELLE BEFÜLLEN--*/
+    //=>Tabelle befüllen
+    //--------------------------------------------------------------------------
     //Statement vorbereiten
     $lr_sql_stmt = $this->gr_conn->prepare(
       "INSERT INTO kitaprognose.alterstadtteil (STICHTAG, BEZIRK_ID, BEZIRK_BEZ,
@@ -431,6 +434,7 @@ class Datenbereitstellung {
     //Transaktion beginnen
     $this->gr_conn->begin_transaction();
 
+    //Bearbeiten aller leeren Kitas
     while (($la_kita_leer = $lr_kitas_leer->fetch_assoc()) != null) {
 
       //Kita-ID nach int casten
@@ -440,7 +444,7 @@ class Datenbereitstellung {
       //Prüfen, ob für diese Kita bereits Kapazitäten vorliegen
       if (array_key_exists($lv_kita_id, $la_man_kap)
           & $lv_kita_kap == 0) {
-        //->Für diese Kita existiert eine manuell gepflegte Kapazität
+        //->Für diese leere Kita existiert eine manuell gepflegte Kapazität
 
         //SQL-Statement füllen
         $lr_sql_prep->bind_param("ii", $la_man_kap[$lv_kita_id], $lv_kita_id);
@@ -453,6 +457,30 @@ class Datenbereitstellung {
     if (!$this->gr_conn->commit()) {
       //->Transaktion fehlgeschlagen
       $this->gr_conn->rollback();
+    }
+  }
+
+  /**
+   * PRUEFE_VERBINDUNG
+   * Prüft ob das OpenData-Portal erreichbar ist oder nicht.
+   *
+   * @throws Exception
+   * @author René Kanzenbach
+   */
+  private function pruefe_verbindung() {
+
+    $lv_result_json = "";
+    $lr_result_obj  = null;
+
+    //Datensatz als JSON-String anfordern
+    $lv_result_json = file_get_contents(self::CO_CONNECTION_LINK);
+    //JSON-String in Objekt wandeln
+    $lr_result_obj = json_decode($lv_result_json);
+
+    //Prüfe ob API erreichbar ist
+    if ($lr_result_obj->success != true) {
+      //->API ist nicht erreichbar
+      throw new Exception("Es kann keine Verbindung zur OpenData-API aufgebaut werden!");
     }
   }
 

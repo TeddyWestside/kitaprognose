@@ -29,5 +29,10 @@
     "last_dataset": "Letzter Datenbestand:",
     "imprint": "Impressum",
     "disclaimer": "Datenschutz"
+  },
+  "Error":{
+      "NoConnectionException": "Keine Verbindung zur Datenbank.",
+      "NoDatabaseException": "Datenbankfehler: Keine Datenbank oder Tabellen in der Datenbank.",
+      "NoDataException": "Datenladefehler: Keine Daten in der Datenbank."
   }
 }

@@ -2,8 +2,6 @@
 // Jürgen Berkemeier, 7. 7. 2016
 // www.j-berkemeier.de
 
-( function() {	
-
 	"use strict";
 
 	var JB_sortbutStyle = document.createElement('style'); // Stylesheet für Button im TH
@@ -11,7 +9,7 @@
 	document.head.appendChild(JB_sortbutStyle);
 
 		var JB_Table = function(tab) {
-	
+
 		var up = String.fromCharCode(9650);
 		var down = String.fromCharCode(9660);
 		// var up = String.fromCharCode(8593);
@@ -33,14 +31,14 @@
 		var Arr = new Array(nzeilen);
 		var ct = 0;
 		var sdir = new Array(nspalten);
-		var stype = new Array(nspalten); 
-		var sortable = new Array(nspalten); 
-		for(var i=0;i<nspalten;i++) { 
+		var stype = new Array(nspalten);
+		var sortable = new Array(nspalten);
+		for(var i=0;i<nspalten;i++) {
 			stype[i] = "n";
 			sdir[i] = "u";
 			sortable[i] = false;
 		}
-	
+
 		var initTableHead = function(t,nr) {
 			var b = document.createElement("button");
 			b.type = "button";
@@ -63,7 +61,7 @@
 			else if(t.className.indexOf("sortiere")>-1) startsort_u=nr;
 			sortable[nr] = true;
 		} // initTableHead
-    
+
 		var sortsymbol = {
 			init: function(t,s) {
 				var tt = t.querySelector("button");
@@ -174,11 +172,11 @@
 //					Arr[z] = new Array(nspalten*2);
 					Arr[z][nspalten] = tz[z];
 					for(var s=0;s<nspalten;s++) {
-						if (zelle[s].getAttribute("data-sort_key")) 
+						if (zelle[s].getAttribute("data-sort_key"))
 							var zi = convert(zelle[s].getAttribute("data-sort_key"),s);
-						else if (zelle[s].getAttribute("sort_key")) 
+						else if (zelle[s].getAttribute("sort_key"))
 							var zi = convert(zelle[s].getAttribute("sort_key"),s);
-						else 
+						else
 							var zi = convert(zelle[s].textContent,s);
 						Arr[z][s] = zi ;
 //						Arr[z][s+nspalten] = zelle[s].innerHTML;
@@ -209,7 +207,7 @@
 			}
 /*			for(var z=0;z<nzeilen;z++) {
 				var zelle = tz[z].getElementsByTagName("td"); // cells;
-					for(var s=0;s<nspalten;s++) 
+					for(var s=0;s<nspalten;s++)
 						zelle[s].innerHTML = Arr[z][s+nspalten];
 			}*/
 			for(var z=0;z<nzeilen;z++)
@@ -228,7 +226,7 @@
 			}
 	}
 		if(ct==0) {
-			for(var i=0;i<Titel.length;i++) 
+			for(var i=0;i<Titel.length;i++)
 				initTableHead(Titel[i],i);
 			defsort = 0;
 		}
@@ -238,28 +236,27 @@
 
 	} // JB_Table
 
-	var JB_initTableSort = function() {
-		if (!document.querySelectorAll) return;
-		var JB_Tables = [];
-		var Sort_Table = document.querySelectorAll("table.sortierbar, table[sortable]");
-		for(var i=0;i<Sort_Table.length;i++) JB_Tables.push(new JB_Table(Sort_Table[i]));
+	// var JB_initTableSort = function() {
+	// 	if (!document.querySelectorAll) return;
+	// 	var JB_Tables = [];
+	// 	var Sort_Table = document.querySelectorAll("table.sortierbar, table[sortable]");
+	// 	for(var i=0;i<Sort_Table.length;i++) JB_Tables.push(new JB_Table(Sort_Table[i]));
+	//
+	// 	var pars = decodeURI(window.location.search.substring(1));
+	// 	if(pars.length) { // jbts=((0,1),(10,0),(3,3),(2,2))   tnr,snr
+	// 		pars = pars.replace(/\s/g,"");
+	// 		pars = pars.match(/jbts=\(?(\(\d+,\d+\),?){1,}\)?/gi);
+	// 		if(pars) {
+	// 			pars = pars[0].substr(pars[0].search("=")+1);
+	// 			pars = pars.replace(/\(\(/g,"(").replace(/\)\)/g,")").replace(/\)\(/g,")|(").replace(/\),\(/g,")|(");
+	// 			pars = pars.split("|");
+	// 			for(var i=0;i<pars.length;i++) {
+	// 				var p = pars[i].substring(1,pars[i].length-1).split(",");
+	// 				if(p[0]>-1&&p[0]<JB_Tables.length) JB_Tables[p[0]].sort(p[1]);
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// initTableSort
 
-		var pars = decodeURI(window.location.search.substring(1));
-		if(pars.length) { // jbts=((0,1),(10,0),(3,3),(2,2))   tnr,snr
-			pars = pars.replace(/\s/g,"");
-			pars = pars.match(/jbts=\(?(\(\d+,\d+\),?){1,}\)?/gi); 
-			if(pars) {
-				pars = pars[0].substr(pars[0].search("=")+1); 
-				pars = pars.replace(/\(\(/g,"(").replace(/\)\)/g,")").replace(/\)\(/g,")|(").replace(/\),\(/g,")|("); 
-				pars = pars.split("|");
-				for(var i=0;i<pars.length;i++) {
-					var p = pars[i].substring(1,pars[i].length-1).split(","); 
-					if(p[0]>-1&&p[0]<JB_Tables.length) JB_Tables[p[0]].sort(p[1]);
-				}
-			}
-		} 
-	} // initTableSort
-
-	if(window.addEventListener) window.addEventListener("DOMContentLoaded",JB_initTableSort,false);
-
-})();
+	// if(window.addEventListener) window.addEventListener("DOMContentLoaded",JB_initTableSort,false);
