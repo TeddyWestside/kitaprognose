@@ -32,12 +32,12 @@ class Algorithmus
 
       // Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
       if($sql_kapa == NULL | $sql_3bis6 == NULL | $sql_2bis5 == NULL | $sql_1bis4 == NULL | $sql_0bis3 == NULL){
-        throw new Exception('Datenbankfehler: Keine Datenbank oder Tabellen in der Datenbank.');
+        throw new NoDatabaseException('Datenbankfehler: Keine Datenbank oder Tabellen in der Datenbank.');
       }
 
       // Fehlerhandling für einen leeren Datensatz.
       if($sql_kapa->num_rows == 0 | $sql_3bis6->num_rows == 0 | $sql_2bis5->num_rows == 0 | $sql_1bis4->num_rows == 0 | $sql_0bis3->num_rows == 0){
-        throw new Exception('Datenladefehler: Keine Daten in der Datenbank.');
+        throw new NoDataException('Datenladefehler: Keine Daten in der Datenbank.');
       }
     }
     // Fangen der Exceptions und
@@ -140,6 +140,7 @@ class Algorithmus
     }
 
     // Architektur der Ausgabe
+
     // $prognoseAusgabe = array(
     //   "Stadtteil1" => array(84.99,70,80,22,22),
     //   "Stadtteil2" => array(85,12,14),
