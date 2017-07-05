@@ -18,13 +18,14 @@ Footer wird jeweils extra eingebunden.
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
   <?php
-  //Definierung der Variablen und Vorbelegung mit Standardwerten
-  //Standardsprache
-  $lang = "de";
-  //Standard % Anzahl Kinder im Kindergarten
-  $propChildren = 100;
-  //Standard % Geburtenrate
-  $birthrate = 1.7;
+  //Laden der Config aus config.php
+  $config = include "config.php";
+  //Definierung der Standardsprache
+  $lang = $config["lang"];
+  //Definierung Standard % Anzahl Kinder im Kindergarten
+  $propChildren = $config["propChildren"];
+  //Definierung Standard % Geburtenrate
+  $birthrate = $config["birthrate"];
 
   //Prüfen und ggf. Anpassen der Werte auf Grundlage der GET-Parameter
   if (isset($_GET["lang"])) {
@@ -135,7 +136,7 @@ Footer wird jeweils extra eingebunden.
   <?php
   include 'connection.php';
   if($GLOBALS['conn'] != null){
-    require "phpClass/Algorithmus.php";  
+    require "phpClass/Algorithmus.php";
   }
 
   $algo = new Algorithmus;
