@@ -139,7 +139,7 @@ class Algorithmus
             $prognoseAusgabe[$kapa["Stadtteil"]][] = 0;
           }
           else{
-            $auslastung = $birthrate*$propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
+            $auslastung = ($birthrate/100+1)*$propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
             $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
           }
         }
