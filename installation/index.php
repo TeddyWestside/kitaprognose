@@ -1,7 +1,7 @@
 <?php
-require "Datenbereitstellung.php";
-
-include "../connection.php";
+require "../phpClass/Datenbankinitialisierung.php";
+require "../phpClass/Datenbereitstellung.php";
+require "../connection.php";
 
 //Datenbank initialisieren
 $cl_Datenbankinitialisierung = new Datenbankinitialisierung();
