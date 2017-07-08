@@ -10,6 +10,11 @@ class Algorithmus
 {
   public function getPrognose($propChildren,$birthrate){
 
+    // Fehlerhandling, wenn keine Connection zur Datenbank vorhanden ist.
+    if ($GLOBALS['conn'] == NULL){
+        return;
+    }
+
     // Erzeugen einer Instanz der KLasse Datenbankabfrage.
     $cl_DatenBankabfrage = new Datenbankabfrage();
 
@@ -30,6 +35,8 @@ class Algorithmus
       $sql_1bis4 = $cl_DatenBankabfrage->getAnzahlKinder1bis4();
       $sql_0bis3 = $cl_DatenBankabfrage->getAnzahlKinder0bis3();
 
+
+
       // Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
       if($sql_kapa == NULL | $sql_3bis6 == NULL | $sql_2bis5 == NULL | $sql_1bis4 == NULL | $sql_0bis3 == NULL){
         throw new NoDatabaseException($lang->Error->NoDatabaseException);
@@ -40,7 +47,7 @@ class Algorithmus
         throw new NoDataException($lang->Error->NoDataException);
       }
     }
-    // Fangen der Exceptions und
+    // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
     catch (Exception $e){
       echo $e->getMessage();
       return;
@@ -132,7 +139,7 @@ class Algorithmus
             $prognoseAusgabe[$kapa["Stadtteil"]][] = 0;
           }
           else{
-            $auslastung = $birthrate*$propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
+            $auslastung = ($birthrate/100+1)*$propChildren*$kinder["SummeKinder"]/$kapa["Kapa"];
             $prognoseAusgabe[$kapa["Stadtteil"]][] = round($auslastung, 2);
           }
         }
