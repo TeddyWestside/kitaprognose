@@ -22,13 +22,6 @@ class Datenbankabfrage
   //   return $sql_KapazitaetInKita;
   // }
 
-  function __construct() {
-    $cl_Datenbankinitialisierung = new Datenbankinitialisierung();
-    $cl_Datenbankinitialisierung->erstelleDatenbank();
-    $cl_Datenbankinitialisierung->erstelleTabelleKitas();
-    $cl_Datenbankinitialisierung->erstelleTabelleAlterStadtteil();
-  }
-
 
   // Funktion, die die aufsummierte Kapazität der Kitas für ein Stadtteil zurückliefert.
   public function getKapazitaet()

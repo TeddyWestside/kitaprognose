@@ -95,21 +95,21 @@ class Datenbereitstellung {
     //--------------------------------------------------------------------------
     $this->pruefe_verbindung();
 
-    //=>Kita-Datenbestand aktuallisieren
-    //--------------------------------------------------------------------------
-    // $la_kita_result = $this->lade_datensatz(self::CO_OPENDATA_LINK . 'resource_id='
-    //   . self::CO_RESOURCE_KITA);
-    // $this->speicher_kitas($la_kita_result);
+    // =>Kita-Datenbestand aktuallisieren
+    // --------------------------------------------------------------------------
+    $la_kita_result = $this->lade_datensatz(self::CO_OPENDATA_LINK . 'resource_id='
+      . self::CO_RESOURCE_KITA);
+    $this->speicher_kitas($la_kita_result);
 
-    //=>AlterStadtteil-Datenbestand aktualisieren
-    //--------------------------------------------------------------------------
-    // $la_stadtteil_result = $this->lade_datensatz(self::CO_OPENDATA_LINK
-    //   . 'resource_id=' . self::CO_RESOURCE_STADTTEIL);
-    // $this->speicher_stadtteil($la_stadtteil_result);
+    // =>AlterStadtteil-Datenbestand aktualisieren
+    // --------------------------------------------------------------------------
+    $la_stadtteil_result = $this->lade_datensatz(self::CO_OPENDATA_LINK
+      . 'resource_id=' . self::CO_RESOURCE_STADTTEIL);
+    $this->speicher_stadtteil($la_stadtteil_result);
 
-    //=>Fehlende Kapazitätsplätze manuell eintragen
-    //--------------------------------------------------------------------------
-    // $this->fuelle_leere_kitaplaetze();
+    // =>Fehlende Kapazitätsplätze manuell eintragen
+    // --------------------------------------------------------------------------
+    $this->fuelle_leere_kitaplaetze();
   }
 
   /**

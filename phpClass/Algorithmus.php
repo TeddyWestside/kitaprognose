@@ -157,7 +157,6 @@ class Algorithmus
     // );
 
     // Rückgabe der Egebnisse der Prognose
-    echo "Kurz vor return, man!";
     return $prognoseAusgabe;
   }
 
