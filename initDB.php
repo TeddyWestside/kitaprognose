@@ -13,6 +13,5 @@ $cl_Algorithmus = new Algorithmus;
 $cl_DBInit->erstelleDatenbank();
 $cl_DBInit->erstelleTabelleKitas();
 $cl_DBInit->erstelleTabelleAlterStadtteil();
-$ergebnise=$cl_Algorithmus->getPrognose(2.5,3.6);
 
 ?>
