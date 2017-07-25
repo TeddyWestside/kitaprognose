@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'lang' => 'de',
+    'langCode' => 'de',
     'propChildren' => '100',
     'birthrate' => '1.7',
     'host' => 'localhost',
