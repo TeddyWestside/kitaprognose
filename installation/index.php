@@ -21,6 +21,7 @@ echo "<br>";
 
 //Datenbank befüllen
 $gr_datenbereitstellung = new Datenbereitstellung($cl_lang);
+$gr_datenbereitstellung->set_fehlende_kapazitaeten("../files/Fehlende_Kapazitaeten.csv")
 $gr_datenbereitstellung->initialisiere_datenbestand();
 echo "Datenbank wurde befüllt!";
 echo "<br>";

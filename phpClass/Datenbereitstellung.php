@@ -58,10 +58,6 @@ class Datenbereitstellung {
       }
       $this->gv_lokale_verbindung = 1;
     }
-
-    //Sprache festlegen
-    //--------------------------------------------------------------------------
-
   }
 
   /**
@@ -598,7 +594,7 @@ class Datenbereitstellung {
    * @author René Kanzenbach
    */
   public function set_fehlende_kapazitaeten($iv_pfad) {
-    $this->gv_pfad_manuelle_kap = $iv_pfad
+    $this->gv_pfad_manuelle_kap = $iv_pfad;
   }
 
 }
