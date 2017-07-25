@@ -7,8 +7,8 @@ class language {
   im JSON-Format geöffnet. Die Datei muss im Ordner "lang" abgelegt sein. Anschließend wird
   der JSON Decodiert und in der public Variable data abgelegt.
   */
-  function __construct($language) {
-    $data = file_get_contents("lang\\" . $language . ".json");
+  function __construct($pfad) {
+    $data = file_get_contents($pfad . ".json");
     $this->data = json_decode($data);
   }
   /* Durch den Aufruf der translate-Funktion wird die data-Variable zurückgegeben um den Zugriff aus
