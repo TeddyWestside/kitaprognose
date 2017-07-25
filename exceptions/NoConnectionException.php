@@ -1,15 +1,15 @@
 <?php
-/**
- * Eine maßgeschneiderte Exceptionklasse definieren
- */
+
+/*  Die NoConnectionException ist eine benutzerdefinierte Exceptinon,
+    die geworfen wird, wenn eine Verbindung nicht existiert */
 class NoConnectionException extends Exception
 {
   protected $title = "NoConnectionException";
   protected $message = "";
 
     public function __construct($message) {
-        // sicherstellen, dass alles korrekt zugewiesen wird
-          $this->message = $message;
+        //Setzen der Nachricht der Exception
+        $this->message = $message;
     }
 
     public function getTitle(){

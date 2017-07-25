@@ -1,14 +1,13 @@
 <?php
-/**
- * Eine maßgeschneiderte Exceptionklasse definieren
- */
+/*  Die NoDatabaseException ist eine benutzerdefinierte Exceptinon,
+    die geworfen wird, wenn keine Datenbank existiert */
 class NoDatabaseException extends Exception
 {
   protected $title = "NoDatabaseException";
   protected $message = "";
 
     public function __construct($message) {
-        // sicherstellen, dass alles korrekt zugewiesen wird
+        //Setzen der Nachricht der Exception
           $this->message = $message;
     }
 
