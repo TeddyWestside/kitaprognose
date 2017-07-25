@@ -8,10 +8,10 @@
       </ul>
       <!-- Dropdown Structure -->
       <ul id='dropdownLanguage' class='dropdown-content'>
-        <li><a href="./?lang=de">Deutsch</a></li>
+        <li><a href="./?langCode=de">Deutsch</a></li>
         <!--Als Sprache 2 ist aktuell "en" festgelegt um die Funktion zu testen. Es
         sind jedoch nich alle IDs codiert wodurch Fehler in der GUI entstehen können. -->
-        <li><a href="./?lang=en">Englisch</a></li>
+        <li><a href="./?langCode=en">Englisch</a></li>
       </ul>
     </div>
   </div>
