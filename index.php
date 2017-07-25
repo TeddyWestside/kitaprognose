@@ -21,6 +21,7 @@ der Footer werden jeweils extra eingebunden.
 
   <?php
   //Laden der Konfigurationsparameter, die zentral in der config.php festgelegt werden
+  $GLOBALS["config"] = include "config.php";
   $config = include "config.php";
 
   //Definierung der Standardsprache
