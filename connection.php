@@ -5,9 +5,14 @@
     @author Carsten Schober
 */
 
-$servername = "localhost";
-$username = "root";
-$password = "";
+// $servername = "localhost";
+// $username = "root";
+// $password = "";
+$config = include "config.php";
+$servername = $config["servername"];
+$username = $config["username"];
+$password = $config["password"];
+
 
 // Connection erstellen
 // $GLOBALS['conn'] = new mysqli($servername, $username, $password);

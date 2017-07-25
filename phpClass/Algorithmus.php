@@ -5,6 +5,12 @@ Diese Klasse ist für die Berechnung des Algorithmus zuständig.
 */
 
 require 'Datenbankabfrage.php';
+// require 'lang\language.php';
+require 'exceptions/NoConnectionException.php';
+require 'exceptions/NoDatabaseException.php';
+require 'exceptions/NoDataException.php';
+
+
 
 class Algorithmus
 {
@@ -146,18 +152,7 @@ class Algorithmus
       }
     }
 
-    // Architektur der Ausgabe
-
-    // $prognoseAusgabe = array(
-    //   "Stadtteil1" => array(84.99,70,80,22,22),
-    //   "Stadtteil2" => array(85,12,14),
-    //   "Stadtteil3" => array(105,100,140),
-    //   "Stadtteil4" => array(115,70,80),
-    //   "Stadtteil5" => array(115.01,70,80),
-    // );
-
     // Rückgabe der Egebnisse der Prognose
-    echo "Kurz vor return, man!";
     return $prognoseAusgabe;
   }
 

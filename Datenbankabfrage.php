@@ -7,20 +7,6 @@
 
 class Datenbankabfrage
 {
-  // // Funktion, die die Kitas für einen Stadtteil in Gelsenkirchen zurückliefert.
-  // public function getKitasInStadtteil($Stadtteil)
-  // {
-  //   $sql_KitasImStadtteil = $GLOBALS['conn']->query("SELECT * FROM Kitaprognose.Kitas WHERE Stadtteil LIKE '" . $Stadtteil . "'");
-  //   return $sql_KitasImStadtteil;
-  // }
-
-  // // Funktion, die die Kapazität für eine Kita zurückliefert.
-  // public function getKapazitaetProKita($Kita)
-  // {
-  //   $sql_KapazitaetInKita = $GLOBALS['conn']->query("SELECT Anzahl_der_Plaetze FROM Kitaprognose.Kitas WHERE Name LIKE '" . $Kita . "'");
-  //   return $sql_KapazitaetInKita;
-  // }
-
   // Funktion, die die aufsummierte Kapazität der Kitas für ein Stadtteil zurückliefert.
   public function getKapazitaet()
   {
