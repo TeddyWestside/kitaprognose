@@ -29,12 +29,12 @@ class Datenbankabfrage
 
       // Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
       if($sql_NeusterDatensatz == NULL){
-        throw new NoDatabaseException($lang->Error->NoDatabaseException);
+        throw new NoDatabaseException("NoDatabaseException"); //$lang->Error->NoDatabaseException
       }
 
       // Fehlerhandling für einen leeren Datensatz.
       if($sql_NeusterDatensatz->num_rows == 0){
-        throw new NoDataException($lang->Error->NoDataException);
+        throw new NoDataException("NoDataException"); //$lang->Error->NoDataException
       }
 
       //Schleife, um mit dem Mysql-Objekt ein Array zu füllen

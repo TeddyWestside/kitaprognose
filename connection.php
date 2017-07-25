@@ -9,7 +9,7 @@
 require 'exceptions/NoConnectionException.php';
 
 
-$config = include "config.php";         //Einbinden des config-Array für allgemeingültige Werte
+// $config = include "config.php";         //Einbinden des config-Array für allgemeingültige Werte
 $servername = $config["servername"];    //Laden des Servernamen aus der config-Datei
 $username = $config["username"];        //Laden des Usernamen aus der config-Datei
 $password = $config["password"];        //Laden des Passworts aus der config-Datei
