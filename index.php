@@ -22,7 +22,7 @@ der Footer werden jeweils extra eingebunden.
   <?php
   //Laden der Konfigurationsparameter, die zentral in der config.php festgelegt werden
   $GLOBALS["config"] = include "config.php";
-  $config = include "config.php";
+  $config = $GLOBALS["config"];
 
   //Definierung der Standardsprache
   $langCode = $config["langCode"];
@@ -48,8 +48,8 @@ der Footer werden jeweils extra eingebunden.
   die IDs zugreifen zu können.
   */
   $language = new language("lang/". $langCode);
-  $lang = $language->translate();
   $GLOBALS["lang"] = $language->translate();
+  $lang = $GLOBALS["lang"];
   ?>
 </head>
 <body>
@@ -146,9 +146,10 @@ der Footer werden jeweils extra eingebunden.
   //Prüfung ob Verbindung vorhanden
   if($GLOBALS['conn'] != null){
     //Datenbankprüfung ob neue Elemente vorliegen und ggf. Updatet
-    // include "phpClass/Datenbereitstellung.php";
-    // $datenbereitstellung = new Datenbereitstellung($lang);
-    // $datenbereitstellung->aktualisiere_datenbestand();
+    include "phpClass/Datenbereitstellung.php";
+    $datenbereitstellung = new Datenbereitstellung($lang);
+    $datenbereitstellung->set_fehlende_kapazitaeten("files/Fehlende_Kapazit");
+    $datenbereitstellung->aktualisiere_datenbestand();
 
 
     //Einbindung des Algorithmus
