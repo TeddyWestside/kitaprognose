@@ -55,6 +55,7 @@ class Algorithmus
     // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
     catch (Exception $e){
       echo $e->getMessage();
+      return;
     }
 
     // Füllen der Hilfsarrys mit den Werten der Mysql-Objekte.
@@ -155,7 +156,7 @@ class Algorithmus
     return $prognoseAusgabe;
   }
 
-  // Funktion, die die Jahre zurückliefert, für die die Prognose durchgeführt wird
+  // Funktion, die die 5 Jahre zurückliefert, für die die Prognose durchgeführt wird
   public function getPrognosejahre(){
     $cl_DatenBankabfrage = new Datenbankabfrage();
     $jahr =  substr($cl_DatenBankabfrage->getNeusterDatensatzAlterStadtteil(), 0, 4);

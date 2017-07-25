@@ -8,6 +8,7 @@
 //NoConnectionException wird importiert, um diese Exceptin später werfen zu können.
 require 'exceptions/NoConnectionException.php';
 
+
 $config = include "config.php";         //Einbinden des config-Array für allgemeingültige Werte
 $servername = $config["servername"];    //Laden des Servernamen aus der config-Datei
 $username = $config["username"];        //Laden des Usernamen aus der config-Datei
@@ -27,10 +28,10 @@ try {
 
   }
 
-  //Fangen der Exception, die durch einen Fehler bei der Verbindung zur Datenbank auftritt
+  //Fangen der Exception, die durch einen Fehler bei der Verbindung zum Datenbankserver auftritt
   catch (Exception $e) {
     // Weiterwerfen der Exception, da es sich bei dieser Exception um eine NoConnectionException handeln soll
-    throw new NoConnectionException($lang->Error->NoConnectionException);
+    throw new NoConnectionException($lang->Error->NoConnectionExceptionDBServer);
   }
 }
 // Fangen der Exception, die durch durch den obigen Fehler geworfen wird

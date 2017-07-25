@@ -1,6 +1,6 @@
 <?php
 //Die Language-Klasse ermöglicht das Übersetzten der sprachabhängigen Ausgaben in der GUI.
-class language {
+class Language {
 
   public $data;
   /*Im Konstruktor wird mit dem übergebenen Sprachparameter die entsprechende Sprachquelldatei
