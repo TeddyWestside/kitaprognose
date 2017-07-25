@@ -6,9 +6,10 @@ require "../lang/Language.php";
 
 //Konfiguration laden
 $ar_config = require "../config.php";
+$GLOBALS["config"] = $ar_config;
 
 //Sprache laden
-$cl_lang = new Language("../lang/".$ar_config["lang"]);
+$cl_lang = new Language("../lang/".$ar_config["langCode"]);
 $cl_lang->translate();
 
 //Datenbank initialisieren
@@ -21,7 +22,7 @@ echo "<br>";
 
 //Datenbank befüllen
 $gr_datenbereitstellung = new Datenbereitstellung($cl_lang);
-$gr_datenbereitstellung->set_fehlende_kapazitaeten("../files/Fehlende_Kapazitaeten.csv")
+$gr_datenbereitstellung->set_fehlende_kapazitaeten("../files/Fehlende_Kapazitaeten.csv");
 $gr_datenbereitstellung->initialisiere_datenbestand();
 echo "Datenbank wurde befüllt!";
 echo "<br>";
