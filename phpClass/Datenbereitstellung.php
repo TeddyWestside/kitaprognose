@@ -1,4 +1,5 @@
 <?php
+
 /**
 * Kümmert sich um die gesamte Bereitstellung der Daten von der "opendata.
 * gelsenkirchen.de" Seite.
@@ -7,27 +8,12 @@
 */
 class Datenbereitstellung {
 
-  //KONSTANTEN
-  //----------------------------------------------------------------------------
-  //Link zum Aufruf der OpenData-API
-  private const CO_OPENDATA_LINK = 'https://opendata.gelsenkirchen.de/api/action/datastore/search.json?';
-  //Link zum prüfen der Erreichbarkeit der OpenData-API
-  const CO_CONNECTION_LINK = 'https://opendata.gelsenkirchen.de/api/3/action/site_read';
-
-  //Resource-ID's
-  const CO_RESOURCE_KITA      = '5a27334a-4765-4535-8943-02ef8494f21b';
-  const CO_RESOURCE_STADTTEIL = 'e5c405d5-3549-433a-ae1c-e81f6c3cc044';
-
-  //Datenbankverbindung
-  const CO_SERVERNAME = "localhost";
-  const CO_USERNAME   = "root";
-  const CO_PASSWORD   = "";
-
-  //Dateipfad zur CSV-Datei mit den manuell gepflegten Kapazitätsplätzen
-  const CO_PFAD_KITAPLAETZE = "../files/Kapazitaeten.csv";
-
   //KLASSENATTRIBUTE
   //----------------------------------------------------------------------------
+  //Array mit Inhalt der Konfigurationsdatei
+  private $ga_config = array();
+  //Klasse mit sprachunabhängigen Texten
+  private $gr_sprache = null;
   //Datenbankverbindung
   private $gr_conn = null;
   //Kennzeichen, dass eine lokale Datenbankverbindung erzeugt wurde
@@ -42,8 +28,16 @@ class Datenbereitstellung {
    *
    * @author René Kanzenbach
    */
-  public function __construct() {
+  public function __construct($ir_sprache) {
 
+    //Sprache setzen
+    $this->gr_sprache;
+
+    //Konfigurationsdatei laden
+    $this->ga_config = include '../config.php';
+
+    //Datenbankverbindung aufbauen
+    //--------------------------------------------------------------------------
     //Datenbankverbindung auslesen
     $this->gr_conn = $GLOBALS["conn"];
     //Datenbankverbindung prüfen
@@ -51,14 +45,20 @@ class Datenbereitstellung {
       //->Verbindung konnte nicht ausgelesen werden
 
       //Eigene DB-Verbindung erzeugen
-      $this->gr_conn = new mysqli(self::CO_SERVERNAME, self::CO_USERNAME,
-        self::CO_PASSWORD);
+      $this->gr_conn = new mysqli($this->ga_config["servername"], $this->ga_config["username"],
+        $this->ga_config["password"]);
+      //Charset auf UTF-8 setzen
+      $this->gr_conn->set_charset('utf8');
       if ($this->gr_conn->connect_error) {
         //->Verbindung konnte nicht aufgebaut werden
         die("Es konnte keine Datenbankverbindung erzeugt werden!");
       }
       $this->gv_lokale_verbindung = 1;
     }
+
+    //Sprache festlegen
+    //--------------------------------------------------------------------------
+
   }
 
   /**
@@ -76,17 +76,17 @@ class Datenbereitstellung {
       $this->gr_conn->close();
       $this->gv_lokale_verbindung = 0;
     }
-    //Charset auf UTF-8 setzen
-    $this->gr_conn->set_charset('utf8');
   }
 
   /**
-  * AKTUALISIERE_DATENBESTAND
-  * Aktualisiert sämtliche Datenbestände.
-  *
-  * @author René Kanzenbach
-  */
-  public function aktualisiere_datenbestand() {
+   * INITIALISIERE_DATENBESTAND
+   * Leert den gesamten Datenbestand und füllt ihn anschließend neu mit den
+   * Daten der OpenData-API.
+   *
+   * @author René Kanzenbach
+   */
+  public function initialisiere_datenbestand() {
+
     //Result-Arrays
     $la_kita_result;
     $la_stadtteil_result;
@@ -95,20 +95,97 @@ class Datenbereitstellung {
     //--------------------------------------------------------------------------
     $this->pruefe_verbindung();
 
-    // =>Kita-Datenbestand aktuallisieren
-    // --------------------------------------------------------------------------
-    $la_kita_result = $this->lade_datensatz(self::CO_OPENDATA_LINK . 'resource_id='
-      . self::CO_RESOURCE_KITA);
+    //=>Kita-Datenbestand aktuallisieren
+    //--------------------------------------------------------------------------
+    //Kita Datensätze laden
+    $la_kita_result = $this->lade_datensatz($this->ga_config["opendata_link"] . 'resource_id='
+      . $this->ga_config["resource_kita"]);
+    //Datensätze in DB speichern
     $this->speicher_kitas($la_kita_result);
 
-    // =>AlterStadtteil-Datenbestand aktualisieren
-    // --------------------------------------------------------------------------
-    $la_stadtteil_result = $this->lade_datensatz(self::CO_OPENDATA_LINK
-      . 'resource_id=' . self::CO_RESOURCE_STADTTEIL);
+    //Letztes Update-Datum der Kita-Ressource ermitteln
+    $lv_update_datum = $this->get_update_datum($this->ga_config["resource_kita"]);
+    //Letztes Update-Datum der Ressource speichern
+    $GLOBALS["update_kita"] = $lv_update_datum;
+
+    //=>AlterStadtteil-Datenbestand aktualisieren
+    //--------------------------------------------------------------------------
+    //Stadteil Datensätze laden
+    $la_stadtteil_result = $this->lade_datensatz($this->ga_config["opendata_link"]
+      . 'resource_id=' . $this->ga_config["resource_stadtteil"]);
+    //Datensätze in DB speichern
     $this->speicher_stadtteil($la_stadtteil_result);
 
-    // =>Fehlende Kapazitätsplätze manuell eintragen
-    // --------------------------------------------------------------------------
+    //Letzes Update-Datum der Stadteil-Ressource ermitteln
+    $lv_update_datum = $this->get_update_datum($this->ga_config["resource_stadtteil"]);
+    //Letztes Update-Datum der Ressource speichern
+    $GLOBALS["update_stadtteil"] = $lv_update_datum;
+
+    //=>Fehlende Kapazitätsplätze manuell eintragen
+    //--------------------------------------------------------------------------
+    $this->fuelle_leere_kitaplaetze();
+  }
+
+  /**
+  * AKTUALISIERE_DATENBESTAND
+  * Prüft anhand des Änderungsdatums der Datenbestände der OpenData-API ob sich
+  * die Daten seit dem letzten Laden geändert haben. Ist dies der Fall, werden
+  * die lokalen Datenbestände aktualisiert.
+  *
+  * @author René Kanzenbach
+  */
+  public function aktualisiere_datenbestand() {
+    //Result-Arrays
+    $la_kita_result;
+    $la_stadtteil_result;
+
+    //Updatedatum der Datensätze
+    $lv_update_datum;
+
+    //=>Verbindung zur OpenData-API prüfen
+    //--------------------------------------------------------------------------
+    $this->pruefe_verbindung();
+
+    //=>Kita-Datenbestand aktuallisieren
+    //--------------------------------------------------------------------------
+    //Letztes Update-Datum der Kita-Ressource ermitteln
+    $lv_update_datum = $this->get_update_datum($this->ga_config["resource_kita"]);
+
+    if (isset($GLOBALS["update_kita"])
+      && $GLOBALS["update_kita"] <> $lv_update_datum) {
+      //->Kitas wurden noch nie geladen oder die Ressource auf der OpenData-Seite
+      //wurde seit dem letzten Laden aktualisiert
+
+      //Kita Datensätze laden
+      $la_kita_result = $this->lade_datensatz($this->ga_config["opendata_link"] . 'resource_id='
+        . $this->ga_config["resource_kita"]);
+      //Datensätze in DB speichern
+      $this->speicher_kitas($la_kita_result);
+      //Letztes Update-Datum der Ressource speichern
+      $GLOBALS["update_kita"] = $lv_update_datum;
+    }
+
+    //=>AlterStadtteil-Datenbestand aktualisieren
+    //--------------------------------------------------------------------------
+    //Letzes Update-Datum der Stadteil-Ressource ermitteln
+    $lv_update_datum = $this->get_update_datum($this->ga_config["resource_stadtteil"]);
+
+    if (isset($GLOBALS["update_stadtteil"])
+      && $GLOBALS["update_stadtteil"] <> $lv_update_datum) {
+      //->Stadteile wurden noch nie geladen oder die Ressource auf der OpenData-
+      //Seite wurde seit dem letzten Laden aktualisiert
+
+      //Stadteil Datensätze laden
+      $la_stadtteil_result = $this->lade_datensatz($this->ga_config["opendata_link"]
+        . 'resource_id=' . $this->ga_config["resource_stadtteil"]);
+      //Datensätze in DB speichern
+      $this->speicher_stadtteil($la_stadtteil_result);
+      //Letztes Update-Datum der Ressource speichern
+      $GLOBALS["update_stadtteil"] = $lv_update_datum;
+    }
+
+    //=>Fehlende Kapazitätsplätze manuell eintragen
+    //--------------------------------------------------------------------------
     $this->fuelle_leere_kitaplaetze();
   }
 
@@ -173,14 +250,7 @@ class Datenbereitstellung {
       //Neue Datensätze an das Return-Array hängen
       $ra_result = array_merge($ra_result, $lr_obj->result->records);
 
-      //>>>DEBUG
-      // var_dump($lv_json);
-      // echo "<br>";
-      // var_dump($lr_obj->result);
-      // $lv_i = sizeof($lr_obj->result->records);
-      // echo $lv_i;
-      //<<<DEBUG
-
+      //->Wiederhole bis keine Datensätze mehr zurückgegeben werden
     } while (sizeof($lr_obj->result->records) != 0);
 
     return $ra_result;
@@ -191,6 +261,7 @@ class Datenbereitstellung {
   * Leert die DB-Tabelle "Kitas" und fügt den übergebenen Datenbestand in
   * die Tabelle ein.
   *
+  * @throws NoDatabaseException: Keine Verbindung zur Datenbank
   * @param $ia_kita_result: Array mit Kita-Datensatz
   * @author René Kanzenbach
   */
@@ -204,6 +275,13 @@ class Datenbereitstellung {
     $id; $name; $art; $traeger; $plz; $ort; $strasse; $bezirk; $stadtteil; $x;
     $y; $telefon; $fax; $email; $internet; $info; $internetbeschreibung;
     $barrierefrei_inklusion; $anzahl_der_plaetze; $anzahl_der_gruppen; $betriebsnummer;
+
+    //=>Prüfen ob die Datenbank erreichbar ist
+    //--------------------------------------------------------------------------
+    if($this->gr_conn->connect_error){
+      //->Fehler mit der Datenbankverbindung
+      throw new NoDatabaseException();
+    }
 
     //=>Kita Tabelle leeren
     //--------------------------------------------------------------------------
@@ -243,7 +321,6 @@ class Datenbereitstellung {
       $fax = $record->Fax;
       $email = $record->E_Mail;
       $internet = $record->Internet;
-      // $info = $record->Info;
       $internetbeschreibung = $record->Internet;
       $barrierefrei_inklusion = $record->Barrierefrei;
       $anzahl_der_plaetze = $record->Anzahl_der_Plaetze;
@@ -394,8 +471,6 @@ class Datenbereitstellung {
     //Statement ausführen
     $lr_kitas_leer = $this->gr_conn->query($lv_sql);
 
-    //TODO Prüfen ob leere Kitas gefunden wurden
-
     //=>Update-Statement vorbereiten
     //--------------------------------------------------------------------------
     $lr_sql_prep = $this->gr_conn->prepare(
@@ -406,7 +481,7 @@ class Datenbereitstellung {
     //=>Auslesen der manuell gepflegten Kapazitätsplätze
     //--------------------------------------------------------------------------
     //Datei öffnen
-    $lr_datei = fopen(self::CO_PFAD_KITAPLAETZE, "r")
+    $lr_datei = fopen($this->ga_config["pfad_kitaplaetze"], "r")
     or die("Datei mit den manuellen Kapaziätsplätzen konnte nicht geöffnet werden");
 
     //Erste Zeile der CSV-Datei einlesen (Die erste Zeile ist die Headerline
@@ -473,15 +548,43 @@ class Datenbereitstellung {
     $lr_result_obj  = null;
 
     //Datensatz als JSON-String anfordern
-    $lv_result_json = file_get_contents(self::CO_CONNECTION_LINK);
+    $lv_result_json = file_get_contents($this->ga_config["opendata_link_funk"]."site_read");
     //JSON-String in Objekt wandeln
     $lr_result_obj = json_decode($lv_result_json);
 
     //Prüfe ob API erreichbar ist
     if ($lr_result_obj->success != true) {
       //->API ist nicht erreichbar
-      throw new Exception("Es kann keine Verbindung zur OpenData-API aufgebaut werden!");
+      throw new NoConnectionException("Es kann keine Verbindung zur OpenData-API
+        aufgebaut werden!");
     }
+  }
+
+  /**
+   * GET_UPDATE_DATUM
+   *
+   * Gibt das Datum zurück, an dem die übergebene Ressource das letzte mal auf
+   * der OpenData-Website geändert wurde. Dazu wird das Änderungsdatum der
+   * Ressource über die DKAN-API mittels einer 'ressource_show'-Funktion abgefragt.
+   *
+   * @param $iv_resource_id Ressource-ID der Ressource, für die das Änderungsdatum
+   *  ermittelt werden soll.
+   * @return Datum an dem die Ressource das letzte mal geändert wurde.
+   * @author René Kanzenbach
+   */
+  private function get_update_datum($iv_resource_id){
+
+    $lv_result_json = "";
+    $lr_result_obj = "";
+
+    //Datensatz als JSON-String anfordern
+    $lv_result_json = file_get_contents($this->ga_config["opendata_link_funk"]
+      ."resource_show?id=".$iv_resource_id);
+    //JSON-String in Objekt wandeln
+    $lr_result_obj = json_decode($lv_result_json);
+
+    //Rückgabe des letzten Änderungsdatums
+    return substr($lr_result_obj->result->last_modified, 13);
   }
 
 }
