@@ -28,7 +28,10 @@ class Datenbereitstellung {
    *
    * @author René Kanzenbach
    */
-  public function __construct() {
+  public function __construct($ir_sprache) {
+
+    //Sprache setzen
+    $this->gr_sprache;
 
     //Konfigurationsdatei laden
     $this->ga_config = include '../config.php';
@@ -55,8 +58,7 @@ class Datenbereitstellung {
 
     //Sprache festlegen
     //--------------------------------------------------------------------------
-    // $this->gr_sprache = new language("../lang/".$this->ga_config["lang"]);
-    // $this->gr_sprache->translate();
+
   }
 
   /**
