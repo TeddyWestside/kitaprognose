@@ -6,7 +6,6 @@ Diese Klasse ist für die Berechnung des Algorithmus zuständig.
 
 require 'Datenbankabfrage.php';
 // require 'lang\language.php';
-require 'exceptions/NoConnectionException.php';
 require 'exceptions/NoDatabaseException.php';
 require 'exceptions/NoDataException.php';
 
@@ -56,9 +55,9 @@ class Algorithmus
     // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
     catch (Exception $e){
       echo $e->getMessage();
-      return;
     }
 
+    // Füllen der Hilfsarrys mit den Werten der Mysql-Objekte.
     while($row = $sql_kapa->fetch_assoc()){
       $ar_kapa[] = $row;
     }
@@ -156,11 +155,13 @@ class Algorithmus
     return $prognoseAusgabe;
   }
 
-  // Methode für das Beende der Verbindung zur Datenbank
-  public function closeConnection(){
-    $GLOBALS['conn']->close();
+  //
+  public function getPrognosejahr(){
+    $cl_DatenBankabfrage = new Datenbankabfrage();
+    $jahr =  substr($cl_DatenBankabfrage->getNeusterDatensatzAlterStadtteil(), 0, 4);
+    $array = array($jahr+1, $jahr+2, $jahr+3, $jahr+4, $jahr+5);
+    return $array;
   }
 }
-
 
 ?>
