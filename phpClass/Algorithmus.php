@@ -155,8 +155,8 @@ class Algorithmus
     return $prognoseAusgabe;
   }
 
-  //
-  public function getPrognosejahr(){
+  // Funktion, die die Jahre zurückliefert, für die die Prognose durchgeführt wird
+  public function getPrognosejahre(){
     $cl_DatenBankabfrage = new Datenbankabfrage();
     $jahr =  substr($cl_DatenBankabfrage->getNeusterDatensatzAlterStadtteil(), 0, 4);
     $array = array($jahr+1, $jahr+2, $jahr+3, $jahr+4, $jahr+5);
