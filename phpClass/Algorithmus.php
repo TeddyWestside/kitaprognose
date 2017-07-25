@@ -44,12 +44,12 @@ class Algorithmus
 
       // Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
       if($sql_kapa == NULL | $sql_3bis6 == NULL | $sql_2bis5 == NULL | $sql_1bis4 == NULL | $sql_0bis3 == NULL){
-        throw new NoDatabaseException($lang->Error->NoDatabaseException);
+        throw new NoDatabaseException($GLOBALS['lang']->Error->NoDatabaseException);
       }
 
       // Fehlerhandling für einen leeren Datensatz.
       if($sql_kapa->num_rows == 0 | $sql_3bis6->num_rows == 0 | $sql_2bis5->num_rows == 0 | $sql_1bis4->num_rows == 0 | $sql_0bis3->num_rows == 0){
-        throw new NoDataException($lang->Error->NoDataException);
+        throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
       }
     }
     // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
