@@ -18,6 +18,8 @@ class Datenbereitstellung {
   private $gr_conn = null;
   //Kennzeichen, dass eine lokale Datenbankverbindung erzeugt wurde
   private $gv_lokale_verbindung = 0;
+  //Pfad zur Datei mit den manuell gepflegten Kitakapazitäten
+  private $gv_pfad_manuelle_kap = "";
 
   //FUNKTIONEN
   //----------------------------------------------------------------------------
@@ -26,15 +28,16 @@ class Datenbereitstellung {
    * __CONSTRUCT
    * Liest die global verfügbare Datenbankverbindung aus.
    *
+   * @param $ir_sprache: Objekt welches die Texte in der aktuell verwendeten
+   *  Sprache enthält
    * @author René Kanzenbach
    */
   public function __construct($ir_sprache) {
 
     //Sprache setzen
-    $this->gr_sprache;
-
+    $this->gr_sprache = $GLOBALS["lang"];
     //Konfigurationsdatei laden
-    $this->ga_config = include '../config.php';
+    $this->ga_config = $GLOBALS["config"];
 
     //Datenbankverbindung aufbauen
     //--------------------------------------------------------------------------
@@ -481,7 +484,7 @@ class Datenbereitstellung {
     //=>Auslesen der manuell gepflegten Kapazitätsplätze
     //--------------------------------------------------------------------------
     //Datei öffnen
-    $lr_datei = fopen($this->ga_config["pfad_kitaplaetze"], "r")
+    $lr_datei = fopen($this->gv_pfad_manuelle_kap, "r")
     or die("Datei mit den manuellen Kapaziätsplätzen konnte nicht geöffnet werden");
 
     //Erste Zeile der CSV-Datei einlesen (Die erste Zeile ist die Headerline
@@ -585,6 +588,17 @@ class Datenbereitstellung {
 
     //Rückgabe des letzten Änderungsdatums
     return substr($lr_result_obj->result->last_modified, 13);
+  }
+
+  /**
+   * SET_FEHLENDE_KAPAZITAETEN
+   * Setzt den Pfad für die CSV-Datei mit den manuell gepflegten Kitakapazitäten.
+   *
+   * @param $iv_pfad: Pfad der CSV-Datei
+   * @author René Kanzenbach
+   */
+  public function set_fehlende_kapazitaeten($iv_pfad) {
+    $this->gv_pfad_manuelle_kap = $iv_pfad
   }
 
 }
