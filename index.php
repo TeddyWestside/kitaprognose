@@ -1,8 +1,9 @@
 <!--
 author: Johannes Kusber
-description: Über diese Datei wird die Prognose parametriesiert, Filter erstellt,
-der Prognosealgorithmus aufgerufen und das Ergebnis angezeigt. Der Header und der
-Footer wird jeweils extra eingebunden.
+description: Die index.php erstellt die GUI. Dazu gehören die Möglichtkeiten die
+Prognose zu parametriesieren, Filter zu erstellen und im Ergebnis zu sortieren.
+Die Datei ruft den Prognosealgorithmus und zeigt das Ergebnis an. Der Header und
+der Footer werden jeweils extra eingebunden.
 -->
 
 <!DOCTYPE html>
@@ -12,13 +13,14 @@ Footer wird jeweils extra eingebunden.
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kitaprognose</title>
 
-  <!--Import Google Icon Font-->
+  <!-- Importieren der Material Icons von Google. Vorteil diese nicht lokal zur
+  Verfügung zu stellen ist es das diese eventuell bereits im Cache des Browsers
+  liegen. Des Weiteren Import des CSS-->
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!--Import materialize.css-->
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
   <?php
-  //Laden der Config aus config.php
+  //Laden der Konfigurationsparameter, die zentral in der config.php festgelegt werden
   $config = include "config.php";
   //Definierung der Standardsprache
   $lang = $config["lang"];
@@ -27,7 +29,7 @@ Footer wird jeweils extra eingebunden.
   //Definierung Standard % Geburtenrate
   $birthrate = $config["birthrate"];
 
-  //Prüfen und ggf. Anpassen der Werte auf Grundlage der GET-Parameter
+  //Prüfen der Get-Paramenter und falls vorhanden Anpassen der Werte
   if (isset($_GET["lang"])) {
     $lang = $_GET["lang"];
   }
@@ -37,14 +39,13 @@ Footer wird jeweils extra eingebunden.
   if (isset($_GET["birthrate"]) && $_GET["birthrate"] != "") {
     $birthrate = $_GET["birthrate"];
   }
-  //Only fot test
-  //var_dump($lang);
-  //var_dump($propChildren);
-  //var_dump($birthrate);
-  //var_dump($forecastPeriod);
 
   //Einbindung der language.php Datei um Sprachunabhängigkeit in der GUI zu ermöglichen.
   require ('lang\language.php');
+
+// bis hierhin
+
+
   /*Instanzierung der language-Klasse und speichern der JSON-Variable in $lang um auf die Strings über
   die IDs zugreifen zu können.
   */
@@ -133,7 +134,9 @@ Footer wird jeweils extra eingebunden.
     <!--Einbindung des Footers -->
     <?php include('footer.php'); ?>
   </body>
+
   <?php
+  echo "<span style='position:absolute; top: 0; background: red'>";
   include 'connection.php';
   if($GLOBALS['conn'] != null){
     require "phpClass/Algorithmus.php";
@@ -143,12 +146,10 @@ Footer wird jeweils extra eingebunden.
   else{
     die();
   }
-
-
+  echo "</span>";
   ?>
-
+  <script src="js/extScript.js"></script>
   <script>
-
   // Inizialisierung
   <?php
   $jsArray = json_encode($result);
@@ -157,134 +158,13 @@ Footer wird jeweils extra eingebunden.
   echo ("var jsLanguage = $jsLanguage;");
   ?>
 
+  // for test
   console.log(jsLanguage);
+  console.log("Ich habe das bis hier ausgeführt");
 
   buildFilter();
   setMaxForecastPeriod();
   buildTable();
   document.getElementById("filterRow").style.visibility = "visible";
-
-  // Methoden
-
-  // Beschreibung der Methode
-  function buildTable(){
-    tableArray = jsresult;
-    // Bei nur änderung von der Prognosezeit wird auch das gesamte Filterarray neu geladen
-    forecastPeriod = getForecastPeriod();
-    filterArray = getFilterArray();
-    if (filterArray != null){
-      tableArray = buildFilteredArray(jsresult, getFilterArray());
-    }
-
-    var htmlString = "<table class='striped sortierbar' id='tableForecast'><thead><tr><th class='sortierbar'>Stadtteil</th><th class='sortierbar'>Auslastung</th></tr></thead><tbody>";
-    var stadtteil;
-    for (stadtteil in tableArray){
-      htmlString = htmlString + "<tr><td>" + stadtteil + "</td><td class='" + outputColor(tableArray[stadtteil][forecastPeriod]) + "'>" + tableArray[stadtteil][forecastPeriod] + "</td></tr>"
-    }
-    htmlString = htmlString + "</tbody></table>";
-    document.getElementById("tablePlaceholder").innerHTML = htmlString;
-
-    var zumSortieren = document.getElementById("tableForecast");
-    new JB_Table(zumSortieren);
-  }
-
-  // Beschreibung der Methode
-  function outputColor (value){
-    var color = "";
-    if (value < 85){
-      color = "red-text";
-    } else if(value < 95){
-      color = "orange-text";
-    } else if(value <= 105){
-      color = "green-text";
-    } else if(value <= 115){
-      color = "orange-text";
-    } else{
-      color = "red-text";
-    }
-    return color;
-  }
-
-  // Beschreibung der Methode
-  function buildFilter() {
-    var htmlString = "<option disabled selected>Alle</option>";
-
-    for (stadtteil in jsresult){
-      htmlString = htmlString + "<option>" + stadtteil + "</option>";
-    }
-    document.getElementById("filter").innerHTML = htmlString;
-  }
-
-  // Beschreibung der Methode
-  function setMaxForecastPeriod() {
-    var maxlength = 0;
-      for (stadtteil in jsresult){
-        var actuallength = jsresult[stadtteil].length;
-        if(actuallength > maxlength){
-          maxlength = actuallength;
-        }
-      }
-    document.getElementById("forecastPeriod").max = maxlength;
-  }
-
-  // Beschreibung der Methode
-  $(document).ready(function() {
-    $('select').material_select();
-  });
-
-  // Beschreibung der Methode
-  function getForecastPeriod() {
-    return parseInt(document.getElementById("forecastPeriod").value) - 1;
-  }
-
-  // Beschreibung der Methode
-  function getFilterArray (){
-    var filterArray = new Array;
-    var filterArrayPos = 0;
-    var element = document.getElementById("filter");
-
-    for(var i = 1; i < element.options.length; i++){
-      if(element.options[i].selected){
-        filterArray[filterArrayPos] = element.options[i].text;
-        filterArrayPos = filterArrayPos + 1;
-      }
-    }
-    // console.log("Das filter Array ist: ");
-    // console.log(filterArray);
-    if (filterArray.length == 0){
-      // console.log("null return filter Array");
-      return null;
-    }
-    return filterArray;
-  }
-
-  // Beschreibung der Methode
-  function buildFilteredArray (oldArray, filterArray){
-    var resultArray = new Array();
-
-
-    // for(stadtteil in oldArray){
-    //   for (var i = 0; i < filterArray.length; i++){
-    //     if(stadtteil == filterArray[i]){
-    //       console.log(stadtteil + "ist gleich" + filterArray[i]);
-    //     }
-    //   }
-    // }
-    for(stadtteil in oldArray){
-      // console.log("Stadteil oldArray ist: " + stadtteil);
-      for (var i = 0; i < filterArray.length; i++){
-        // console.log("Stadteil FilterArray ist: " + filterArray[i]);
-        if(stadtteil == filterArray[i]){
-          // console.log("erfolgreich");
-          // console.log(stadtteil + " ist gleich " + filterArray[i]);
-          resultArray[stadtteil] = oldArray[stadtteil];
-          // working müsste über iteration gelöst werden
-          // new Array(oldArray[stadtteil][0], oldArray[stadtteil][1], oldArray[stadtteil][2])
-        }
-      }
-    }
-    // console.log(resultArray);
-    return resultArray;
-  }
   </script>
   </html>
