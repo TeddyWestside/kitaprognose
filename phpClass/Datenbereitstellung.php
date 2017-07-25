@@ -32,7 +32,7 @@ class Datenbereitstellung {
    *  Sprache enthält
    * @author René Kanzenbach
    */
-  public function __construct($ir_sprache) {
+  public function __construct() {
 
     //Sprache setzen
     $this->gr_sprache = $GLOBALS["lang"];
