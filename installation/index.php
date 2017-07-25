@@ -11,6 +11,7 @@ $GLOBALS["config"] = $ar_config;
 //Sprache laden
 $cl_lang = new Language("../lang/".$ar_config["langCode"]);
 $cl_lang->translate();
+$GLOBALS["lang"] = $cl_lang;
 
 //Datenbank initialisieren
 $cl_Datenbankinitialisierung = new Datenbankinitialisierung();
