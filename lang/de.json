@@ -50,6 +50,7 @@
   },
   "Error":{
       "NoConnectionException": "Es konnte keine Verbindung zur OpenData-API aufgebaut werden!",
+      "DBUpdateError": "Neuer Datenbestand konnte nicht in die Datenbank eingefügt werden!",
       "NoDBConnection": "Es konnte keine Verbindung zur Datenbank aufgebaut werden!",
       "NoConnectionExceptionDBServer": "Keine Verbindung zum Datenbankserver.",
       "NoDatabaseException": "Datenbankfehler: Keine Datenbank oder Tabellen in der Datenbank.",
