@@ -6,26 +6,35 @@
 */
 
 //Hinzufügen der für die Installation benötigten Klassen
-require "../phpClass/Datenbankinitialisierung.php";
-require "../phpClass/Datenbereitstellung.php";
-require "../phpClass/Datenbankabfrage.php";
 require "../lang/Language.php";
-require "../connection.php";
 require "../exceptions/NoConnectionException.php";
 require "../exceptions/NoDatabaseException.php";
 require "../exceptions/NoDataException.php";
+try {
+  //Einbindung & Aufbau der Verbindung zur Datenbank
+  include '../connection.php';
+}
+catch (Exception $e) {
+    die($e->getMessage());
+}
+require "../phpClass/Datenbankinitialisierung.php";
+require "../phpClass/Datenbereitstellung.php";
+require "../phpClass/Datenbankabfrage.php";
+
+
+
 
 //Sql-Statements definieren
 $sqlInsert0 = "INSERT INTO kitaprognose.Zwischenspeicher (ID, BESCHREIBUNG, WERT) VALUES (0,'','') ON DUPLICATE KEY UPDATE WERT=WERT";
 $sqlInsert1 = "INSERT INTO kitaprognose.Zwischenspeicher (ID, BESCHREIBUNG, WERT) VALUES (1,'','') ON DUPLICATE KEY UPDATE WERT=WERT";
 
-//Konfiguration laden
-$ar_config = require "../config.php";
-$GLOBALS["config"] = $ar_config;
-
-//Sprache laden
-$cl_lang = new Language("../lang/".$ar_config["langCode"]);
-$GLOBALS["lang"] = $cl_lang->translate();
+// //Konfiguration laden
+// $ar_config = require "../config.php";
+// $GLOBALS["config"] = $ar_config;
+//
+// //Sprache laden
+// $cl_lang = new Language("../lang/".$ar_config["langCode"]);
+// $GLOBALS["lang"] = $cl_lang->translate();
 
 
 try {
