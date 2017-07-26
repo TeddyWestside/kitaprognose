@@ -1,3 +1,8 @@
+<!--
+author: Michael Kostka (https://www.foxplex.com/sites/mehrsprachige-webseiten-mit-php-und-json/)
+description: Dient zum Laden der entsprechenden Sprachdatei und Rückgabe des Sprach-JSON. Sie wurde
+kopiert und nur leicht modifiziert.
+-->
 <?php
 //Die Language-Klasse ermöglicht das Übersetzten der sprachabhängigen Ausgaben in der GUI.
 class Language {

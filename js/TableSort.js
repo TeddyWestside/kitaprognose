@@ -1,6 +1,5 @@
-// TableSort 9.2
-// Jürgen Berkemeier, 7. 7. 2016
-// www.j-berkemeier.de
+// author: Jürgen Berkemeier (www.j-berkemeier.de)
+// TableSort 9.2 dient zum sortieren von Tabellen.
 
 	"use strict";
 

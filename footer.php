@@ -24,17 +24,20 @@ description: In der footer.php ist der Footerbereich ausgelagert damit dieser au
   <div class="footer-copyright">
     <div class="container">
       <div class="row">
+        <!-- Diese Funktion wurde nichtmehr umgesetzt. Falls Sie wieder eingebaut wird muss die col l6 in
+        den anderen class -->
         <!-- Einbindung der Daten der letzten Datenbestände -->
         <div class="col l4">
           <?php
             // $lr_datenbankabfrage = new Datenbankabfrage();
             // $la_letztes_update = $lr_datenbankabfrage->getZwischenspeicher();
             // echo $lang->Footer->last_dataset . $la_letztes_update[0]["Wert"];
-            echo $lang->Footer->last_dataset;
+            // echo $lang->Footer->last_dataset;
 
 
            ?>
         </div>
+
         <!-- Einbindung des Impressum und der Datenschutzerklärung -->
         <div class="col l4">
           <a class="grey-text text-lighten-3" href="./impressum.php<?php echo "?langCode=" . $langCode ?>"><?php echo $lang->Footer->imprint ?></a>

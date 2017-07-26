@@ -1,4 +1,5 @@
-//In dieser Klasse wird das Javascript, dass für die Index.php benötigt wird gesammelt definiert
+//author: Johannes Kusber
+//description: dieser Klasse wird das Javascript, dass für die Index.php benötigt wird gesammelt definiert
 
 //Diese Methode dient zur Initialisierung des Multiselects
 $(document).ready(function() {

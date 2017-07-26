@@ -88,7 +88,7 @@ der Footer werden jeweils extra eingebunden.
                   <!-- Inputfeld für Geburtenrate in Prozent mit HTML 5 Formularvalidierung -->
                   <div class="input-field col l6">
                     <input placeholder=<?php echo $birthrate ?> id="birthrate" name="birthrate" type="text"
-                    pattern="\d{3}|\d{3}\.\d|\d{3}\.\d{2}|\d{2}|\d{2}\.\d|\d{2}\.\d{2}|\d|\d\.\d|\d\.\d{2}"
+                    pattern="\d{2}|\d{2}\.\d|\d{2}\.\d{2}|\d|\d\.\d|\d\.\d{2}|[-]\d{2}|[-]\d{2}\.\d|[-]\d{2}\.\d{2}|[-]\d|[-]\d\.\d|[-]\d\.\d{2}"
                     class="validate" title="<?php echo $lang->Main->title_validation ?>">
                     <label for="birthrate"><?php echo $lang->Main->label_birthrate ?></label>
                   </div>
@@ -118,7 +118,7 @@ der Footer werden jeweils extra eingebunden.
               </div>
               <!-- Definition des Sliders zum Einstellen des Vorhersagejahrs -->
               <div class="col l6">
-                <label><?php echo $lang->Main->label_forecastPeriod ?><span id="forecastPeriodYear">X</span></span></label>
+                <label><?php echo $lang->Main->label_forecastPeriod ?><span id="forecastPeriodYear"></span></label>
                 <input type="range" id="forecastPeriod" onchange="buildTable()"  value="1" min="1">
               </div>
             </div>
