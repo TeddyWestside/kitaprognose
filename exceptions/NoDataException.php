@@ -1,6 +1,8 @@
 <?php
 /*  Die NoConnectionException ist eine benutzerdefinierte Exceptinon
-    für eine nicht vorhande Verbindung */
+    für eine nicht vorhande Verbindung
+    @author Carsten Schober
+*/
 class NoDataException extends Exception
 {
   protected $title = "NoDataException";

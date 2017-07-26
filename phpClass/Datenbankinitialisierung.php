@@ -4,9 +4,11 @@
     @author Carsten Schober
 */
 class Datenbankinitialisierung{
-  // Datenbank-Queries
 
+  //Sql-Query für die Erstellung der Datenbank
   private $sql_CreateDB = "CREATE DATABASE IF NOT EXISTS Kitaprognose DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+
+  //Sql-Query für die Erstellug der Tabelle "Kitas"
   private $sql_CreateTableKita = "CREATE TABLE IF NOT EXISTS Kitaprognose.Kitas (
     Id int,
     Name varchar(100),
@@ -32,6 +34,7 @@ class Datenbankinitialisierung{
     PRIMARY KEY (Id)
   )";
 
+  //Sql-Query für die Erstellug der Tabelle "AlterStadtteil"
   private $sql_CreateTableAlterStadtteil = "CREATE TABLE IF NOT EXISTS Kitaprognose.AlterStadtteil (
     Stichtag date,
     Bezirk_id int,
