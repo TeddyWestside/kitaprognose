@@ -11,6 +11,14 @@ require "../exceptions/NoConnectionException.php";
 require "../exceptions/NoDatabaseException.php";
 require "../exceptions/NoDataException.php";
 try {
+  //Konfiguration laden
+  $ar_config = require "../config.php";
+  $GLOBALS["config"] = $ar_config;
+
+  //Sprache laden
+  $cl_lang = new Language("../lang/".$ar_config["langCode"]);
+  $GLOBALS["lang"] = $cl_lang->translate();
+
   //Einbindung & Aufbau der Verbindung zur Datenbank
   include '../connection.php';
 }

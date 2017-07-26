@@ -6,14 +6,6 @@
 */
 
 
-//Konfiguration laden
-$ar_config = require "config.php";
-$GLOBALS["config"] = $ar_config;
-
-//Sprache laden
-$cl_lang = new Language("lang/".$ar_config["langCode"]);
-$GLOBALS["lang"] = $cl_lang->translate();
-
 $config = $GLOBALS["config"];         //Einbinden des config-Array für allgemeingültige Werte
 $servername = $config["servername"];    //Laden des Servernamen aus der config-Datei
 $username = $config["username"];        //Laden des Usernamen aus der config-Datei
