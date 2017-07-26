@@ -148,7 +148,7 @@ class Datenbereitstellung {
     //Updatedatum der Ressourcen der OpenData-API, al die Ressourcen das Letzte
     //mal mit dem lokalen Datenbestand abgeglichen wurden
     $lv_update_kita = ""; //Letztes Update der Kitas
-    $lv_update_stadteil = ""; //Letztes Update der Staddteile
+    $lv_update_stadtteil = ""; //Letztes Update der Staddteile
 
     //=>Verbindung zur OpenData-API prüfen
     //--------------------------------------------------------------------------
@@ -619,10 +619,10 @@ class Datenbereitstellung {
 
     //Update-Statement vorbereiten
     //--------------------------------------------------------------------------
-    $lr_sql_stmt = $this->gr_conn->prepare(
-      "UPDATE kitaprognose.Zwischenspeicher
-        SET beschreibung = ? wert = ?
-        WHERE id = ?");
+    $lr_sql_prep = $this->gr_conn->prepare(
+      "UPDATE kitaprognose.zwischenspeicher
+        SET BESCHREIBUNG = ?, WERT = ?
+        WHERE ID = ?");
 
     switch ($iv_schluessel) {
       case 0:
@@ -631,7 +631,7 @@ class Datenbereitstellung {
         $lv_beschreibung = "Stadtteil Updatedatum";
     }
 
-    $lr_sql_prep->bind_param("iss", $lv_beschreibung, $iv_wert, $iv_schluessel);
+    $lr_sql_prep->bind_param("ssi", $lv_beschreibung, $iv_wert, $iv_schluessel);
 
     //Transaktion durchführen
     //--------------------------------------------------------------------------
