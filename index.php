@@ -131,21 +131,7 @@ der Footer werden jeweils extra eingebunden.
         <div class="col l12">
           <div class="card-panel">
             <!-- Bereitstellen des Bereichs der von der Methode buildTable() überschrieben wird -->
-            <span id="tablePlaceholder">
-            <div class="center-align">
-              <div class="preloader-wrapper big active">
-                <div class="spinner-layer spinner-red">
-                  <div class="circle-clipper left">
-                    <div class="circle"></div>
-                  </div><div class="gap-patch">
-                    <div class="circle"></div>
-                  </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </span>
+            <span id="tablePlaceholder"></span>
           </div>
         </div>
       </div>
@@ -162,19 +148,26 @@ Algorithmus ausgeführt wird -->
 //Verschieben der Errormeldungen nach oben
 echo "<span style='position:absolute; top: 0; background: red'>";
 
-//1234
-//Einbindung & Aufbau der Verbindung zur Datenbank
-include 'connection.php';
-//Einbindung des Algorithmus
+require "exceptions/NoConnectionException.php";
+require "exceptions/NoDatabaseException.php";
+require "exceptions/NoDataException.php";
+try {
+  //Einbindung & Aufbau der Verbindung zur Datenbank
+  include 'connection.php';
+}
+catch (Exception $e) {
+    die($e->getMessage());
+}
+
+//Einbindung des benötigten Klassen
 require "phpClass/Datenbankabfrage.php";
 require "phpClass/Datenbereitstellung.php";
 require "phpClass/Algorithmus.php";
 
 
-//Prüfung ob Verbindung vorhanden
-if($GLOBALS['conn'] != null){
   //Aktualisieren des lokalen Datenbestandes falls neue Daten im OpenData Portal existieren und Laden fehlender Kapazitäten
 
+try {
   $datenbereitstellung = new Datenbereitstellung();
   $datenbereitstellung->set_fehlende_kapazitaeten("files/Fehlende_Kapazitaeten.csv");
   $datenbereitstellung->aktualisiere_datenbestand();
@@ -187,10 +180,12 @@ if($GLOBALS['conn'] != null){
   //Abfrage des Vorhersagejahres
   $forecastPeriodYear = $algo->getPrognosejahre();
 }
-//Falls keine Verbindung vorhanden wird abgebrochen
-else{
-  die();
+
+catch (Exception $e) {
+  //Falls ein Fehler auftritt wird abgebrochen
+  die($e->getMessage());
 }
+
 // Abschluss des Verschieben der Errormeldung
 echo "</span>";
 ?>

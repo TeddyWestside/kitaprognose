@@ -4,6 +4,9 @@ require "../phpClass/Datenbereitstellung.php";
 require "../phpClass/Datenbankabfrage.php";
 require "../lang/Language.php";
 require "../connection.php";
+require "../exceptions/NoConnectionException.php";
+require "../exceptions/NoDatabaseException.php";
+require "../exceptions/NoDataException.php";
 
 //Sql-Statements definieren
 $sqlInsert0 = "INSERT INTO kitaprognose.Zwischenspeicher (ID, BESCHREIBUNG, WERT) VALUES (0,'','') ON DUPLICATE KEY UPDATE WERT=WERT";
