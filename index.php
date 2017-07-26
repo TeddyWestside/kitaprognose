@@ -148,7 +148,7 @@ der Footer werden jeweils extra eingebunden.
     //Datenbankprüfung ob neue Elemente vorliegen und ggf. Updatet
     include "phpClass/Datenbereitstellung.php";
     $datenbereitstellung = new Datenbereitstellung($lang);
-    $datenbereitstellung->set_fehlende_kapazitaeten("files/Fehlende_Kapazit");
+    $datenbereitstellung->set_fehlende_kapazitaeten("files/Fehlende_Kapazitaeten.csv");
     $datenbereitstellung->aktualisiere_datenbestand();
 
 

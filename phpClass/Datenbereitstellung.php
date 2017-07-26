@@ -26,10 +26,14 @@ class Datenbereitstellung {
 
   /**
    * __CONSTRUCT
-   * Liest die global verfügbare Datenbankverbindung aus.
+   * Liest die global verfügbare Datenbankverbindung, Sprachtexte und allgemeine
+   * Konfiguration aus.
+   * Konnte keine Datenbankverbindung ausgelesen werden, wird eine lokale Ver-
+   * bindung aufgebaut.
    *
    * @param $ir_sprache: Objekt welches die Texte in der aktuell verwendeten
    *  Sprache enthält
+   * @throws NoDatabaseException
    * @author René Kanzenbach
    */
   public function __construct() {
@@ -54,7 +58,7 @@ class Datenbereitstellung {
       $this->gr_conn->set_charset('utf8');
       if ($this->gr_conn->connect_error) {
         //->Verbindung konnte nicht aufgebaut werden
-        die("Es konnte keine Datenbankverbindung erzeugt werden!");
+        throw NoDatabaseException($gr_sprache->Error->NoDBConnection);
       }
       $this->gv_lokale_verbindung = 1;
     }
@@ -97,15 +101,15 @@ class Datenbereitstellung {
     //=>Kita-Datenbestand aktuallisieren
     //--------------------------------------------------------------------------
     //Kita Datensätze laden
-    $la_kita_result = $this->lade_datensatz($this->ga_config["opendata_link"] . 'resource_id='
-      . $this->ga_config["resource_kita"]);
+    $la_kita_result = $this->lade_datensatz($this->ga_config["opendata_link"].'resource_id='
+      .$this->ga_config["resource_kita"]);
     //Datensätze in DB speichern
     $this->speicher_kitas($la_kita_result);
 
     //Letztes Update-Datum der Kita-Ressource ermitteln
     $lv_update_datum = $this->get_update_datum($this->ga_config["resource_kita"]);
     //Letztes Update-Datum der Ressource speichern
-    $GLOBALS["update_kita"] = $lv_update_datum;
+    $this->set_update_datum(0, $lv_update_datum);
 
     //=>AlterStadtteil-Datenbestand aktualisieren
     //--------------------------------------------------------------------------
@@ -118,7 +122,7 @@ class Datenbereitstellung {
     //Letzes Update-Datum der Stadteil-Ressource ermitteln
     $lv_update_datum = $this->get_update_datum($this->ga_config["resource_stadtteil"]);
     //Letztes Update-Datum der Ressource speichern
-    $GLOBALS["update_stadtteil"] = $lv_update_datum;
+    $this->set_update_datum(1, $lv_update_datum);
 
     //=>Fehlende Kapazitätsplätze manuell eintragen
     //--------------------------------------------------------------------------
@@ -138,8 +142,13 @@ class Datenbereitstellung {
     $la_kita_result;
     $la_stadtteil_result;
 
-    //Updatedatum der Datensätze
-    $lv_update_datum;
+    //Aktuelles Updatedatum der OpenData-API einer Ressource
+    $lv_update_datum;     //Aktuell
+
+    //Updatedatum der Ressourcen der OpenData-API, al die Ressourcen das Letzte
+    //mal mit dem lokalen Datenbestand abgeglichen wurden
+    $lv_update_kita = ""; //Letztes Update der Kitas
+    $lv_update_stadteil = ""; //Letztes Update der Staddteile
 
     //=>Verbindung zur OpenData-API prüfen
     //--------------------------------------------------------------------------
@@ -150,18 +159,17 @@ class Datenbereitstellung {
     //Letztes Update-Datum der Kita-Ressource ermitteln
     $lv_update_datum = $this->get_update_datum($this->ga_config["resource_kita"]);
 
-    if (isset($GLOBALS["update_kita"])
-      && $GLOBALS["update_kita"] <> $lv_update_datum) {
+    if ($lv_update_kita == "" && $lv_update_kita <> $lv_update_datum) {
       //->Kitas wurden noch nie geladen oder die Ressource auf der OpenData-Seite
       //wurde seit dem letzten Laden aktualisiert
 
-      //Kita Datensätze laden
+      //Kita Datensätze von OpenData-API laden
       $la_kita_result = $this->lade_datensatz($this->ga_config["opendata_link"] . 'resource_id='
         . $this->ga_config["resource_kita"]);
       //Datensätze in DB speichern
       $this->speicher_kitas($la_kita_result);
       //Letztes Update-Datum der Ressource speichern
-      $GLOBALS["update_kita"] = $lv_update_datum;
+      $this->set_update_datum(0, $lv_update_datum);
     }
 
     //=>AlterStadtteil-Datenbestand aktualisieren
@@ -169,18 +177,17 @@ class Datenbereitstellung {
     //Letzes Update-Datum der Stadteil-Ressource ermitteln
     $lv_update_datum = $this->get_update_datum($this->ga_config["resource_stadtteil"]);
 
-    if (isset($GLOBALS["update_stadtteil"])
-      && $GLOBALS["update_stadtteil"] <> $lv_update_datum) {
+    if ($lv_update_stadtteil == "" && $lv_update_stadtteil <> $lv_update_datum) {
       //->Stadteile wurden noch nie geladen oder die Ressource auf der OpenData-
       //Seite wurde seit dem letzten Laden aktualisiert
 
-      //Stadteil Datensätze laden
+      //Stadteil Datensätze von OpenData-API laden
       $la_stadtteil_result = $this->lade_datensatz($this->ga_config["opendata_link"]
         . 'resource_id=' . $this->ga_config["resource_stadtteil"]);
       //Datensätze in DB speichern
       $this->speicher_stadtteil($la_stadtteil_result);
       //Letztes Update-Datum der Ressource speichern
-      $GLOBALS["update_stadtteil"] = $lv_update_datum;
+      $this->set_update_datum(1, $lv_update_datum);
     }
 
     //=>Fehlende Kapazitätsplätze manuell eintragen
@@ -327,10 +334,14 @@ class Datenbereitstellung {
       $betriebsnummer = $record->Betriebsnummer;
 
       //Statement ausführen
-      if($lr_sql_stmt->execute()) {
-        //TODO Fehlerbehandlung
+      if(!$lr_sql_stmt->execute()) {
+        //->Statement konnte nicht durchgeführt werden
+        $this->gr_conn->rollback();
+        throw new NoDatabaseException($this->gr_sprache->DBUpdateError);
       }
     }
+    //Update durchführen
+    $this->gr_conn->commit();
   }
 
   /**
@@ -339,6 +350,7 @@ class Datenbereitstellung {
   * des übergebenen Result-Objektes.
   *
   * @param $ia_stadtteil_result: Result-Array der JSON-AlterStadtteil Datensätze
+  * @throws NoDatabaseException
   * @author René Kanzenbach
   */
   private function speicher_stadtteil($ia_stadtteil_result) {
@@ -378,10 +390,6 @@ class Datenbereitstellung {
     //Daten einfügen
     foreach ($ia_stadtteil_result as $record) {
 
-      //>>>DEBUG
-      // var_dump($record);
-      //<<<DEBUG
-
       $stichtag = $this->formatiere_datum($record->stichtag);
       $bezirk_id = $record->bezirk_id;
       $bezirk_bez = $record->bezirk_bez;
@@ -410,10 +418,14 @@ class Datenbereitstellung {
       $gesamtstadt = $record->gesamtstadt;
 
       //Statement ausführen
-      if($lr_sql_stmt->execute()) {
-        // echo "Datensatz eingefügt! Stichtag=" . $record->stichtag;
+      if(!$lr_sql_stmt->execute()) {
+        //->Statement konnte nicht ausgeführt werden
+        $this->gr_conn->rollback();
+        throw new NoDatabaseException($this->gr_sprache->DBUpdateError);
       }
     }
+    //Statements commiten
+    $this->gr_conn->commit();
   }
 
   /**
@@ -597,5 +609,42 @@ class Datenbereitstellung {
     $this->gv_pfad_manuelle_kap = $iv_pfad;
   }
 
+  /**
+   * SET_UPDATE_DATUM
+   *
+   */
+  public function set_update_datum($iv_schluessel, $iv_wert) {
+
+    $lr_sql_prep = null;     //Prepared SQL-Statement
+
+    //Update-Statement vorbereiten
+    //--------------------------------------------------------------------------
+    $lr_sql_stmt = $this->gr_conn->prepare(
+      "UPDATE kitaprognose.Zwischenspeicher
+        SET beschreibung = ? wert = ?
+        WHERE id = ?");
+
+    switch ($iv_schluessel) {
+      case 0:
+        $lv_beschreibung = "Kita Updatedatum";
+      case 1:
+        $lv_beschreibung = "Stadtteil Updatedatum";
+    }
+
+    $lr_sql_prep->bind_param("iss", $lv_beschreibung, $iv_wert, $iv_schluessel);
+
+    //Transaktion durchführen
+    //--------------------------------------------------------------------------
+    //Transaktion beginnen
+    $this->gr_conn->begin_transaction();
+    //Statement ausführen
+    $lr_sql_prep->execute();
+
+    //Transaktion abschließen
+    if (!$this->gr_conn->commit()) {
+      //->Transaktion fehlgeschlagen
+      $this->gr_conn->rollback();
+    }
+  }
 }
 ?>
