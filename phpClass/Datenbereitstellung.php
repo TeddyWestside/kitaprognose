@@ -138,28 +138,36 @@ class Datenbereitstellung {
   * @author René Kanzenbach
   */
   public function aktualisiere_datenbestand() {
+
+    //Objekt zur Datenbankabfrage
+    $lr_datenbankabfrage = new Datenbankabfrage();
+
     //Result-Arrays
     $la_kita_result;
     $la_stadtteil_result;
 
     //Aktuelles Updatedatum der OpenData-API einer Ressource
-    $lv_update_datum;     //Aktuell
+    $lv_update_datum;
 
-    //Updatedatum der Ressourcen der OpenData-API, al die Ressourcen das Letzte
+    //Updatedatum der Ressourcen der OpenData-API, als die Ressourcen das Letzte
     //mal mit dem lokalen Datenbestand abgeglichen wurden
-    $lv_update_kita = ""; //Letztes Update der Kitas
-    $lv_update_stadtteil = ""; //Letztes Update der Staddteile
+    $la_letztes_update;
 
     //=>Verbindung zur OpenData-API prüfen
     //--------------------------------------------------------------------------
     $this->pruefe_verbindung();
+
+    //=>Auslesen der Änderungsdatumsangaben der Ressourcen der OpenData-API
+    //--------------------------------------------------------------------------
+    $la_letztes_update = $lr_datenbankabfrage->getZwischenspeicher();
 
     //=>Kita-Datenbestand aktuallisieren
     //--------------------------------------------------------------------------
     //Letztes Update-Datum der Kita-Ressource ermitteln
     $lv_update_datum = $this->get_update_datum($this->ga_config["resource_kita"]);
 
-    if ($lv_update_kita == "" && $lv_update_kita <> $lv_update_datum) {
+    if ($la_letztes_update[0]["Wert"] == ""
+        && $la_letztes_update[0]["Wert"] <> $lv_update_datum) {
       //->Kitas wurden noch nie geladen oder die Ressource auf der OpenData-Seite
       //wurde seit dem letzten Laden aktualisiert
 
@@ -177,7 +185,8 @@ class Datenbereitstellung {
     //Letzes Update-Datum der Stadteil-Ressource ermitteln
     $lv_update_datum = $this->get_update_datum($this->ga_config["resource_stadtteil"]);
 
-    if ($lv_update_stadtteil == "" && $lv_update_stadtteil <> $lv_update_datum) {
+    if ($la_letztes_update[1]["Wert"] == ""
+        && $la_letztes_update[1]["Wert"] <> $lv_update_datum) {
       //->Stadteile wurden noch nie geladen oder die Ressource auf der OpenData-
       //Seite wurde seit dem letzten Laden aktualisiert
 
