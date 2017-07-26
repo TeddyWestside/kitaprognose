@@ -1,9 +1,19 @@
 <?php
+
+/*  Diese Klasse ist für die Installation der Webapplikation zuständig
+    inklusive Erstellen der Datenbank, Tabellen und das Befüllen Dieser.
+    @author Carsten Schober
+*/
+
+//Hinzufügen der für die Installation benötigten Klassen
 require "../phpClass/Datenbankinitialisierung.php";
 require "../phpClass/Datenbereitstellung.php";
 require "../phpClass/Datenbankabfrage.php";
 require "../lang/Language.php";
 require "../connection.php";
+require "../exceptions/NoConnectionException.php";
+require "../exceptions/NoDatabaseException.php";
+require "../exceptions/NoDataException.php";
 
 //Sql-Statements definieren
 $sqlInsert0 = "INSERT INTO kitaprognose.Zwischenspeicher (ID, BESCHREIBUNG, WERT) VALUES (0,'','') ON DUPLICATE KEY UPDATE WERT=WERT";
@@ -17,8 +27,6 @@ $GLOBALS["config"] = $ar_config;
 $cl_lang = new Language("../lang/".$ar_config["langCode"]);
 $GLOBALS["lang"] = $cl_lang->translate();
 
-//Einbinden der Connection.php für die Verbindung zur Datenbank
-
 
 try {
   //Datenbank initialisieren
@@ -27,6 +35,9 @@ try {
   $cl_Datenbankinitialisierung->erstelleTabelleKitas();
   $cl_Datenbankinitialisierung->erstelleTabelleAlterStadtteil();
   $cl_Datenbankinitialisierung->erstelleTabelleZwischenspeicher();
+  if ($GLOBALS['conn']->query($sqlInsert0) === FALSE & $GLOBALS['conn']->query($sqlInsert1) === FALSE) {
+      echo "Error: " . $GLOBALS['conn']->error;
+  }
   echo "Datenbank erstellt!";
   echo "<br>";
 } catch (Exception $e) {
@@ -43,13 +54,5 @@ try {
 } catch (Exception $e) {
   echo $e->getMessage()."<br>";
 }
-
-if ($GLOBALS['conn']->query($sqlInsert0) === FALSE & $GLOBALS['conn']->query($sqlInsert1) === FALSE) {
-    echo "Error: " . $GLOBALS['conn']->error;
-}
-
-$gr_datenbankabfrage = new Datenbankabfrage();
-$zwischenspeicher = $gr_datenbankabfrage->getZwischenspeicher();
-var_dump($zwischenspeicher);
 
 ?>

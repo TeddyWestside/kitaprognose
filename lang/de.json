@@ -14,12 +14,12 @@
     "text_all_selected":"Alle",
     "label_forecastPeriod": "Prognose für ",
     "label_first_table_row":"Stadtteil",
-    "label_second_table_row":"Auslastung",
+    "label_second_table_row":"Auslastung [%]",
     "text_tableCaption": "Die Werte werden entsprechend der Auslastung eingefärbt: rote Werte = kritisch, orange Werte = gefährdet, grüne Werte = gut"
   },
   "Footer":{
     "description": "Ein Projekt von Studierenden des Fachbereichs Informatik an der Westfälischen Hochschule Gelsenkirchen in Kooperation mit der Stadt Gelsenkirchen. Das Projekt entstand im Rahmen einer Ideenfindung zu OpenData.",
-    "last_dataset": "Letzter Datenbestand:",
+    "last_dataset": "Letzter Datenbestand: ",
     "imprint": "Impressum",
     "disclaimer": "Datenschutzerklärung"
   },
