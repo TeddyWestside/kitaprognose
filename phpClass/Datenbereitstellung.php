@@ -148,7 +148,7 @@ class Datenbereitstellung {
     //Updatedatum der Ressourcen der OpenData-API, al die Ressourcen das Letzte
     //mal mit dem lokalen Datenbestand abgeglichen wurden
     $lv_update_kita = ""; //Letztes Update der Kitas
-    $lv_update_stadteil = ""; //Letztes Update der Staddteile
+    $lv_update_stadtteil = ""; //Letztes Update der Staddteile
 
     //=>Verbindung zur OpenData-API prüfen
     //--------------------------------------------------------------------------
@@ -226,7 +226,13 @@ class Datenbereitstellung {
       //Offset erhöhen
       $lv_offset = $lv_offset + 100;
       //Datensatz als JSON-String anfordern
-      $lv_json = file_get_contents($lv_dyn_link);
+      $lv_json = c($lv_dyn_link);
+
+      //Prüfen, ob die Datei geladen werden konnte
+      if ($lv_json == FALSE) {
+        //->Datei konnte nicht geladen werden
+        return;
+      }
 
       //Anpassen der Attributnamen innerhalb des JSON-Strings, damit diese im nächsten
       //Schritt erfolgreich in ein Objekt gewandelt werden können
@@ -286,7 +292,7 @@ class Datenbereitstellung {
     //--------------------------------------------------------------------------
     if($this->gr_conn->connect_error){
       //->Fehler mit der Datenbankverbindung
-      throw new NoDatabaseException();
+      throw new NoDatabaseException($this->gr_sprache->Error->NoDBConnection);
     }
 
     //=>Kita Tabelle leeren
@@ -303,6 +309,12 @@ class Datenbereitstellung {
         INTERNETBESCHREIBUNG, BARRIEREFREI_INKLUSION, ANZAHL_DER_PLAETZE,
         ANZAHL_DER_GRUPPEN, BETRIEBSNUMMER)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    //Prüfen, ob das Prepared Statement erstellt werden konnte
+    if ($lr_sql_stmt == FALSE) {
+      //->Prepared Statement konnte nicht erstellt werden
+      throw new NoDatabaseException($this->gr_sprache->Error->DBUpdateError);
+    }
 
     $lr_sql_stmt->bind_param('issssssssiisssssssiis', $id, $name, $art, $traeger,
     $plz, $ort, $strasse, $bezirk, $stadtteil, $x, $y, $telefon, $fax, $email,
@@ -380,6 +392,12 @@ class Datenbereitstellung {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
         ?, ?, ?, ?)");
 
+    //Prüfen, ob das Prepared Statement erstellt werden konnte
+    if ($lr_sql_stmt == FALSE) {
+      //->Prepared Statement konnte nicht erstellt werden
+      throw new NoDatabaseException($this->gr_sprache->Error->DBUpdateError);
+    }
+
     //Statement befüllen
     $lr_sql_stmt->bind_param('sisisiiiiiiiiiiiiiiiiiiiii', $stichtag, $bezirk_id,
     $bezirk_bez, $stadtteil_id, $stadtteil_bez, $_0bis1m, $_0bis1w, $_1bis2m,
@@ -453,6 +471,7 @@ class Datenbereitstellung {
   * Prüft ob Kindertagesstädten existieren, für die keine Kapazitätsplätze
   * gepflegt sind und füllt diese wenn möglich mit selbst ermittelten Daten.
   *
+  * @throws NoDatabaseException
   * @author René Kanzenbach
   */
   private function fuelle_leere_kitaplaetze() {
@@ -476,7 +495,7 @@ class Datenbereitstellung {
     //Verbindung prüfen
     if ($this->gr_conn->connect_error) {
       //->Es besteht keine Datenbankverbindung
-      die("Es konnte nicht auf die Datenbank zugegriffen werden!");
+      throw new NoDatabaseException($this->gr_sprache->Error->NoDBConnection);
     }
 
     //Statement ausführen
@@ -488,6 +507,12 @@ class Datenbereitstellung {
       "UPDATE kitaprognose.kitas
         SET ANZAHL_DER_PLAETZE = ?
         WHERE ID = ?");
+
+    //Prüfen, ob das Prepared Statement erstellt werden konnte
+    if ($lr_sql_prep == FALSE) {
+      //->Prepared Statement konnte nicht erstellt werden
+      throw new NoDatabaseException($this->gr_sprache->Error->DBUpdateError);
+    }
 
     //=>Auslesen der manuell gepflegten Kapazitätsplätze
     //--------------------------------------------------------------------------
@@ -543,6 +568,7 @@ class Datenbereitstellung {
     if (!$this->gr_conn->commit()) {
       //->Transaktion fehlgeschlagen
       $this->gr_conn->rollback();
+      throw new NoDataBaseException($this->gr_sprache->Error->DBUpdateError);
     }
   }
 
@@ -619,7 +645,7 @@ class Datenbereitstellung {
 
     //Update-Statement vorbereiten
     //--------------------------------------------------------------------------
-    $lr_sql_stmt = $this->gr_conn->prepare(
+    $lr_sql_prep = $this->gr_conn->prepare(
       "UPDATE kitaprognose.Zwischenspeicher
         SET beschreibung = ? wert = ?
         WHERE id = ?");
@@ -631,7 +657,7 @@ class Datenbereitstellung {
         $lv_beschreibung = "Stadtteil Updatedatum";
     }
 
-    $lr_sql_prep->bind_param("iss", $lv_beschreibung, $iv_wert, $iv_schluessel);
+    $lr_sql_prep->bind_param("ssi", $lv_beschreibung, $iv_wert, $iv_schluessel);
 
     //Transaktion durchführen
     //--------------------------------------------------------------------------
