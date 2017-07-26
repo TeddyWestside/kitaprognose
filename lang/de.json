@@ -49,7 +49,9 @@
     "text_source":"Quelle: "
   },
   "Error":{
-      "NoConnectionException": "Keine Verbindung zur Datenbank.",
+      "NoConnectionException": "Es konnte keine Verbindung zur OpenData-API aufgebaut werden!",
+      "NoDBConnection": "Es konnte keine Verbindung zur Datenbank aufgebaut werden!",
+      "NoConnectionExceptionDBServer": "Keine Verbindung zum Datenbankserver.",
       "NoDatabaseException": "Datenbankfehler: Keine Datenbank oder Tabellen in der Datenbank.",
       "NoDataException": "Datenladefehler: Keine Daten in der Datenbank."
   }
