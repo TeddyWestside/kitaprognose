@@ -2,7 +2,7 @@
 
 return array(
     'langCode' => 'de',
-    'propChildren' => '100',
+    'propChildren' => '90',
     'birthrate' => '1.7',
     'host' => 'localhost',
     'username' => 'root',
