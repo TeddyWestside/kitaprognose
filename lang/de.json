@@ -54,6 +54,7 @@
       "NoDBConnection": "Es konnte keine Verbindung zur Datenbank aufgebaut werden!",
       "NoConnectionExceptionDBServer": "Keine Verbindung zum Datenbankserver.",
       "NoDatabaseException": "Datenbankfehler: Keine Datenbank oder Tabellen in der Datenbank.",
-      "NoDataException": "Datenladefehler: Keine Daten in der Datenbank."
+      "NoDataException": "Datenladefehler: Keine Daten in der Datenbank.",
+      "NoFileException": "Die Datei mit den manuell gepflegten Kapazitätsplätzen konnte nicht eingelesen werden!"
   }
 }

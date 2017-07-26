@@ -527,7 +527,7 @@ class Datenbereitstellung {
     //--------------------------------------------------------------------------
     //Datei öffnen
     $lr_datei = fopen($this->gv_pfad_manuelle_kap, "r")
-    or die("Datei mit den manuellen Kapaziätsplätzen konnte nicht geöffnet werden");
+      or die($this->gr_sprache->Error->NoFileException);
 
     //Erste Zeile der CSV-Datei einlesen (Die erste Zeile ist die Headerline
     //und wird nicht benötigt)
@@ -593,16 +593,19 @@ class Datenbereitstellung {
     $lv_result_json = "";
     $lr_result_obj  = null;
 
-    //Datensatz als JSON-String anfordern
-    $lv_result_json = file_get_contents($this->ga_config["opendata_link_funk"]."site_read");
-    //JSON-String in Objekt wandeln
-    $lr_result_obj = json_decode($lv_result_json);
+    try {
+      //Datensatz als JSON-String anfordern
+      $lv_result_json = file_get_contents($this->ga_config["opendata_link_funk"]."site_read");
+      //JSON-String in Objekt wandeln
+      $lr_result_obj = json_decode($lv_result_json);
 
-    //Prüfe ob API erreichbar ist
-    if ($lr_result_obj->success != true) {
-      //->API ist nicht erreichbar
-      throw new NoConnectionException("Es kann keine Verbindung zur OpenData-API
-        aufgebaut werden!");
+      if ($lr_result_obj == null || $lr_result_obj->success != true) {
+        //->API ist nicht erreichbar
+        throw new NoConnectionException($this->gr_sprache->Error->NoConnectionException);
+      }
+    } catch (Exception $e) {
+      //->Fehler beim Erreichen der API
+      throw new NoConnectionException($this->gr_sprache->Error->NoConnectionException);
     }
   }
 
