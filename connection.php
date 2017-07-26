@@ -29,7 +29,7 @@ catch (Exception $e) {
   // Weiterwerfen der Exception, da es sich bei dieser Exception um eine NoConnectionException handeln soll
   throw new NoConnectionException($lang->Error->NoConnectionExceptionDBServer);
 }
-}
+
 //Fangen der Exception, die durch durch den obigen Fehler geworfen wird
 
 ?>
