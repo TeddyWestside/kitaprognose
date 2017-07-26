@@ -1,40 +1,43 @@
 <!--
 author: Johannes Kusber
-description: Über diese Datei wird das Impressum eingebunden
+description: Über diese Datei wird das Impressum erstellt
 -->
-
-<!-- Sprachabhängigkeit umstellen funktioniert nicht und Texte nicht sprachunabhängig-->
 
 <!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kitaprognose</title>
 
-  <!--Import Google Icon Font-->
+  <!-- Importieren der Material Icons von Google. Vorteil diese nicht lokal zur
+  Verfügung zu stellen ist es das diese eventuell bereits im Cache des Browsers
+  liegen. Des Weiteren Import des CSS-->
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!--Import materialize.css-->
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
   <?php
-  //Definierung der Variablen und Vorbelegung mit Standardwerten
-  //Standardsprache
-  $lang = "de";
+  //Laden der Konfigurationsparameter, die zentral in der config.php festgelegt werden
+  $GLOBALS["config"] = include "config.php";
+  $config = $GLOBALS["config"];
 
-  //Prüfen und ggf. Anpassen der Werte auf Grundlage der GET-Parameter
-  if (isset($_GET["lang"])) {
-    $lang = $_GET["lang"];
+  //Definierung der Standardsprache
+  $langCode = $config["langCode"];
+  //Prüfen der Get-Paramenter in URL und falls vorhanden Anpassung der Werte
+  if (isset($_GET["langCode"])) {
+    $langCode = $_GET["langCode"];
   }
-
   //Einbindung der language.php Datei um Sprachunabhängigkeit in der GUI zu ermöglichen.
-  require ('lang\language.php');
+  require ('lang\Language.php');
   /*Instanzierung der language-Klasse und speichern der JSON-Variable in $lang um auf die Strings über
   die IDs zugreifen zu können.
   */
-  $language = new language($lang);
-  $lang = $language->translate();
+  $language = new language("lang/". $langCode);
+  $GLOBALS["lang"] = $language->translate();
+  $lang = $GLOBALS["lang"];
   ?>
+
+  <!-- Erstellen des Seitentitels -->
+  <title><?php echo $lang->Basic->program_Name?></title>
 </head>
 <body>
   <!--Import jQuery before materialize.js-->
@@ -44,57 +47,29 @@ description: Über diese Datei wird das Impressum eingebunden
   <!--Einbindung des  Headers -->
   <?php include('header.php'); ?>
 
-  <div class="container">
-    <h1>Impressum</h1>
-    <h2>Angaben gemäß § 5 TMG:</h2>
-    <p>Carsten Schober<br /> Wodanstraße 7b<br /> 45891 Gelsenkirchen </p>
-    <h2>Kontakt:</h2>
-    <p>E-Mail: carstenschober93@googlemail.com
-      <h2>Haftung für Inhalte</h2>
-      <p>Als Diensteanbieter sind wir gemäß $ 7 Abs.1 TMG für eigene Inhalte auf diesen
-        Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind
-        wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte
-        fremde Informationen zu +berwachen oder nach Umständen zu forschen, die
-        auf eine rechtswidrige Tätigkeit hinweisen.
-      </p>
-      <p>Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen
-        nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche
-        Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten
-        Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen
-        werden wir diese Inhalte umgehend entfernen.</p>
-        <h2>Haftung für Links</h2>
-        <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren
-          Inhalte wir keinen Einfluss haben. Deshalb können wir für diese
-          fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte
-          der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der
-          Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der
-          Verlinkung auf mögliche Rechtsverstöße überprüft.
-          Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.
-        </p>
-        <p>Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch
-          ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei
-          Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend
-          entfernen.
-        </p>
-        <h2>Urheberrecht</h2>
-        <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten
-          unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung,
-          Verbreitung und jede Art der Verwertung außerhalb der Grenzen des
-          Urheberrechtesbedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw.
-          Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten,
-          nicht kommerziellen Gebrauch gestattet.
-        </p>
-        <p>Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden,
-          werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter
-          als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung
-          aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von
-          Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
-        </p>
-        <p>Quelle: <a href="https://www.e-recht24.de">erecht24.de</a></p>
-      </div>
+  <!-- Erstellen des sprachabhängigen Impressums -->
+  <main>
+    <div class="container">
+      <h1><?php echo $lang->Footer->imprint; ?></h1>
+      <h2><?php echo $lang->Imprint->heading_information; ?></h2>
+        <p>Carsten Schober<br /> Wodanstraße 7b<br /> 45891 Gelsenkirchen </p>
+      <h2><?php echo $lang->Imprint->heading_contact; ?></h2>
+        <p>E-Mail: carstenschober93@googlemail.com</p>
+      <h2><?php echo $lang->Imprint->heading_liability_content; ?></h2>
+        <p><?php echo $lang->Imprint->text_liability_content1; ?> </p>
+        <p><?php echo $lang->Imprint->text_liability_content2; ?></p>
+      <h2><?php echo $lang->Imprint->heading_liability_link; ?></h2>
+        <p><?php echo $lang->Imprint->text_liability_link1; ?></p>
+        <p><?php echo $lang->Imprint->text_liability_link2; ?></p>
+      <h2><?php echo $lang->Imprint->heading_copyright; ?></h2>
+        <p><?php echo $lang->Imprint->text_copyright1; ?></p>
+        <p><?php echo $lang->Imprint->text_copyright2; ?></p>
+        <p><?php echo $lang->Imprint->text_source; ?><a href="https://www.e-recht24.de">erecht24.de</a></p>
+    </div>
+  </main>
 
-      <!--Einbindung des Footers -->
-      <?php include('footer.php'); ?>
-    </body>
+  <!--Einbindung des Footers -->
+  <?php include('footer.php'); ?>
+</body>
 
-    </html>
+</html>

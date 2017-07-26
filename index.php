@@ -11,7 +11,6 @@ der Footer werden jeweils extra eingebunden.
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kitaprognose</title>
 
   <!-- Importieren der Material Icons von Google. Vorteil diese nicht lokal zur
   Verfügung zu stellen ist es das diese eventuell bereits im Cache des Browsers
@@ -51,8 +50,14 @@ der Footer werden jeweils extra eingebunden.
   $GLOBALS["lang"] = $language->translate();
   $lang = $GLOBALS["lang"];
   ?>
+
+  <!-- Erstellen des Seitentitels -->
+  <title><?php echo $lang->Basic->program_Name?></title>
 </head>
 <body>
+
+  <span id="error"></span>
+
   <!--Einbindung des Headers -->
   <?php include('header.php'); ?>
   <!-- Definition des Hauptbereichs der Seite -->
@@ -98,103 +103,106 @@ der Footer werden jeweils extra eingebunden.
           </div>
         </li>
       </ul>
-        <!-- Zweiter Block Filter und Vorhersagejahr -->
-        <div class="row">
-          <div class="col l12">
-            <div class="card-panel">
-              <!-- Definition des Filterbereichs (hidden wird am Ende nach Abschluss des Tabellenbaus sichtbar sobald ein Ergebnis vom Algorithmus vorhanden ist damit sie bei einem Fehler unsichtbar ist) -->
-              <div class="row" id="filterRow" style="visibility:hidden">
-                <!-- Definition des Multiselects zum Filtern der Stadtteile -->
-                <div class="input-field col l6">
-                  <select id="filter" multiple onchange="buildTable();">
-                  </select>
-                  <label><?php echo $lang->Main->label_filter ?></label>
+      <!-- Zweiter Block Filter und Vorhersagejahr -->
+      <div class="row">
+        <div class="col l12">
+          <div class="card-panel">
+            <!-- Definition des Filterbereichs (hidden wird am Ende nach Abschluss des Tabellenbaus sichtbar sobald ein Ergebnis vom Algorithmus vorhanden ist damit sie bei einem Fehler unsichtbar ist) -->
+            <div class="row" id="filterRow" style="visibility:hidden">
+              <!-- Definition des Multiselects zum Filtern der Stadtteile -->
+              <div class="input-field col l6">
+                <select id="filter" multiple onchange="buildTable();">
+                </select>
+                <label><?php echo $lang->Main->label_filter ?></label>
 
-                </div>
-                <!-- Definition des Sliders zum Einstellen des Vorhersagejahrs -->
-                <div class="col l6">
-                  <label><?php echo $lang->Main->label_forecastPeriod ?><span id="forecastPeriodYear">X</span></span></label>
-                  <input type="range" id="forecastPeriod" onchange="buildTable()"  value="1" min="1">
-                </div>
+              </div>
+              <!-- Definition des Sliders zum Einstellen des Vorhersagejahrs -->
+              <div class="col l6">
+                <label><?php echo $lang->Main->label_forecastPeriod ?><span id="forecastPeriodYear">X</span></span></label>
+                <input type="range" id="forecastPeriod" onchange="buildTable()"  value="1" min="1">
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Dritter Block Tabelle -->
-        <div class="row">
-          <div class="col l12">
-            <div class="card-panel">
-              <!-- Bereitstellen des Bereichs der von der Methode buildTable() überschrieben wird -->
-              <span id="tablePlaceholder">
-              </span>
-            </div>
+      <!-- Dritter Block Tabelle -->
+      <div class="row">
+        <div class="col l12">
+          <div class="card-panel">
+            <!-- Bereitstellen des Bereichs der von der Methode buildTable() überschrieben wird -->
+            <span id="tablePlaceholder">
+            </span>
           </div>
         </div>
       </div>
-    </main>
+    </div>
+  </main>
 
-    <!--Einbindung des Footers -->
-    <?php include('footer.php');?>
-  </body>
+  <!--Einbindung des Footers -->
+  <?php include('footer.php');?>
+</body>
 
-  <?php
-  //Verschieben der Errormeldungen nach oben
-  echo "<span style='position:absolute; top: 0; background: red'>";
-  //Einbindung & Aufbau der Verbindung zur Datenbank
-  include 'connection.php';
-  //Prüfung ob Verbindung vorhanden
-  if($GLOBALS['conn'] != null){
-    //Datenbankprüfung ob neue Elemente vorliegen und ggf. Updatet
-    include "phpClass/Datenbereitstellung.php";
-    $datenbereitstellung = new Datenbereitstellung($lang);
-    $datenbereitstellung->set_fehlende_kapazitaeten("files/Fehlende_Kapazitaeten.csv");
-    $datenbereitstellung->aktualisiere_datenbestand();
+<!-- PHP Bereich in dem der die Datenbereitstellung vom OpenData Protal und der
+Algorithmus ausgeführt wird -->
+<?php
+//Verschieben der Errormeldungen nach oben
+echo "<span style='position:absolute; top: 0; background: red'>";
+//Einbindung & Aufbau der Verbindung zur Datenbank
+include 'connection.php';
+//Prüfung ob Verbindung vorhanden
+if($GLOBALS['conn'] != null){
+  //Aktualisieren des lokalen Datenbestandes falls neue Daten im OpenData Portal existieren und Laden fehlender Kapazitäten
+  include "phpClass/Datenbereitstellung.php";
+  $datenbereitstellung = new Datenbereitstellung();
+  $datenbereitstellung->set_fehlende_kapazitaeten("files/Fehlende_Kapazitaeten.csv");
+  $datenbereitstellung->aktualisiere_datenbestand();
 
+  //Einbindung des Algorithmus
+  require "phpClass/Algorithmus.php";
+  //Erzeugen eines Algorithmus Objekt
+  $algo = new Algorithmus;
+  //Erzeugen eines Ergebnisses mit aktuellen Parametern
+  $result = $algo->getPrognose($propChildren, $birthrate);
+  //Abfrage des Vorhersagejahres
+  $forecastPeriodYear = $algo->getPrognosejahre();
+}
+//Falls keine Verbindung vorhanden wird abgebrochen
+else{
+  die();
+}
+// Abschluss des Verschieben der Errormeldung
+echo "</span>";
+?>
 
-    //Einbindung des Algorithmus
-    require "phpClass/Algorithmus.php";
-    //Erzeugen eines Algorithmus Objekt
-    $algo = new Algorithmus;
-    //Erzeugen eines Ergebnisses mit aktuellen Parametern
-    $result = $algo->getPrognose($propChildren, $birthrate);
-    //Abfrage des Vorhersagejahres
-    $forecastPeriodYear = $algo->getPrognosejahre();
-  }
-  //Falls keine Verbindung vorhanden wird abgebrochen
-  else{
-    die();
-  }
-  // Abschluss des Verschieben der Errormeldung
-  echo "</span>";
-  ?>
-  <!--Import Skript materialize-->
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="js/materialize.min.js"></script>
+<!-- Skript von materialize einbinden -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
 
-  <!-- Skript zum sotieren der Tabelle einbinden -->
-  <script type="text/javascript" src="js/TableSort.js"></script>
+<!-- Skript zum sotieren der Tabelle einbinden -->
+<script type="text/javascript" src="js/TableSort.js"></script>
 
-  <!-- Einbindung des externen Javascripts für Funktionalität des Filterbereichs und der Tabelle -->
-  <script src="js/extScript.js"></script>
-  <script>
-  //Übergabe des PHP Ergebnsis des Algorithmus an Javascript
-  <?php
-  $jsArray = json_encode($result);
-  echo ("var jsresult = $jsArray;");
-  $jsForecastPeriodYear = json_encode($forecastPeriodYear);
-  echo ("var jsForecastPeriodYear = $jsForecastPeriodYear;");
-  $jsLanguage = json_encode($lang->Main);
-  echo ("var jsLanguage = $jsLanguage;");
-  ?>
+<!-- externes Skript einbinden (Funktionalität des Filterbereichs und der Tabelle) -->
+<script src="js/extScript.js"></script>
 
-  //Aufruf der Methode, die Multiselect (Filter) erstellt und in HTML einfügt
-  buildFilter();
-  //Aufruf der Methode, die dem Slider den maximalen Wert gibt
-  setMaxForecastPeriod();
-  //Aufruf der Methode, die die Tabelle erstellt
-  buildTable();
-  //Filterbereich sichtbar machen
-  document.getElementById("filterRow").style.visibility = "visible";
-  </script>
-  </html>
+<script>
+//Übergabe des PHP Ergebnsis des Algorithmus an Javascript
+<?php
+$jsArray = json_encode($result);
+echo ("var jsresult = $jsArray;");
+$jsForecastPeriodYear = json_encode($forecastPeriodYear);
+echo ("var jsForecastPeriodYear = $jsForecastPeriodYear;");
+$jsLanguage = json_encode($lang->Main);
+echo ("var jsLanguage = $jsLanguage;");
+?>
+
+//Aufruf der Methode, die Multiselect (Filter) erstellt und in HTML einfügt
+buildFilter();
+//Aufruf der Methode, die dem Slider den maximalen Wert gibt
+setMaxForecastPeriod();
+//Aufruf der Methode, die die Tabelle erstellt
+buildTable();
+//Filterbereich sichtbar machen
+document.getElementById("filterRow").style.visibility = "visible";
+</script>
+</html>

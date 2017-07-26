@@ -1,17 +1,56 @@
 {
   "Basic":{
-    "language": "Englisch"
-  },
-  "Header":{
-
+    "program_Name": "Kitaforecast",
+    "language": "English"
   },
   "Main":{
-
+    "title_parameterConfig": "Lorem Ipsum",
+    "text_parameterConfig": "Lorem Ipsum:",
+    "title_validation": "Lorem Ipsum  z.B. 95.99",
+    "label_propChildren": "Lorem Ipsum",
+    "label_birthrate": "Lorem Ipsum",
+    "text_parameterButton": "Lorem Ipsum",
+    "label_filter":"Lorem Ipsum",
+    "text_all_selected":"Lorem Ipsum",
+    "label_forecastPeriod": "Lorem Ipsum ",
+    "label_first_table_row":"Lorem Ipsum",
+    "label_second_table_row":"Lorem Ipsum",
+    "text_tableCaption": "Lorem Ipsum"
   },
   "Footer":{
     "description": "Lorem Ipsum",
-    "last_dataset": "Last Dataset:",
-    "imprint": "Imprint",
-    "disclaimer": "Disclaimer"
+    "last_dataset": "Lorem Ipsum:",
+    "imprint": "imprint",
+    "disclaimer": "disclaimer"
+  },
+  "Imprint":{
+    "heading_information": "Angaben gemäß § 5 TMG:",
+    "heading_contact":"Kontakt:",
+    "heading_liability_content":"Haftung für Inhalte",
+    "text_liability_content1":"Als Diensteanbieter sind wir gemäß $ 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu +berwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.",
+    "text_liability_content2":"Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.",
+    "heading_liability_link":"Haftung für Links",
+    "text_liability_link1":"Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.",
+    "text_liability_link2":"Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.",
+    "heading_copyright":"Urheberrecht",
+    "text_copyright1":"Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtesbedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.",
+    "text_copyright2":"Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.",
+    "text_source":"Quelle: "
+  },
+  "Disclaimer":{
+    "heading_disclaimer": "Datenschutz",
+    "text_disclaimer1": "Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.",
+    "text_disclaimer2": "Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-MailAdressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.",
+    "text_disclaimer3": "Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.",
+    "heading_cookies": "Cookies",
+    "text_cookies1":"Die Internetseiten verwenden teilweise so genannte Cookies. Cookies richten auf Ihrem Rechner keinen Schaden an und enthalten keine Viren. Cookies dienen dazu, unser Angebot nutzerfreundlicher, effektiver und sicherer zu machen. Cookies sind kleine Textdateien, die auf Ihrem Rechner abgelegt werden und die Ihr Browser speichert.",
+    "text_cookies2":"Die meisten der von uns verwendeten Cookies sind so genannte „Session-Cookies“. Sie werden nach Ende Ihres Besuchs automatisch gelöscht. Andere Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese löschen. Diese Cookies ermöglichen es uns, Ihren Browser beim nächsten Besuch wiederzuerkennen.",
+    "text_cookies3":"Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert werden und Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle oder generell ausschließen sowie das automatische Löschen der Cookies beim Schließen des Browser aktivieren. Bei der Deaktivierung von Cookies kann die Funktionalität dieser Website eingeschränkt sein.",
+    "text_source":"Quelle: "
+  },
+  "Error":{
+      "NoConnectionException": "Keine Verbindung zur Datenbank.",
+      "NoDatabaseException": "Datenbankfehler: Keine Datenbank oder Tabellen in der Datenbank.",
+      "NoDataException": "Datenladefehler: Keine Daten in der Datenbank."
   }
 }
