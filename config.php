@@ -4,7 +4,6 @@ return array(
     'langCode' => 'de',
     'propChildren' => '90',
     'birthrate' => '1.7',
-    'host' => 'localhost',
     'username' => 'root',
     'servername' => 'localhost',
     'password' => '',
