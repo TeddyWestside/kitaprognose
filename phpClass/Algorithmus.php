@@ -4,12 +4,6 @@ Diese Klasse ist für die Berechnung des Algorithmus zuständig.
 @author Carsten Schober
 */
 
-require 'Datenbankabfrage.php';
-require 'exceptions/NoDatabaseException.php';
-require 'exceptions/NoDataException.php';
-
-
-
 class Algorithmus
 {
   public function getPrognose($propChildren,$birthrate){
