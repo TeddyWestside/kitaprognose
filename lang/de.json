@@ -31,7 +31,8 @@
     "disclaimer": "Datenschutz"
   },
   "Error":{
-      "NoConnectionException": "Keine Verbindung zur Datenbank.",
+      "NoConnectionException": "Es konnte keine Verbindung zur OpenData-API aufgebaut werden!",
+      "NoDBConnection": "Es konnte keine Verbindung zur Datenbank aufgebaut werden!",
       "NoDatabaseException": "Datenbankfehler: Keine Datenbank oder Tabellen in der Datenbank.",
       "NoDataException": "Datenladefehler: Keine Daten in der Datenbank."
   }
