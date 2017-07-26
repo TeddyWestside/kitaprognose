@@ -225,8 +225,8 @@ class Datenbereitstellung {
 
       //Offset erhöhen
       $lv_offset = $lv_offset + 100;
-      //Datensatz als JSON-String anfordern
-      $lv_json = c($lv_dyn_link);
+      //Datensatz als JSON-String von der OpenData-API anfordern
+      $lv_json = file_get_contents($lv_dyn_link);
 
       //Prüfen, ob die Datei geladen werden konnte
       if ($lv_json == FALSE) {
