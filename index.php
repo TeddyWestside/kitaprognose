@@ -132,6 +132,19 @@ der Footer werden jeweils extra eingebunden.
           <div class="card-panel">
             <!-- Bereitstellen des Bereichs der von der Methode buildTable() überschrieben wird -->
             <span id="tablePlaceholder">
+            <div class="center-align">
+              <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-red">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div><div class="gap-patch">
+                    <div class="circle"></div>
+                  </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
             </span>
           </div>
         </div>
