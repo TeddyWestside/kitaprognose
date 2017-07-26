@@ -26,7 +26,14 @@ description: In der footer.php ist der Footerbereich ausgelagert damit dieser au
       <div class="row">
         <!-- Einbindung der Daten der letzten Datenbestände -->
         <div class="col l4">
-          <?php echo $lang->Footer->last_dataset ?>
+          <?php
+            // $lr_datenbankabfrage = new Datenbankabfrage();
+            // $la_letztes_update = $lr_datenbankabfrage->getZwischenspeicher();
+            // echo $lang->Footer->last_dataset . $la_letztes_update[0]["Wert"];
+            echo $lang->Footer->last_dataset;
+
+
+           ?>
         </div>
         <!-- Einbindung des Impressum und der Datenschutzerklärung -->
         <div class="col l4">

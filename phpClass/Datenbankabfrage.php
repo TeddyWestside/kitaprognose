@@ -1,7 +1,7 @@
 <?php
 /*  Diese Klasse ist für das ziehen der erfolderlichen Daten aus der Datenbank
-zuständig.
-@author Carsten Schober und Ken Diepers
+    zuständig.
+    @author Carsten Schober und Ken Diepers
 */
 
 //Diese Klasse hält Methoden für die Datenbankabfrage
@@ -10,7 +10,7 @@ class Datenbankabfrage
   //Funktion, die die aufsummierte Kapazität der Kitas für ein Stadtteil zurückliefert
   public function getKapazitaet()
   {
-    // Sql-Query-Ergebnis für die aufsummierte Kapazität der Kitas für einen Stadtteil
+    //Sql-Query-Ergebnis für die aufsummierte Kapazität der Kitas für einen Stadtteil
     $sql_Kapazitaet = $GLOBALS['conn']->query("SELECT Stadtteil ,sum(Anzahl_der_Plaetze) as Kapa FROM Kitaprognose.Kitas Group by Stadtteil;");
     return $sql_Kapazitaet;
   }
@@ -21,29 +21,29 @@ class Datenbankabfrage
     $neusterDatensatz;      // Hilfsvariable für die Ausgabe als String
     $ar_NeusterDatensatz;   // Hilfsarray für das Durchlaufen des Rückgabe-sql-Objekt
 
-      //Sql-Query-Ergebnis für den neusten Stichtag aus der Tabelle AlterStadtteil
-      $sql_NeusterDatensatz = $GLOBALS['conn']->query("SELECT Stichtag FROM Kitaprognose.AlterStadtteil ORDER BY Stichtag DESC LIMIT 1;");
+    //Sql-Query-Ergebnis für den neusten Stichtag aus der Tabelle AlterStadtteil
+    $sql_NeusterDatensatz = $GLOBALS['conn']->query("SELECT Stichtag FROM Kitaprognose.AlterStadtteil ORDER BY Stichtag DESC LIMIT 1;");
 
-      // Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
-      if($sql_NeusterDatensatz == NULL){
-        throw new NoDatabaseException($GLOBALS['lang']->Error->NoDatabaseException);
-      }
+    //Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
+    if($sql_NeusterDatensatz == NULL){
+      throw new NoDatabaseException($GLOBALS['lang']->Error->NoDatabaseException);
+    }
 
-      // Fehlerhandling für einen leeren Datensatz.
-      if($sql_NeusterDatensatz->num_rows == 0){
-        throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
-      }
+    //Fehlerhandling für einen leeren Datensatz.
+    if($sql_NeusterDatensatz->num_rows == 0){
+      throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
+    }
 
-      //Schleife, um mit dem Mysql-Objekt ein Array zu füllen
-      while($row = $sql_NeusterDatensatz->fetch_assoc()){
-        $ar_NeusterDatensatz[]= $row;
-      }
+    //Schleife, um mit dem Mysql-Objekt ein Array zu füllen
+    while($row = $sql_NeusterDatensatz->fetch_assoc()){
+      $ar_NeusterDatensatz[]= $row;
+    }
 
-      //Schleife, um aus dem ersten Feld des Arrays die String Variable zu füllen
-      foreach($ar_NeusterDatensatz as $nD){
-        $neusterDatensatz = $nD["Stichtag"];
-      }
-      return $neusterDatensatz;
+    //Schleife, um aus dem ersten Feld des Arrays die String Variable zu füllen
+    foreach($ar_NeusterDatensatz as $nD){
+      $neusterDatensatz = $nD["Stichtag"];
+    }
+    return $neusterDatensatz;
 
   }
 
@@ -52,24 +52,24 @@ class Datenbankabfrage
   {
     $ar_NeusterDatensatz;   // Hilfsarray für das Durchlaufen des Rückgabe-sql-Objekt
 
-      //Sql-Query-Ergebnis für den neusten Stichtag aus der Tabelle AlterStadtteil
-      $sql_NeusterDatensatz = $GLOBALS['conn']->query("SELECT * FROM Kitaprognose.Zwischenspeicher;");
+    //Sql-Query-Ergebnis für den neusten Stichtag aus der Tabelle AlterStadtteil
+    $sql_NeusterDatensatz = $GLOBALS['conn']->query("SELECT * FROM Kitaprognose.Zwischenspeicher;");
 
-      // Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
-      if($sql_NeusterDatensatz == NULL){
-        throw new NoDatabaseException($GLOBALS['lang']->Error->NoDatabaseException);
-      }
+    //Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
+    if($sql_NeusterDatensatz == NULL){
+      throw new NoDatabaseException($GLOBALS['lang']->Error->NoDatabaseException);
+    }
 
-      // Fehlerhandling für einen leeren Datensatz.
-      if($sql_NeusterDatensatz->num_rows == 0){
-        throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
-      }
+    //Fehlerhandling für einen leeren Datensatz.
+    if($sql_NeusterDatensatz->num_rows == 0){
+      throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
+    }
 
-      //Schleife, um mit dem Mysql-Objekt ein Array zu füllen
-      while($row = $sql_NeusterDatensatz->fetch_assoc()){
-        $ar_NeusterDatensatz[]= $row;
-      }
-      return $ar_NeusterDatensatz;
+    //Schleife, um mit dem Mysql-Objekt ein Array zu füllen
+    while($row = $sql_NeusterDatensatz->fetch_assoc()){
+      $ar_NeusterDatensatz[]= $row;
+    }
+    return $ar_NeusterDatensatz;
 
   }
 

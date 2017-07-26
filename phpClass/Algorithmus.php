@@ -1,50 +1,50 @@
 <?php
 /*
-Diese Klasse ist für die Berechnung des Algorithmus zuständig.
-@author Carsten Schober
+    Diese Klasse ist für die Berechnung des Algorithmus zuständig.
+    @author Carsten Schober und Ken Diepers
 */
 
 class Algorithmus
 {
   public function getPrognose($propChildren,$birthrate){
 
-    // Fehlerhandling, wenn keine Connection zur Datenbank vorhanden ist.
+    //Fehlerhandling, wenn keine Connection zur Datenbank vorhanden ist.
     if ($GLOBALS['conn'] == NULL){
-        return;
+      return;
     }
 
-    // Erzeugen einer Instanz der KLasse Datenbankabfrage.
+    //Erzeugen einer Instanz der KLasse Datenbankabfrage.
     $cl_DatenBankabfrage = new Datenbankabfrage();
 
-    // Hilfsarrays für Schleifen
+    //Hilfsarrays für Schleifen
     $ar_kapa;
     $ar_3bis6;
     $ar_2bis5;
     $ar_1bis4;
     $ar_0bis3;
 
-      // Kapazität eines jeden Stadteils herausfinden.
-      $sql_kapa = $cl_DatenBankabfrage->getKapazitaet();
+    //Kapazität eines jeden Stadteils herausfinden.
+    $sql_kapa = $cl_DatenBankabfrage->getKapazitaet();
 
-      // Anzahl der Kinder eine Altersklasse herausfinden.
-      $sql_3bis6 = $cl_DatenBankabfrage->getAnzahlKinder3bis6();
-      $sql_2bis5 = $cl_DatenBankabfrage->getAnzahlKinder2bis5();
-      $sql_1bis4 = $cl_DatenBankabfrage->getAnzahlKinder1bis4();
-      $sql_0bis3 = $cl_DatenBankabfrage->getAnzahlKinder0bis3();
+    //Anzahl der Kinder eine Altersklasse herausfinden.
+    $sql_3bis6 = $cl_DatenBankabfrage->getAnzahlKinder3bis6();
+    $sql_2bis5 = $cl_DatenBankabfrage->getAnzahlKinder2bis5();
+    $sql_1bis4 = $cl_DatenBankabfrage->getAnzahlKinder1bis4();
+    $sql_0bis3 = $cl_DatenBankabfrage->getAnzahlKinder0bis3();
 
 
 
-      // Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
-      if($sql_kapa == NULL | $sql_3bis6 == NULL | $sql_2bis5 == NULL | $sql_1bis4 == NULL | $sql_0bis3 == NULL){
-        throw new NoDatabaseException($GLOBALS['lang']->Error->NoDatabaseException);
-      }
+    //Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
+    if($sql_kapa == NULL | $sql_3bis6 == NULL | $sql_2bis5 == NULL | $sql_1bis4 == NULL | $sql_0bis3 == NULL){
+      throw new NoDatabaseException($GLOBALS['lang']->Error->NoDatabaseException);
+    }
 
-      // Fehlerhandling für einen leeren Datensatz.
-      if($sql_kapa->num_rows == 0 | $sql_3bis6->num_rows == 0 | $sql_2bis5->num_rows == 0 | $sql_1bis4->num_rows == 0 | $sql_0bis3->num_rows == 0){
-        throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
-      }
+    //Fehlerhandling für einen leeren Datensatz.
+    if($sql_kapa->num_rows == 0 | $sql_3bis6->num_rows == 0 | $sql_2bis5->num_rows == 0 | $sql_1bis4->num_rows == 0 | $sql_0bis3->num_rows == 0){
+      throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
+    }
 
-    // Füllen der Hilfsarrys mit den Werten der Mysql-Objekte.
+    //Füllen der Hilfsarrys mit den Werten der Mysql-Objekte.
     while($row = $sql_kapa->fetch_assoc()){
       $ar_kapa[] = $row;
     }
@@ -62,7 +62,7 @@ class Algorithmus
     }
     $ar_m0bis2 = $ar_0bis3;
 
-    // Prognose +1 Jahr
+    //Prognose +1 Jahr
     foreach($ar_kapa as $kapa){
       foreach($ar_3bis6 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
@@ -78,7 +78,7 @@ class Algorithmus
         }
       }
     }
-    // Prognose +2 Jahr
+    //Prognose +2 Jahr
     foreach($ar_kapa as $kapa){
       foreach($ar_2bis5 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
@@ -93,7 +93,7 @@ class Algorithmus
       }
     }
 
-    // Prognose +3 Jahr
+    //Prognose +3 Jahr
     foreach($ar_kapa as $kapa){
       foreach($ar_1bis4 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
@@ -108,7 +108,7 @@ class Algorithmus
       }
     }
 
-    // Prognose +4 Jahr
+    //Prognose +4 Jahr
     foreach($ar_kapa as $kapa){
       foreach($ar_0bis3 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
@@ -123,7 +123,7 @@ class Algorithmus
       }
     }
 
-    // Prognose +5 Jahr
+    //Prognose +5 Jahr
     foreach($ar_kapa as $kapa){
       foreach($ar_m0bis2 as $kinder){
         if($kapa["Stadtteil"] == $kinder["Stadtteil"]){
@@ -138,11 +138,11 @@ class Algorithmus
       }
     }
 
-    // Rückgabe der Egebnisse der Prognose
+    //Rückgabe der Egebnisse der Prognose
     return $prognoseAusgabe;
   }
 
-  // Funktion, die die 5 Jahre zurückliefert, für die die Prognose durchgeführt wird
+  //Funktion, die die 5 Jahre zurückliefert, für die die Prognose durchgeführt wird
   public function getPrognosejahre(){
     $cl_DatenBankabfrage = new Datenbankabfrage();
     $jahr =  substr($cl_DatenBankabfrage->getNeusterDatensatzAlterStadtteil(), 0, 4);

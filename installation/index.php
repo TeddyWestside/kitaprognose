@@ -1,4 +1,11 @@
 <?php
+
+/*  Diese Klasse ist für die Installation der Webapplikation zuständig
+    inklusive Erstellen der Datenbank, Tabellen und das Befüllen Dieser.
+    @author Carsten Schober
+*/
+
+//Hinzufügen der für die Installation benötigten Klassen
 require "../phpClass/Datenbankinitialisierung.php";
 require "../phpClass/Datenbereitstellung.php";
 require "../phpClass/Datenbankabfrage.php";
