@@ -40,6 +40,7 @@ if ($GLOBALS['conn']->query($sqlInsert0) === FALSE & $GLOBALS['conn']->query($sq
 }
 
 $gr_datenbankabfrage = new Datenbankabfrage();
-$gr_datenbankabfrage->getZwischenspeicher();
+$zwischenspeicher = $gr_datenbankabfrage->getZwischenspeicher();
+var_dump($zwischenspeicher);
 
 ?>

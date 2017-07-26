@@ -5,8 +5,6 @@ zuständig.
 */
 
 // require 'Datenbankinitialisierung.php';
-require '../exceptions/NoDatabaseException.php';
-require '../exceptions/NoDataException.php';
 
 
 //Diese Klasse hält Methoden für die Datenbankabfrage
@@ -82,7 +80,6 @@ class Datenbankabfrage
       while($row = $sql_NeusterDatensatz->fetch_assoc()){
         $ar_NeusterDatensatz[]= $row;
       }
-
       return $ar_NeusterDatensatz;
     }
 
