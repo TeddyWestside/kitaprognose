@@ -20,8 +20,6 @@ $GLOBALS["config"] = $ar_config;
 $cl_lang = new Language("../lang/".$ar_config["langCode"]);
 $GLOBALS["lang"] = $cl_lang->translate();
 
-//Einbinden der Connection.php für die Verbindung zur Datenbank
-
 
 try {
   //Datenbank initialisieren
@@ -30,6 +28,9 @@ try {
   $cl_Datenbankinitialisierung->erstelleTabelleKitas();
   $cl_Datenbankinitialisierung->erstelleTabelleAlterStadtteil();
   $cl_Datenbankinitialisierung->erstelleTabelleZwischenspeicher();
+  if ($GLOBALS['conn']->query($sqlInsert0) === FALSE & $GLOBALS['conn']->query($sqlInsert1) === FALSE) {
+      echo "Error: " . $GLOBALS['conn']->error;
+  }
   echo "Datenbank erstellt!";
   echo "<br>";
 } catch (Exception $e) {
@@ -46,12 +47,5 @@ try {
 } catch (Exception $e) {
   echo $e->getMessage()."<br>";
 }
-
-if ($GLOBALS['conn']->query($sqlInsert0) === FALSE & $GLOBALS['conn']->query($sqlInsert1) === FALSE) {
-    echo "Error: " . $GLOBALS['conn']->error;
-}
-
-$gr_datenbankabfrage = new Datenbankabfrage();
-$zwischenspeicher = $gr_datenbankabfrage->getZwischenspeicher();
 
 ?>

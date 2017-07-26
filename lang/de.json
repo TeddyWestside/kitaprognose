@@ -14,7 +14,7 @@
     "text_all_selected":"Alle",
     "label_forecastPeriod": "Prognose für ",
     "label_first_table_row":"Stadtteil",
-    "label_second_table_row":"Auslastung",
+    "label_second_table_row":"Auslastung [%]",
     "text_tableCaption": "Die Werte werden entsprechend der Auslastung eingefärbt: rote Werte = kritisch, orange Werte = gefährdet, grüne Werte = gut"
   },
   "Footer":{
