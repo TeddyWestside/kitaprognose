@@ -64,24 +64,40 @@ class Datenbankinitialisierung{
     Gesamtstadt int
   )";
 
+  //Sql-Query für die Erstellug der Tabelle "Zwischenspeicher"
+  private $sql_CreateTableZwischenspeicher = "CREATE TABLE IF NOT EXISTS Kitaprognose.Zwischenspeicher (
+    Id int,
+    Beschreibung varchar (100),
+    Wert varchar (100),
+    PRIMARY KEY (Id)
+  )";
+
+
   // Datenbank erstellen
   public function erstelleDatenbank() {
     if ($GLOBALS['conn']->query($this->sql_CreateDB) != TRUE) {
-      echo "<br> Error Datenbankerstellung: " . $GLOBALS['conn']->error;
+      echo "<br> Error Datenbankerstellung: " . $GLOBALS['conn']->error . "<br>";
     }
   }
 
   // Tabelle "Kitas" erstellen
   public function erstelleTabelleKitas() {
     if ($GLOBALS['conn']->query($this->sql_CreateTableKita) != TRUE) {
-      echo "<br> Error Erstellung Tabelle 'Kitas': " . $GLOBALS['conn']->error;
+      echo "<br> Error Erstellung Tabelle 'Kitas': " . $GLOBALS['conn']->error . "<br>";
     }
   }
 
   // Tabelle "AlterStadtteil" erstellen
   public function erstelleTabelleAlterStadtteil() {
     if ($GLOBALS['conn']->query($this->sql_CreateTableAlterStadtteil) != TRUE) {
-      echo "<br> Error Erstellung Tabelle 'AlterStadtteil': " . $GLOBALS['conn']->error;
+      echo "<br> Error Erstellung Tabelle 'AlterStadtteil': " . $GLOBALS['conn']->error . "<br>";
+    }
+  }
+
+  // Tabelle "Zwischenspeicher" erstellen
+  public function erstelleTabelleZwischenspeicher() {
+    if ($GLOBALS['conn']->query($this->sql_CreateTableZwischenspeicher) != TRUE) {
+      echo "<br> Error Erstellung Tabelle 'Zwischenspeicher': " . $GLOBALS['conn']->error . "<br>";
     }
   }
 

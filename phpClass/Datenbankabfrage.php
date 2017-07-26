@@ -4,7 +4,10 @@ zuständig.
 @author Carsten Schober und Ken Diepers
 */
 
-require 'Datenbankinitialisierung.php';
+// require 'Datenbankinitialisierung.php';
+require '../exceptions/NoDatabaseException.php';
+require '../exceptions/NoDataException.php';
+
 
 //Diese Klasse hält Methoden für die Datenbankabfrage
 class Datenbankabfrage
@@ -47,6 +50,40 @@ class Datenbankabfrage
         $neusterDatensatz = $nD["Stichtag"];
       }
       return $neusterDatensatz;
+    }
+
+    // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
+    catch (Exception $e){
+      echo $e->getMessage();
+      return;
+    }
+  }
+
+  //Funktion, die das neuste Datum der Tabelle AlterStadtteil herausfinden und als String zurückliefert
+  public function getZwischenspeicher()
+  {
+    $ar_NeusterDatensatz;   // Hilfsarray für das Durchlaufen des Rückgabe-sql-Objekt
+
+    try{
+      //Sql-Query-Ergebnis für den neusten Stichtag aus der Tabelle AlterStadtteil
+      $sql_NeusterDatensatz = $GLOBALS['conn']->query("SELECT * FROM Kitaprognose.Zwischenspeicher;");
+
+      // Fehlerhandling, wenn Tabellen in der DB oder die Datenbank selbst fehlt.
+      if($sql_NeusterDatensatz == NULL){
+        throw new NoDatabaseException($GLOBALS['lang']->Error->NoDatabaseException);
+      }
+
+      // Fehlerhandling für einen leeren Datensatz.
+      if($sql_NeusterDatensatz->num_rows == 0){
+        throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
+      }
+
+      //Schleife, um mit dem Mysql-Objekt ein Array zu füllen
+      while($row = $sql_NeusterDatensatz->fetch_assoc()){
+        $ar_NeusterDatensatz[]= $row;
+      }
+
+      return $ar_NeusterDatensatz;
     }
 
     // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
