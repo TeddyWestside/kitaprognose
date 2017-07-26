@@ -5,8 +5,9 @@
     @author Carsten Schober
 */
 
-//NoConnectionException wird importiert, um diese Exceptin später werfen zu können.
-require 'exceptions/NoConnectionException.php';
+//Konfiguration laden
+$ar_config = require "config.php";
+$GLOBALS["config"] = $ar_config;
 
 $config = $GLOBALS["config"];         //Einbinden des config-Array für allgemeingültige Werte
 $servername = $config["servername"];    //Laden des Servernamen aus der config-Datei

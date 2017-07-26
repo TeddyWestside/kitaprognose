@@ -4,9 +4,6 @@ zuständig.
 @author Carsten Schober und Ken Diepers
 */
 
-// require 'Datenbankinitialisierung.php';
-
-
 //Diese Klasse hält Methoden für die Datenbankabfrage
 class Datenbankabfrage
 {

@@ -46,7 +46,7 @@ der Footer werden jeweils extra eingebunden.
   /*Instanzierung der language-Klasse und speichern der JSON-Variable in $lang um auf die Strings über
   die IDs zugreifen zu können.
   */
-  $language = new language("lang/". $langCode);
+  $language = new Language("lang/". $langCode);
   $GLOBALS["lang"] = $language->translate();
   $lang = $GLOBALS["lang"];
   ?>
@@ -161,18 +161,25 @@ Algorithmus ausgeführt wird -->
 <?php
 //Verschieben der Errormeldungen nach oben
 echo "<span style='position:absolute; top: 0; background: red'>";
+
+//1234
 //Einbindung & Aufbau der Verbindung zur Datenbank
 include 'connection.php';
+//Einbindung des Algorithmus
+require "phpClass/Datenbankabfrage.php";
+require "phpClass/Datenbereitstellung.php";
+require "phpClass/Algorithmus.php";
+
+
 //Prüfung ob Verbindung vorhanden
 if($GLOBALS['conn'] != null){
   //Aktualisieren des lokalen Datenbestandes falls neue Daten im OpenData Portal existieren und Laden fehlender Kapazitäten
-  include "phpClass/Datenbereitstellung.php";
+
   $datenbereitstellung = new Datenbereitstellung();
   $datenbereitstellung->set_fehlende_kapazitaeten("files/Fehlende_Kapazitaeten.csv");
   $datenbereitstellung->aktualisiere_datenbestand();
 
-  //Einbindung des Algorithmus
-  require "phpClass/Algorithmus.php";
+
   //Erzeugen eines Algorithmus Objekt
   $algo = new Algorithmus;
   //Erzeugen eines Ergebnisses mit aktuellen Parametern
