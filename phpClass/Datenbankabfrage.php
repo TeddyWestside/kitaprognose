@@ -24,7 +24,6 @@ class Datenbankabfrage
     $neusterDatensatz;      // Hilfsvariable für die Ausgabe als String
     $ar_NeusterDatensatz;   // Hilfsarray für das Durchlaufen des Rückgabe-sql-Objekt
 
-    try{
       //Sql-Query-Ergebnis für den neusten Stichtag aus der Tabelle AlterStadtteil
       $sql_NeusterDatensatz = $GLOBALS['conn']->query("SELECT Stichtag FROM Kitaprognose.AlterStadtteil ORDER BY Stichtag DESC LIMIT 1;");
 
@@ -48,13 +47,7 @@ class Datenbankabfrage
         $neusterDatensatz = $nD["Stichtag"];
       }
       return $neusterDatensatz;
-    }
 
-    // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
-    catch (Exception $e){
-      echo $e->getMessage();
-      return;
-    }
   }
 
   //Funktion, die das neuste Datum der Tabelle AlterStadtteil herausfinden und als String zurückliefert
@@ -62,7 +55,6 @@ class Datenbankabfrage
   {
     $ar_NeusterDatensatz;   // Hilfsarray für das Durchlaufen des Rückgabe-sql-Objekt
 
-    try{
       //Sql-Query-Ergebnis für den neusten Stichtag aus der Tabelle AlterStadtteil
       $sql_NeusterDatensatz = $GLOBALS['conn']->query("SELECT * FROM Kitaprognose.Zwischenspeicher;");
 
@@ -81,13 +73,7 @@ class Datenbankabfrage
         $ar_NeusterDatensatz[]= $row;
       }
       return $ar_NeusterDatensatz;
-    }
 
-    // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
-    catch (Exception $e){
-      echo $e->getMessage();
-      return;
-    }
   }
 
   //Funktion, die die Anzahl der Kinder zwischen 3 und 6 gruppiert nach Stadtteilen in Gelsenkirchen zurückliefert

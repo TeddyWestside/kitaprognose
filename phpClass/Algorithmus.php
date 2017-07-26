@@ -5,7 +5,6 @@ Diese Klasse ist für die Berechnung des Algorithmus zuständig.
 */
 
 require 'Datenbankabfrage.php';
-// require 'lang\language.php';
 require 'exceptions/NoDatabaseException.php';
 require 'exceptions/NoDataException.php';
 
@@ -30,7 +29,6 @@ class Algorithmus
     $ar_1bis4;
     $ar_0bis3;
 
-    try{
       // Kapazität eines jeden Stadteils herausfinden.
       $sql_kapa = $cl_DatenBankabfrage->getKapazitaet();
 
@@ -51,12 +49,6 @@ class Algorithmus
       if($sql_kapa->num_rows == 0 | $sql_3bis6->num_rows == 0 | $sql_2bis5->num_rows == 0 | $sql_1bis4->num_rows == 0 | $sql_0bis3->num_rows == 0){
         throw new NoDataException($GLOBALS['lang']->Error->NoDataException);
       }
-    }
-    // Fangen der obingen beiden Exceptions und Ausgabe der Fehlers.
-    catch (Exception $e){
-      echo $e->getMessage();
-      return;
-    }
 
     // Füllen der Hilfsarrys mit den Werten der Mysql-Objekte.
     while($row = $sql_kapa->fetch_assoc()){
